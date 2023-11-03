@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="login_menu.AdminController">
+   <children>
+      <PasswordField fx:id="adminPassword" alignment="CENTER" layoutX="220.0" layoutY="208.0"
+                     promptText="Admin Password"/>
+      <TextField fx:id="adminUsername" alignment="CENTER" layoutX="220.0" layoutY="174.0" promptText="Admin Username"/>
+      <Label layoutX="213.0" layoutY="48.0" text="Admin Login">
+         <font>
+            <Font name="Arial" size="31.0"/>
+         </font>
+      </Label>
+      <Button fx:id="loginButton" layoutX="280.0" layoutY="248.0" mnemonicParsing="false" onAction="#loginAdmin"
+              onMouseClicked="#loginAdmin" text="Login"/>
+      <Label fx:id="checkLoginLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="122.0" layoutY="119.0"
+             prefHeight="17.0" prefWidth="363.0" text="Insert Credentials" textAlignment="CENTER"/>
+      <Label fx:id="trialsLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="233.0" layoutY="145.0"
+             prefHeight="17.0" prefWidth="135.0"/>
+   </children>
+</AnchorPane>

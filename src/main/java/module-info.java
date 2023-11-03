@@ -10,7 +10,11 @@ module com.example.cartegormiti {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
+    requires com.google.gson;
 
     opens com.example.cartegormiti to javafx.fxml;
     exports com.example.cartegormiti;
+
+    opens login_menu to javafx.fxml;
+    exports login_menu;
 }
