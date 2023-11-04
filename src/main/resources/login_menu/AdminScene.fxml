@@ -3,13 +3,14 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1"
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/20.0.1"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="login_menu.AdminController">
    <children>
        <PasswordField fx:id="adminPassword" alignment="CENTER" layoutX="220.0" layoutY="208.0"
                       promptText="Admin Password"/>
        <TextField fx:id="adminUsername" alignment="CENTER" layoutX="220.0" layoutY="174.0" promptText="Admin Username"/>
-      <Label layoutX="213.0" layoutY="48.0" text="Admin Login">
+       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="152.0" layoutY="48.0" prefHeight="36.0"
+              prefWidth="295.0" text="Admin Login">
          <font>
              <Font name="Arial" size="31.0"/>
          </font>

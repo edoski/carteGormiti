@@ -1,0 +1,11 @@
+.root {
+    -fx-alignment: center;
+}
+
+.label {
+    -fx-font-weight: bold;
+}
+
+#trialsLabel {
+    -fx-text-fill: red;
+}
