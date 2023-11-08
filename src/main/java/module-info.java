@@ -11,6 +11,8 @@ module com.example.cartegormiti {
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires com.google.gson;
+    requires com.azure.ai.openai;
+//    requires java.prefs;
 
     opens login_menu to javafx.fxml;
     exports login_menu;
