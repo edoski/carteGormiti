@@ -2,24 +2,27 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/20.0.1"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="login_menu.AdminController">
    <children>
-       <TextField fx:id="adminUsername" alignment="CENTER" layoutX="220.0" layoutY="174.0" promptText="Admin Username"/>
-       <PasswordField fx:id="adminPassword" alignment="CENTER" layoutX="220.0" layoutY="208.0"
-                      promptText="Admin Password"/>
-       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="152.0" layoutY="48.0" prefHeight="36.0"
-              prefWidth="295.0" text="Admin Login">
+       <TextField fx:id="adminUsername" alignment="CENTER" layoutX="220.0" layoutY="174.0" opacity="0.0"
+                  promptText="Username"/>
+       <PasswordField fx:id="adminPassword" alignment="CENTER" layoutX="220.0" layoutY="208.0" opacity="0.0"
+                      promptText="Password"/>
+       <Label fx:id="adminLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="152.0" layoutY="169.0"
+              opacity="0.0" prefHeight="36.0" prefWidth="295.0" text="Welcome, Admin.">
          <font>
              <Font name="Arial" size="31.0"/>
          </font>
       </Label>
        <Button fx:id="loginButton" layoutX="280.0" layoutY="248.0" mnemonicParsing="false" onAction="#loginAdmin"
-               text="Login"/>
+               opacity="0.0" text="Login"/>
        <Label fx:id="checkLoginLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="122.0" layoutY="119.0"
-              prefHeight="17.0" prefWidth="363.0" text="Insert Credentials" textAlignment="CENTER"/>
+              opacity="0.0" prefHeight="17.0" prefWidth="363.0" text="Insert Credentials" textAlignment="CENTER"/>
        <Label fx:id="trialsLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="233.0" layoutY="145.0"
               prefHeight="17.0" prefWidth="135.0"/>
+       <Line fx:id="line" layoutX="300.0" layoutY="220.0" opacity="0.0" strokeLineCap="ROUND" strokeWidth="4.0"/>
    </children>
 </AnchorPane>
