@@ -1,5 +1,10 @@
 package carte_gioco;
 
-public class WildCard extends Card {
+public class WildCard  {
+
+
+
+
+
 
 }
