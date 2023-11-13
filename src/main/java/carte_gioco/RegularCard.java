@@ -1,37 +1,35 @@
 package carte_gioco;
 
-public class RegularCard {
+public class RegularCard extends Card {
 
     //RegularCard extends Card {String nome, double vita, Elemento elemento,
     // double magia, double potenza, double velocità}
 
-    private final String name;
+
     private final double health;
-    private final Element element;
     private final double magic;
     private final double power;
     private final double speed;
 
 
-    public RegularCard(String name, double health, Element element, double magic, double power, double speed) {
-        this.name = name;
+    public RegularCard(String name, Element element, double health, double magic, double power, double speed) {
+        super(name, element);
         this.health = health;
-        this.element = element;
         this.magic = magic;
         this.power = power;
         this.speed = speed;
     }
 
     public String getName() {
-        return name;
+        return super.getName();
+    }
+
+    public Element getElement() {
+        return super.getElement();
     }
 
     public double getHealth() {
         return health;
-    }
-
-    public Element getElement() {
-        return element;
     }
 
     public double getMagic() {
@@ -48,13 +46,13 @@ public class RegularCard {
 
     //ancora da decidere ma l'idea è implementare un metodo che calcoli il danno
     public double getDamage() {
-        return (health + magic + power + speed) / 6;
+        return ( magic + power + speed) / 5;
     }
 
     public String toString() {
-        return "Nome carta: " + name + "\n" +
+        return "Nome carta: " + super.getName() + "\n" +
                 "Vita: " + health + "\n" +
-                "Elemento: " + element + "\n" +
+                "Elemento: " + super.getElement() + "\n" +
                 "Magia: " + magic + "\n" +
                 "Potenza: " + power + "\n" +
                 "Velocità: " + speed + "\n";
