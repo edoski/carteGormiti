@@ -1,25 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="login_menu.LoginController">
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="login_menu.LoginController">
    <children>
-       <TextField fx:id="loginTextField" alignment="CENTER" layoutX="195.0" layoutY="183.0" prefHeight="34.0"
-                  prefWidth="211.0" promptText="Inserisci nome Giocatore..."/>
-       <Button fx:id="loginBtn" layoutX="268.0" layoutY="231.0" mnemonicParsing="false" onAction="#addPlayer"
-               text="Aggiungi"/>
-       <Label fx:id="aiLabel" alignment="CENTER" layoutX="9.0" layoutY="271.0" prefHeight="115.0" prefWidth="584.0"
-              text="Label">
+       <TextField fx:id="loginTextField" alignment="CENTER" layoutX="196.0" layoutY="229.0" prefHeight="34.0" prefWidth="211.0" promptText="Inserisci nome Giocatore..." />
+       <Button fx:id="loginBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="228.0" layoutY="275.0" mnemonicParsing="false" onAction="#addPlayer" prefHeight="26.0" prefWidth="144.0" text="add player" textAlignment="CENTER" />
+       <Label fx:id="codeLabel" alignment="CENTER" layoutX="10.0" layoutY="166.0" prefHeight="55.0" prefWidth="584.0">
            <font>
-               <Font size="16.0"/>
+               <Font size="18.0" />
            </font>
        </Label>
-       <ImageView fx:id="IV" fitHeight="150.0" fitWidth="200.0" layoutX="201.0" layoutY="14.0" pickOnBounds="true"
-                  preserveRatio="true"/>
+      <ChoiceBox fx:id="gameMode" layoutX="225.0" layoutY="134.0" prefWidth="150.0" />
+      <ProgressBar fx:id="progress" layoutX="116.0" layoutY="61.0" prefHeight="26.0" prefWidth="372.0" progress="0.0" />
+      <RadioButton fx:id="robot" layoutX="183.0" layoutY="332.0" mnemonicParsing="false" text="Robot">
+         <toggleGroup>
+            <ToggleGroup fx:id="playerType" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton fx:id="human" layoutX="330.0" layoutY="332.0" mnemonicParsing="false" text="Human" toggleGroup="$playerType" />
    </children>
 </AnchorPane>
