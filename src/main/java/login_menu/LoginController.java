@@ -33,12 +33,7 @@ public class LoginController {
 
     @FXML
     void addPlayer(ActionEvent event) {
-        gameMode.valueProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.equals("Torneo"))
-                giocatoriTorneo();
-            else if(oldValue.equals("1vs1"))
-                giocatori1vs1();
-        });
+
 
     }
 }
