@@ -8,7 +8,6 @@ module com.example.cartegormiti {
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
-    requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
     requires com.google.gson;
     requires com.azure.ai.openai;
