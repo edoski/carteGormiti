@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/20.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="login_menu.GameModeController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.GameModeController">
     <children>
         <Label alignment="CENTER" contentDisplay="CENTER" layoutX="132.0" layoutY="145.0" prefHeight="42.0"
                prefWidth="168.0" text="Game Mode" textAlignment="CENTER">

@@ -1,6 +1,6 @@
-package login_menu;
+package login;
 
-import dati_utente.Player;
+import game.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;

@@ -1,4 +1,4 @@
-package dati_utente;
+package game;
 
 import java.util.ArrayList;
 

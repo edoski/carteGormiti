@@ -1,4 +1,4 @@
-package login_menu;
+package login;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,7 +24,9 @@ public class GameModeController implements Initializable {
 
         gameMode.setValue("1vs1");
         difficulty.setValue("Easy");
-        System.out.println(gameMode.getSelectionModel().getSelectedItem());
+        gameMode.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            System.out.println(gameMode.getSelectionModel().getSelectedItem());
+        });
     }
 
     @FXML

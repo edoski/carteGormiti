@@ -1,4 +1,4 @@
-package login_menu;
+package login;
 
 import javafx.animation.*;
 import javafx.event.EventHandler;
@@ -43,7 +43,6 @@ public class AdminController implements Initializable {
     Parent root;
     Stage stage;
     Scene scene;
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 

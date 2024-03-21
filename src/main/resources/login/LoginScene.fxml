@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.LoginController">
+    <children>
+        <TextField fx:id="loginTextField" alignment="CENTER" layoutX="193.0" layoutY="217.0" prefHeight="34.0"
+                   prefWidth="211.0" promptText="Inserisci nome Giocatore..."/>
+        <Button fx:id="addPlayerBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="226.0" layoutY="255.0"
+                mnemonicParsing="false" onAction="#addPlayer" prefHeight="26.0" prefWidth="144.0" text="add player"
+                textAlignment="CENTER"/>
+        <Label fx:id="codeLabel" alignment="CENTER" layoutX="8.0" layoutY="200.0" prefHeight="55.0" prefWidth="584.0">
+            <font>
+                <Font size="18.0"/>
+            </font>
+        </Label>
+        <ProgressBar fx:id="progress" layoutX="112.0" layoutY="61.0" prefHeight="26.0" prefWidth="372.0"
+                     progress="0.0"/>
+        <RadioButton fx:id="robot" layoutX="193.0" layoutY="299.0" mnemonicParsing="false" text="Robot">
+            <toggleGroup>
+                <ToggleGroup fx:id="playerType"/>
+            </toggleGroup>
+        </RadioButton>
+        <RadioButton fx:id="human" layoutX="341.0" layoutY="299.0" mnemonicParsing="false" text="Human"
+                     toggleGroup="$playerType"/>
+        <Label fx:id="code" alignment="CENTER" contentDisplay="CENTER" layoutX="1.0" layoutY="126.0" prefHeight="55.0"
+               prefWidth="594.0" text="Label" textAlignment="CENTER">
+            <font>
+                <Font size="28.0"/>
+            </font>
+        </Label>
+    </children>
+</AnchorPane>
