@@ -5,7 +5,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -15,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import utils.Animations;
 
 import java.io.IOException;
 import java.net.URL;
@@ -49,19 +49,19 @@ public class AdminController implements Initializable {
 //        START ANIMATIONS
 //        FADE & SCALE IN TITOLO ADMIN, FROM CENTER
 
-        FadeTransition fadeTitle = fadeIn(adminLabel, 1, 1, Interpolator.EASE_IN);
-        ScaleTransition scaleTitleIn = scale(adminLabel, 0.8, 0.8, 1, Interpolator.EASE_BOTH);
+        FadeTransition fadeTitle = Animations.fadeIn(adminLabel, 1, 1, Interpolator.EASE_IN);
+        ScaleTransition scaleTitleIn = Animations.scale(adminLabel, 0.8, 0.8, 1, Interpolator.EASE_BOTH);
 
         ParallelTransition adminTitleIn = new ParallelTransition(fadeTitle, scaleTitleIn);
         adminTitleIn.play();
 
 //        MOVE UP & SCALE OUT TITOLO ADMIN, FINAL POSITION
 
-        ScaleTransition scaleTitleOut = scale(adminLabel, -0.6, -0.6, 1, Interpolator.EASE_BOTH);
-        TranslateTransition moveTitle = translateY(adminLabel, -120, 1, Interpolator.EASE_BOTH);
+        ScaleTransition scaleTitleOut = Animations.scale(adminLabel, -0.6, -0.6, 1, Interpolator.EASE_BOTH);
+        TranslateTransition moveTitle = Animations.translateY(adminLabel, -120, 1, Interpolator.EASE_BOTH);
 
-        TranslateTransition moveLine = translateY(line, -125, 1, Interpolator.EASE_BOTH);
-        FadeTransition fadeLine = fadeIn(line, 1, 1, Interpolator.EASE_IN);
+        TranslateTransition moveLine = Animations.translateY(line, -125, 1, Interpolator.EASE_BOTH);
+        FadeTransition fadeLine = Animations.fadeIn(line, 1, 1, Interpolator.EASE_IN);
 
 //        ESPANSIONE RIGA DAL SUO CENTRO
         Timeline timeline = new Timeline();
@@ -77,10 +77,10 @@ public class AdminController implements Initializable {
 
 //        FADE IN LOGIN AREA, FROM CENTER (FINAL POSITION)
 
-        FadeTransition fadeCredentialsLabel = fadeIn(checkLoginLabel, 1, 1, Interpolator.EASE_IN);
-        FadeTransition fadeTextField = fadeIn(adminUsername, 1, 1, Interpolator.EASE_IN);
-        FadeTransition fadePasswordField = fadeIn(adminPassword, 1, 1, Interpolator.EASE_IN);
-        FadeTransition fadeButton = fadeIn(loginButton, 1, 1, Interpolator.EASE_IN);
+        FadeTransition fadeCredentialsLabel = Animations.fadeIn(checkLoginLabel, 1, 1, Interpolator.EASE_IN);
+        FadeTransition fadeTextField = Animations.fadeIn(adminUsername, 1, 1, Interpolator.EASE_IN);
+        FadeTransition fadePasswordField = Animations.fadeIn(adminPassword, 1, 1, Interpolator.EASE_IN);
+        FadeTransition fadeButton = Animations.fadeIn(loginButton, 1, 1, Interpolator.EASE_IN);
 
         ParallelTransition fadeInLoginArea = new ParallelTransition(fadeCredentialsLabel, fadeTextField, fadePasswordField, fadeButton);
         fadeInLoginArea.setDelay(Duration.seconds(titleDelay + 0.55)); // TO AVOID TITLE VISUALLY OVERLAPPING WITH LOGIN AREA
@@ -113,29 +113,6 @@ public class AdminController implements Initializable {
                 colorFieldBorder(adminPassword, "red");
         });
 
-    }
-
-    //    ANIMATION UTILITY METHODS
-    public FadeTransition fadeIn(Node node, double changeByValue, double seconds, Interpolator interpolator) {
-        FadeTransition fade = new FadeTransition(Duration.seconds(seconds), node);
-        fade.setByValue(changeByValue);
-        fade.setInterpolator(interpolator);
-        return fade;
-    }
-
-    public ScaleTransition scale(Node node, double changeX, double changeY, double seconds, Interpolator interpolator) {
-        ScaleTransition scale = new ScaleTransition(Duration.seconds(seconds), node);
-        scale.setByX(changeX);
-        scale.setByY(changeY);
-        scale.setInterpolator(interpolator);
-        return scale;
-    }
-
-    public TranslateTransition translateY(Node node, double changeY, double seconds, Interpolator interpolator) {
-        TranslateTransition translateY = new TranslateTransition(Duration.seconds(seconds), node);
-        translateY.setByY(changeY);
-        translateY.setInterpolator(interpolator);
-        return translateY;
     }
 
     //    TEXTINPUTCONTROL È CLASSE PADRE SIA DI TEXTFIELD CHE DI PASSWORDFIELD

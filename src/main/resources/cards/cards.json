@@ -1,0 +1,152 @@
+{
+  "fire": {
+    "01": {
+      "name": "Ardorbrucia",
+      "damage": 10.0,
+      "index": 1,
+      "art": "/src/main/resources/cards/FIRE/FIRE-01.jpeg"
+    },
+    "02": {
+      "name": "Serpifiamma",
+      "damage": 11.0,
+      "index": 2,
+      "art": "/src/main/resources/cards/FIRE/FIRE-02.jpeg"
+    },
+    "03": {
+      "name": "Alafiammante",
+      "damage": 12.0,
+      "index": 3,
+      "art": "/src/main/resources/cards/FIRE/FIRE-03.jpeg"
+    },
+    "04": {
+      "name": "Scintifolletto",
+      "damage": 8.0,
+      "index": 4,
+      "art": "/src/main/resources/cards/FIRE/FIRE-04.jpeg"
+    },
+    "05": {
+      "name": "Flambrigante",
+      "damage": 10.0,
+      "index": 5,
+      "art": "/src/main/resources/cards/FIRE/FIRE-05.jpeg"
+    },
+    "06": {
+      "name": "Rogogatto",
+      "damage": 9.0,
+      "index": 6,
+      "art": "/src/main/resources/cards/FIRE/FIRE-06.jpeg"
+    }
+  },
+  "water": {
+    "01": {
+      "name": "Serpentide",
+      "damage": 9.0,
+      "index": 1,
+      "art": "/src/main/resources/cards/WATER/WATER-01.jpeg"
+    },
+    "02": {
+      "name": "Oceanix",
+      "damage": 12.0,
+      "index": 2,
+      "art": "/src/main/resources/cards/WATER/WATER-02.jpeg"
+    },
+    "03": {
+      "name": "Jellysion",
+      "damage": 8.0,
+      "index": 3,
+      "art": "/src/main/resources/cards/WATER/WATER-03.jpeg"
+    },
+    "04": {
+      "name": "Aquarion Sentinel",
+      "damage": 9.0,
+      "index": 4,
+      "art": "/src/main/resources/cards/WATER/WATER-04.jpeg"
+    },
+    "05": {
+      "name": "Shellbrook",
+      "damage": 11.0,
+      "index": 5,
+      "art": "/src/main/resources/cards/WATER/WATER-05.jpeg"
+    },
+    "06": {
+      "name": "Dragontide",
+      "damage": 9.0,
+      "index": 6,
+      "art": "/src/main/resources/cards/WATER/WATER-06.jpeg"
+    }
+  },
+  "forest": {
+    "01": {
+      "name": "Anticus Arbor",
+      "damage": 9.0,
+      "index": 1,
+      "art": "/src/main/resources/cards/FOREST/FOREST-01.jpeg"
+    },
+    "02": {
+      "name": "Vulpes Viridis",
+      "damage": 8.0,
+      "index": 2,
+      "art": "/src/main/resources/cards/FOREST/FOREST-02.jpeg"
+    },
+    "03": {
+      "name": "Floriscorn",
+      "damage": 9.0,
+      "index": 3,
+      "art": "/src/main/resources/cards/FOREST/FOREST-03.jpeg"
+    },
+    "04": {
+      "name": "Shadow Predator",
+      "damage": 10.0,
+      "index": 4,
+      "art": "/src/main/resources/cards/FOREST/FOREST-04.jpeg"
+    },
+    "05": {
+      "name": "Oakwing Sovereign",
+      "damage": 12.0,
+      "index": 5,
+      "art": "/src/main/resources/cards/FOREST/FOREST-05.jpeg"
+    },
+    "06": {
+      "name": "Leafwhisker",
+      "damage": 8.0,
+      "index": 6,
+      "art": "/src/main/resources/cards/FOREST/FOREST-06.jpeg"
+    }
+  },
+  "wild": {
+    "indebolimento": {
+      "effect": 0.8,
+      "fire": {
+        "art": "/src/main/resources/cards/WILD/INDEBOLIMENTO/WILD-FIRE-INDEBOLIMENTO.jpeg"
+      },
+      "water": {
+        "art": "/src/main/resources/cards/WILD/INDEBOLIMENTO/WILD-WATER-INDEBOLIMENTO.jpeg"
+      },
+      "forest": {
+        "art": "/src/main/resources/cards/WILD/INDEBOLIMENTO/WILD-FOREST-INDEBOLIMENTO.jpeg"
+      }
+    },
+    "potenziamento": {
+      "effect": 1.2,
+      "fire": {
+        "art": "/src/main/resources/cards/WILD/POTENZIAMENTO/WILD-FIRE-POTENZIAMENTO.jpeg"
+      },
+      "water": {
+        "art": "/src/main/resources/cards/WILD/POTENZIAMENTO/WILD-WATER-POTENZIAMENTO.jpeg"
+      },
+      "forest": {
+        "art": "/src/main/resources/cards/WILD/POTENZIAMENTO/WILD-FOREST-POTENZIAMENTO.jpeg"
+      }
+    },
+    "super": {
+      "vincita": {
+        "condition": 1,
+        "art": "/src/main/resources/cards/WILD/SUPER/WILD-SUPER-VINCITA.jpeg"
+      },
+      "perdita": {
+        "condition": -1,
+        "art": "/src/main/resources/cards/WILD/SUPER/WILD-SUPER-PERDITA.jpeg"
+      }
+    }
+  }
+}

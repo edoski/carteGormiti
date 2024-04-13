@@ -1,30 +1,38 @@
 package game;
 
-
 import java.util.ArrayList;
 
 public class Deck {
 
   private ArrayList<Card> cards;
-  private final String path = "src/main/java/carte_gioco/deck.txt";
-  private final String pathPlayerHand = "src/main/java/carte_gioco/playerHand.txt";
-
 
     public Deck(){
       createDeck();
     }
 
     public void createDeck(){
-      //To do: create the deck of cards
+      /*
+       *
+       * Questo metodo inizializza il deck all'inizio della partita complessiva:
+       * - 18 carte normali, 3 tipi: water, fire, earth
+       * - 8 carte wild, 3 tipi: indebolimento, potenziamento, vincita/perdita
+       *
+       */
     }
 
-    public void shuffle(){
-      //To do: shuffle the deck
-    }
-
-    public ArrayList<Card> createPlayerHand(){
+  public ArrayList<Card> createPlayerDeck() {
       ArrayList<Card> playerHand = new ArrayList<Card>();
-      //To do: create the player hand
+
+    /*
+     *
+     * Questo metodo distribuisce le carte a ciascun giocatore all'inizio della partita una volta,
+     * a ciascun giocatore vengono distribuite 9 carte normali:
+     * - 3 fuoco
+     * - 3 acqua
+     * - 3 terra
+     *
+     */
+
       return playerHand;
     }
 
@@ -48,8 +56,4 @@ public class Deck {
       //To do: get the deck from a file
       return null;
     }
-
-
-
-
 }
