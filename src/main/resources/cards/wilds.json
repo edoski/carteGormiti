@@ -1,0 +1,42 @@
+{
+  "wild": {
+    "indebolimento": {
+      "fire": {
+        "name": "indebolimento-fire",
+        "art": "/src/main/resources/cards/WILD/INDEBOLIMENTO/WILD-FIRE-INDEBOLIMENTO.jpeg"
+      },
+      "water": {
+        "name": "indebolimento-water",
+        "art": "/src/main/resources/cards/WILD/INDEBOLIMENTO/WILD-WATER-INDEBOLIMENTO.jpeg"
+      },
+      "forest": {
+        "name": "indebolimento-forest",
+        "art": "/src/main/resources/cards/WILD/INDEBOLIMENTO/WILD-FOREST-INDEBOLIMENTO.jpeg"
+      }
+    },
+    "potenziamento": {
+      "fire": {
+        "name": "potenziamento-fire",
+        "art": "/src/main/resources/cards/WILD/POTENZIAMENTO/WILD-FIRE-POTENZIAMENTO.jpeg"
+      },
+      "water": {
+        "name": "potenziamento-water",
+        "art": "/src/main/resources/cards/WILD/POTENZIAMENTO/WILD-WATER-POTENZIAMENTO.jpeg"
+      },
+      "forest": {
+        "name": "potenziamento-forest",
+        "art": "/src/main/resources/cards/WILD/POTENZIAMENTO/WILD-FOREST-POTENZIAMENTO.jpeg"
+      }
+    },
+    "super": {
+      "vincita": {
+        "name": "super-vincita",
+        "art": "/src/main/resources/cards/WILD/SUPER/WILD-SUPER-VINCITA.jpeg"
+      },
+      "perdita": {
+        "name": "super-perdita",
+        "art": "/src/main/resources/cards/WILD/SUPER/WILD-SUPER-PERDITA.jpeg"
+      }
+    }
+  }
+}

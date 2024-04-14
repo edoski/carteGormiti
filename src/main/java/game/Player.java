@@ -1,6 +1,6 @@
 package game;
 
-public class Player implements PlayerController {
+public class Player {
     private final String name;
 
     public Player(String name) {
