@@ -36,4 +36,17 @@ public class LoginController {
 
 
     }
+
+    public void generateCode() {
+        /*
+         * Admin genera una stringa che viene associata alla partita appena creata,
+         * attraverso questo codice si può riprendere una partita
+         */
+    }
+
+    public void initializePlayers() {
+        /*
+         * Inizializza i dati dei giocatori, il loro nome (String), e semmai un ID univoco (int)
+         */
+    }
 }
