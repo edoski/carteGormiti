@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="login.NewOrResumeGameController">
     <children>
         <TextField fx:id="playerNameTextField" alignment="CENTER" layoutX="56.0" layoutY="182.0" prefHeight="37.0"
                    prefWidth="225.0" promptText="Player Name"/>
-        <Button layoutX="138.0" layoutY="228.0" mnemonicParsing="false" text="Confirm"/>
-        <ListView layoutX="345.0" layoutY="55.0" prefHeight="292.0" prefWidth="200.0"/>
-        <Button layoutX="407.0" layoutY="360.0" mnemonicParsing="false" text="Add Robot"/>
-        <ProgressBar layoutX="345.0" layoutY="27.0" prefWidth="200.0" progress="0.0"/>
-        <Label layoutX="56.0" layoutY="55.0" prefHeight="37.0" prefWidth="225.0" text="Code:" underline="true">
+        <Button fx:id="addPlayerBtn" layoutX="138.0" layoutY="228.0" mnemonicParsing="false" onAction="#addHuman"
+                text="Confirm"/>
+        <ListView fx:id="playerListView" layoutX="345.0" layoutY="55.0" prefHeight="292.0" prefWidth="200.0"/>
+        <Button fx:id="addRobotBtn" layoutX="345.0" layoutY="360.0" mnemonicParsing="false" onAction="#addRobot"
+                text="Add Robot"/>
+        <ProgressBar fx:id="playerProgressBar" layoutX="345.0" layoutY="27.0" prefWidth="200.0" progress="0.0"/>
+        <Label fx:id="codeLabel" layoutX="56.0" layoutY="55.0" prefHeight="37.0" prefWidth="225.0" text="Code:"
+               underline="true">
             <font>
                 <Font name="System Bold" size="20.0"/>
             </font>
         </Label>
+        <Button fx:id="removeRecentBtn" layoutX="442.0" layoutY="360.0" mnemonicParsing="false" onAction="#removeRecent"
+                text="Remove Recent"/>
+        <Button fx:id="startGameBtn" layoutX="169.0" layoutY="345.0" mnemonicParsing="false" onAction="#startGame"
+                text="Start Game">
+            <font>
+                <Font size="16.0"/>
+            </font>
+        </Button>
+        <Button fx:id="goBackBtn" layoutX="80.0" layoutY="345.0" mnemonicParsing="false" onAction="#goBackLoginScreen"
+                text="Go Back">
+            <font>
+                <Font size="16.0"/>
+            </font>
+        </Button>
     </children>
 </AnchorPane>

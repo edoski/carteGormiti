@@ -142,7 +142,7 @@ public class AdminController implements Initializable {
 
     public void loginAdmin() throws IOException {
         if (adminUsername.getText().equals(username) && adminPassword.getText().equals(password))
-            switchToScene("LoginScene.fxml");
+            switchToScene("1NewGameOrExisting.fxml");
 
         else {
             String errorCase;

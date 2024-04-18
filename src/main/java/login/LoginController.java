@@ -1,52 +1,46 @@
 package login;
 
-import game.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
-import java.util.ArrayList;
+import java.io.IOException;
 
 public class LoginController {
+	Parent root;
+	Stage stage;
+	Scene scene;
+	@FXML
+	private Button newGameBtn;
+	@FXML
+	private Button resumeGameBtn;
 
-    GameModeController gameState;
+	public void switchToScene(String fxmlFile, Button btn) throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+		root = loader.load();
+		scene = new Scene(root);
+		stage = (Stage) btn.getScene().getWindow();
+		stage.setScene(scene);
+		stage.show();
+	}
 
-    private ArrayList<Player> players;
-    private final int count = 0;
-    private final String code = "";
+	@FXML
+	void newGame(ActionEvent event) throws IOException {
+		/*
+		 * Cliccando questo bottone, newGameBtn, si passa alla scena "2InitializePlayers.fxml"
+		 */
+		switchToScene("2InitializePlayers.fxml", newGameBtn);
+	}
 
-
-    @FXML
-    private Label codeLabel;
-
-    @FXML
-    private RadioButton human, robot;
-
-    @FXML
-    private Button loginBtn;
-
-    @FXML
-    private TextField loginTextField;
-
-    @FXML
-    private ProgressBar progress;
-
-    @FXML
-    void addPlayer(ActionEvent event) {
-
-
-    }
-
-    public void generateCode() {
-        /*
-         * Admin genera una stringa che viene associata alla partita appena creata,
-         * attraverso questo codice si può riprendere una partita
-         */
-    }
-
-    public void initializePlayers() {
-        /*
-         * Inizializza i dati dei giocatori, il loro nome (String), e semmai un ID univoco (int)
-         */
-    }
+	@FXML
+	void resumeGame(ActionEvent event) throws IOException {
+		/*
+		 * Cliccando questo bottone, resumeGameBtn, si passa alla scena "2LoadGame.fxml"
+		 */
+		switchToScene("2LoadGame.fxml", resumeGameBtn);
+	}
 }
