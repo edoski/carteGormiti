@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <TextField fx:id="playerNameTextField" alignment="CENTER" layoutX="56.0" layoutY="182.0" prefHeight="37.0"
+                   prefWidth="225.0" promptText="Player Name"/>
+        <Button layoutX="138.0" layoutY="228.0" mnemonicParsing="false" text="Confirm"/>
+        <ListView layoutX="345.0" layoutY="55.0" prefHeight="292.0" prefWidth="200.0"/>
+        <Button layoutX="407.0" layoutY="360.0" mnemonicParsing="false" text="Add Robot"/>
+        <ProgressBar layoutX="345.0" layoutY="27.0" prefWidth="200.0" progress="0.0"/>
+        <Label layoutX="56.0" layoutY="55.0" prefHeight="37.0" prefWidth="225.0" text="Code:" underline="true">
+            <font>
+                <Font name="System Bold" size="20.0"/>
+            </font>
+        </Label>
+    </children>
+</AnchorPane>
