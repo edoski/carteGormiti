@@ -5,7 +5,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@style.css" xmlns="http://javafx.com/javafx/20.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="login.AdminController">
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.AdminController">
    <children>
        <TextField fx:id="adminUsername" alignment="CENTER" layoutX="220.0" layoutY="174.0" opacity="0.0"
                   promptText="Username"/>

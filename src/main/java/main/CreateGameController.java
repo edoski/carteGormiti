@@ -1,11 +1,17 @@
-package login;
+package main;
 
 import game.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
-public class NewOrResumeGameController {
+import java.io.IOException;
+
+public class CreateGameController {
 	@FXML
 	private Button addRobotBtn;
 
@@ -34,11 +40,25 @@ public class NewOrResumeGameController {
 	@FXML
 	private Button goBackBtn;
 
+	Parent root;
+	Scene scene;
+	Stage stage;
+
+	public void switchToScene(String fxmlFile, Button btn) throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+		root = loader.load();
+		scene = new Scene(root);
+		stage = (Stage) btn.getScene().getWindow();
+		stage.setScene(scene);
+		stage.show();
+	}
+
 	@FXML
-	void goBackLoginScreen(ActionEvent event) {
+	void goBackLoginScreen(ActionEvent event) throws IOException {
 		/*
-		 * Riporta alla schermata di login precedente → "1NewGameOrExisting.fxml"
+		 * Riporta alla schermata principale
 		 */
+		switchToScene("Main.fxml", goBackBtn);
 	}
 
 	@FXML
@@ -58,6 +78,15 @@ public class NewOrResumeGameController {
 		 *
 		 * All'inserimento del terzo giocatore, viene lanciato un alert per avvertire il fatto che si entra in un torneo aggiungendolo,
 		 * e dando l'opzione o di confermare il terzo giocatore, o di annullare il suo inserimento
+		 */
+	}
+
+	public void generateCode() {
+		/*
+		 * Admin genera una stringa che viene associata alla partita appena creata,
+		 * attraverso questo codice si può riprendere una partita.
+		 *
+		 * Il codice viene generato appena inserito il primo giocatore.
 		 */
 	}
 

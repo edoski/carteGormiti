@@ -11,6 +11,6 @@ module com.example.cartegormiti {
     requires com.almasb.fxgl.all;
     requires org.json;
 
-    opens login to javafx.fxml;
-    exports login;
+	opens main to javafx.fxml;
+	exports main;
 }

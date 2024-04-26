@@ -1,4 +1,4 @@
-package login;
+package main;
 
 import javafx.animation.*;
 import javafx.event.EventHandler;
@@ -36,8 +36,8 @@ public class AdminController implements Initializable {
     @FXML
     Button loginButton;
 
-    private final String username = "admin";
-    private final String password = "onward";
+    private final String username = "1";
+    private final String password = "1";
     private int trials = 0;
 
     Parent root;
@@ -142,7 +142,7 @@ public class AdminController implements Initializable {
 
     public void loginAdmin() throws IOException {
         if (adminUsername.getText().equals(username) && adminPassword.getText().equals(password))
-            switchToScene("1NewGameOrExisting.fxml");
+            switchToScene("Main.fxml");
 
         else {
             String errorCase;
@@ -173,7 +173,7 @@ public class AdminController implements Initializable {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Warning");
                 alert.setHeaderText("You are about to exceed the number of trials");
-                alert.setContentText("If you do not login with the correct credentials the next attempt, the program will shut down for safety reasons.");
+                alert.setContentText("If you do not main with the correct credentials the next attempt, the program will shut down for safety reasons.");
                 alert.showAndWait();
             }
 
