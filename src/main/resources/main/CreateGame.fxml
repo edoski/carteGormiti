@@ -14,7 +14,6 @@
         <ListView fx:id="playerListView" layoutX="345.0" layoutY="55.0" prefHeight="292.0" prefWidth="200.0"/>
         <Button fx:id="addRobotBtn" layoutX="345.0" layoutY="360.0" mnemonicParsing="false" onAction="#addRobot"
                 text="Add Robot"/>
-        <ProgressBar fx:id="playerProgressBar" layoutX="345.0" layoutY="27.0" prefWidth="200.0" progress="0.0"/>
         <Label fx:id="codeLabel" layoutX="56.0" layoutY="55.0" prefHeight="37.0" prefWidth="225.0" text="Code:"
                underline="true">
             <font>
@@ -35,5 +34,10 @@
                 <Font size="16.0"/>
             </font>
         </Button>
+        <Label fx:id="gameTypeLabel" layoutX="422.0" layoutY="22.0" text="Label">
+            <font>
+                <Font size="20.0"/>
+            </font>
+        </Label>
     </children>
 </AnchorPane>

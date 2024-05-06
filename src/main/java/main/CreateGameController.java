@@ -6,7 +6,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -29,7 +32,7 @@ public class CreateGameController {
 	private TextField playerNameTextField;
 
 	@FXML
-	private ProgressBar playerProgressBar;
+	private Label gameTypeLabel;
 
 	@FXML
 	private Button removeRecentBtn;
@@ -103,9 +106,8 @@ public class CreateGameController {
 		 * startGameBtn, lancia la partita, o torneo, in base al numero di giocatori aggiunti.
 		 *
 		 * Partita singola: 2 giocatori
-		 * Torneo: 4 o 8 giocatori
+		 * Torneo: 4 giocatori
 		 *      - Arrotondato a 4 se sono aggiunti 3 giocatori/robot
-		 *      - Arrotondato a 8 se sono aggiunti 5-7 giocatori/robot
 		 *
 		 */
 	}

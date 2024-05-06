@@ -114,7 +114,6 @@ public class AdminController implements Initializable {
         });
 
     }
-
     //    TEXTINPUTCONTROL È CLASSE PADRE SIA DI TEXTFIELD CHE DI PASSWORDFIELD
     public void colorFieldBorder(TextInputControl field, String color) {
         field.setStyle("-fx-border-color: " + color + ";");

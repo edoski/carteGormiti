@@ -40,13 +40,13 @@
                 </AnchorPane>
                 <AnchorPane prefHeight="569.0" prefWidth="249.0">
                     <children>
-                        <Label alignment="CENTER" layoutX="79.0" layoutY="42.0" style="&#10;" text="Scoreboard"
+                        <Label alignment="CENTER" layoutX="70.0" layoutY="44.0" style="&#10;" text="Scoreboard"
                                textAlignment="CENTER" wrapText="false">
                             <font>
                                 <Font name="System Bold" size="18.0" fx:id="x1"/>
                             </font>
                         </Label>
-                        <ListView fx:id="scoreboardListView" layoutX="24.0" layoutY="81.0" prefHeight="474.0"
+                        <ListView fx:id="scoreboardListView" layoutX="15.0" layoutY="82.0" prefHeight="474.0"
                                   prefWidth="200.0"/>
                     </children>
                 </AnchorPane>
