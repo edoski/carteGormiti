@@ -13,6 +13,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Random;
 
 public class CreateGameController {
 	@FXML
@@ -46,6 +48,9 @@ public class CreateGameController {
 	Parent root;
 	Scene scene;
 	Stage stage;
+
+	//	Per tenere traccia dei codici attivi di partite e tornei
+	static private final HashSet<String> activeCodes = new HashSet<>();
 
 	public void switchToScene(String fxmlFile, Button btn) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -84,13 +89,26 @@ public class CreateGameController {
 		 */
 	}
 
-	public void generateCode() {
+	public String generateCode() {
 		/*
 		 * Admin genera una stringa che viene associata alla partita appena creata,
 		 * attraverso questo codice si può riprendere una partita.
 		 *
 		 * Il codice viene generato appena inserito il primo giocatore.
 		 */
+
+		Random rand = new Random();
+		String code = "";
+		for (int i = 0; i < 4; i++) {
+			if (i < 2) {
+//				Generiamo due caratteri maiuscoli in A-Z per la prima parte del codice
+				code += rand.nextInt(26) + 65;
+			} else {
+//				Generiamo due interi casuali in [0,9] per la seconda parte del codice
+				code += rand.nextInt(9);
+			}
+		}
+		return code;
 	}
 
 	@FXML
