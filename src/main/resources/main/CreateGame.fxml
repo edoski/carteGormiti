@@ -2,41 +2,57 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1"
+<?import javafx.scene.text.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0"
+            prefWidth="1280.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="main.CreateGameController">
     <children>
-        <TextField fx:id="playerNameTextField" alignment="CENTER" layoutX="56.0" layoutY="182.0" prefHeight="37.0"
-                   prefWidth="225.0" promptText="Player Name"/>
-        <Button fx:id="addPlayerBtn" layoutX="138.0" layoutY="228.0" mnemonicParsing="false" onAction="#addHuman"
-                text="Confirm"/>
-        <ListView fx:id="playerListView" layoutX="345.0" layoutY="55.0" prefHeight="292.0" prefWidth="200.0"/>
-        <Button fx:id="addRobotBtn" layoutX="345.0" layoutY="360.0" mnemonicParsing="false" onAction="#addRobot"
-                text="Add Robot"/>
-        <Label fx:id="codeLabel" layoutX="56.0" layoutY="55.0" prefHeight="37.0" prefWidth="225.0" text="Code:"
-               underline="true">
+        <TextField fx:id="playerNameTextField" alignment="CENTER" layoutX="120.0" layoutY="323.0" prefHeight="67.0"
+                   prefWidth="484.0" promptText="Player Name">
             <font>
-                <Font name="System Bold" size="20.0"/>
+                <Font size="26.0"/>
             </font>
-        </Label>
-        <Button fx:id="removeRecentBtn" layoutX="442.0" layoutY="360.0" mnemonicParsing="false" onAction="#removeRecent"
-                text="Remove Recent"/>
-        <Button fx:id="startGameBtn" layoutX="169.0" layoutY="345.0" mnemonicParsing="false" onAction="#startGame"
-                text="Start Game">
-            <font>
-                <Font size="16.0"/>
-            </font>
-        </Button>
-        <Button fx:id="goBackBtn" layoutX="80.0" layoutY="345.0" mnemonicParsing="false" onAction="#goBackLoginScreen"
-                text="Go Back">
-            <font>
-                <Font size="16.0"/>
-            </font>
-        </Button>
-        <Label fx:id="gameTypeLabel" layoutX="422.0" layoutY="22.0" text="Label">
+        </TextField>
+        <Button fx:id="addPlayerBtn" layoutX="317.0" layoutY="413.0" mnemonicParsing="false" onAction="#addHuman"
+                text="Confirm">
             <font>
                 <Font size="20.0"/>
+            </font>
+        </Button>
+        <ListView fx:id="playerListView" layoutX="860.0" layoutY="87.0" prefHeight="565.0" prefWidth="372.0"/>
+        <Button fx:id="addRobotBtn" layoutX="905.0" layoutY="661.0" mnemonicParsing="false" onAction="#addRobot"
+                text="Add Robot">
+            <font>
+                <Font size="20.0"/>
+            </font>
+        </Button>
+        <Label fx:id="codeLabel" layoutX="122.0" layoutY="230.0" prefHeight="47.0" prefWidth="350.0" text="Code:"
+               underline="true">
+            <font>
+                <Font name="System Bold" size="38.0"/>
+            </font>
+        </Label>
+        <Button fx:id="removeRecentBtn" layoutX="1036.0" layoutY="662.0" mnemonicParsing="false"
+                onAction="#removeRecent" text="Remove Recent">
+            <font>
+                <Font size="20.0"/>
+            </font>
+        </Button>
+        <Button fx:id="startGameBtn" layoutX="363.0" layoutY="628.0" mnemonicParsing="false" onAction="#startGame"
+                text="Start Game" textFill="#32e132">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Button>
+        <Button fx:id="goBackBtn" layoutX="230.0" layoutY="629.0" mnemonicParsing="false" onAction="#goBackLoginScreen"
+                text="Go Back" textFill="RED">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Button>
+        <Label fx:id="gameTypeLabel" layoutX="1005.0" layoutY="26.0" text="Label">
+            <font>
+                <Font size="39.0"/>
             </font>
         </Label>
     </children>

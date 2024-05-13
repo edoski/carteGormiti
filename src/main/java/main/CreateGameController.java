@@ -4,6 +4,7 @@ import game.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,10 +14,11 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.HashSet;
+import java.net.URL;
 import java.util.Random;
+import java.util.ResourceBundle;
 
-public class CreateGameController {
+public class CreateGameController implements Initializable {
 	@FXML
 	private Button addRobotBtn;
 
@@ -49,9 +51,6 @@ public class CreateGameController {
 	Scene scene;
 	Stage stage;
 
-	//	Per tenere traccia dei codici attivi di partite e tornei
-	static private final HashSet<String> activeCodes = new HashSet<>();
-
 	public void switchToScene(String fxmlFile, Button btn) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
 		root = loader.load();
@@ -66,7 +65,7 @@ public class CreateGameController {
 		/*
 		 * Riporta alla schermata principale
 		 */
-		switchToScene("Main.fxml", goBackBtn);
+		switchToScene("MainMenu.fxml", goBackBtn);
 	}
 
 	@FXML
@@ -89,7 +88,7 @@ public class CreateGameController {
 		 */
 	}
 
-	public String generateCode() {
+	public void generateCode() {
 		/*
 		 * Admin genera una stringa che viene associata alla partita appena creata,
 		 * attraverso questo codice si può riprendere una partita.
@@ -102,13 +101,15 @@ public class CreateGameController {
 		for (int i = 0; i < 4; i++) {
 			if (i < 2) {
 //				Generiamo due caratteri maiuscoli in A-Z per la prima parte del codice
-				code += rand.nextInt(26) + 65;
+				code += (char) (rand.nextInt(26) + 'A');
+
 			} else {
 //				Generiamo due interi casuali in [0,9] per la seconda parte del codice
 				code += rand.nextInt(9);
 			}
 		}
-		return code;
+
+		codeLabel.setText("Code: " + code);
 	}
 
 	@FXML
@@ -128,5 +129,10 @@ public class CreateGameController {
 		 *      - Arrotondato a 4 se sono aggiunti 3 giocatori/robot
 		 *
 		 */
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		generateCode();
 	}
 }
