@@ -7,14 +7,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashSet;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -24,19 +25,18 @@ public class CreateGameController implements Initializable {
 
 	@FXML
 	private Label codeLabel;
+	// HashSet per memorizzare i codici generati
+	private final HashSet<String> activeCodes = new HashSet<>();
 
 	@FXML
 	private Button addPlayerBtn;
-
 	@FXML
-	private ListView<String> playerListView;
+	private Label player1, player2, player3, player4;
 	private Player[] players;
+	private int plyrIndex = 0;
 
 	@FXML
 	private TextField playerNameTextField;
-
-	@FXML
-	private Label gameTypeLabel;
 
 	@FXML
 	private Button removeRecentBtn;
@@ -50,6 +50,15 @@ public class CreateGameController implements Initializable {
 	Parent root;
 	Scene scene;
 	Stage stage;
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		players = new Player[4];
+
+		// TODO: GET CODES FROM FILESYSTEM AND LOAD THEM ONTO THE HASHSET
+
+		generateCode();
+	}
 
 	public void switchToScene(String fxmlFile, Button btn) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -76,6 +85,9 @@ public class CreateGameController implements Initializable {
 		 *
 		 * Se l'inserimento del robot corrisponde al terzo giocatore, viene lanciato un alert (vedi commenti su addHuman() al riguardo)
 		 */
+
+		Player player = new Player("CPU " + (plyrIndex + 1));
+		players[plyrIndex++] = player;
 	}
 
 	@FXML
@@ -86,6 +98,46 @@ public class CreateGameController implements Initializable {
 		 * All'inserimento del terzo giocatore, viene lanciato un alert per avvertire il fatto che si entra in un torneo aggiungendolo,
 		 * e dando l'opzione o di confermare il terzo giocatore, o di annullare il suo inserimento
 		 */
+
+		// Get the text from the text field
+		String playerName = playerNameTextField.getText();
+
+		// Check if the text field is empty
+		if (playerName.isEmpty()) {
+			playerNameTextField.setStyle("-fx-border-color: red");
+			playerNameTextField.setStyle("-fx-prompt-text-fill: red");
+			playerNameTextField.setPromptText("Inserisci un nome valido");
+		} else {
+			if (plyrIndex < 4) {
+				playerNameTextField.setStyle("-fx-border-color: none");
+				playerNameTextField.setStyle("-fx-prompt-text-fill: grey");
+				playerNameTextField.setPromptText("Player Name");
+
+				switch (plyrIndex) {
+					case 0:
+						player1.setText("Player 1: " + playerName);
+						break;
+					case 1:
+						player2.setText("Player 2: " + playerName);
+						break;
+					case 2:
+						player3.setText("Player 3: " + playerName);
+						break;
+					case 3:
+						player4.setText("Player 4: " + playerName);
+						break;
+				}
+
+				Player player = new Player(playerName);
+				players[plyrIndex++] = player;
+			} else {
+				// Non puoi aggiungere più di 4 giocatori
+				Alert alert = new Alert(Alert.AlertType.WARNING);
+				alert.setTitle("Warning");
+				alert.setHeaderText("Non puoi aggiungere più di 4 giocatori");
+				alert.showAndWait();
+			}
+		}
 	}
 
 	public void generateCode() {
@@ -109,7 +161,12 @@ public class CreateGameController implements Initializable {
 			}
 		}
 
-		codeLabel.setText("Code: " + code);
+		if (activeCodes.contains(code)) {
+			generateCode();
+		} else {
+			activeCodes.add(code);
+			codeLabel.setText("Code: " + code);
+		}
 	}
 
 	@FXML
@@ -117,6 +174,25 @@ public class CreateGameController implements Initializable {
 		/*
 		 * removeRecentBtn, rimuove l'inserimento del giocatore (robot o umano) più recente dalla lista
 		 */
+
+		if (plyrIndex > 0) {
+			plyrIndex--;
+			switch (plyrIndex) {
+				case 0:
+					player1.setText("Player 1: ");
+					break;
+				case 1:
+					player2.setText("Player 2: ");
+					break;
+				case 2:
+					player3.setText("Player 3: ");
+					break;
+				case 3:
+					player4.setText("Player 4: ");
+					break;
+			}
+			players[plyrIndex] = null;
+		}
 	}
 
 	@FXML
@@ -129,10 +205,5 @@ public class CreateGameController implements Initializable {
 		 *      - Arrotondato a 4 se sono aggiunti 3 giocatori/robot
 		 *
 		 */
-	}
-
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		generateCode();
 	}
 }

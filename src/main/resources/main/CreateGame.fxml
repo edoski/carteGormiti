@@ -19,8 +19,7 @@
                 <Font size="20.0"/>
             </font>
         </Button>
-        <ListView fx:id="playerListView" layoutX="860.0" layoutY="87.0" prefHeight="565.0" prefWidth="372.0"/>
-        <Button fx:id="addRobotBtn" layoutX="905.0" layoutY="661.0" mnemonicParsing="false" onAction="#addRobot"
+        <Button fx:id="addRobotBtn" layoutX="878.0" layoutY="631.0" mnemonicParsing="false" onAction="#addRobot"
                 text="Add Robot">
             <font>
                 <Font size="20.0"/>
@@ -32,27 +31,47 @@
                 <Font name="System Bold" size="38.0"/>
             </font>
         </Label>
-        <Button fx:id="removeRecentBtn" layoutX="1036.0" layoutY="662.0" mnemonicParsing="false"
+        <Button fx:id="removeRecentBtn" layoutX="1009.0" layoutY="632.0" mnemonicParsing="false"
                 onAction="#removeRecent" text="Remove Recent">
             <font>
                 <Font size="20.0"/>
             </font>
         </Button>
-        <Button fx:id="startGameBtn" layoutX="363.0" layoutY="628.0" mnemonicParsing="false" onAction="#startGame"
+        <Button fx:id="startGameBtn" layoutX="336.0" layoutY="628.0" mnemonicParsing="false" onAction="#startGame"
                 text="Start Game" textFill="#32e132">
             <font>
                 <Font name="System Bold" size="24.0"/>
             </font>
         </Button>
-        <Button fx:id="goBackBtn" layoutX="230.0" layoutY="629.0" mnemonicParsing="false" onAction="#goBackLoginScreen"
-                text="Go Back" textFill="RED">
+        <Button fx:id="goBackBtn" layoutX="242.0" layoutY="629.0" mnemonicParsing="false" onAction="#goBackLoginScreen"
+                text="Back" textFill="RED">
             <font>
                 <Font name="System Bold" size="24.0"/>
             </font>
         </Button>
-        <Label fx:id="gameTypeLabel" layoutX="1005.0" layoutY="26.0" text="Label">
+        <Label layoutX="428.0" layoutY="43.0" text="Creazione Gioco">
             <font>
-                <Font size="39.0"/>
+                <Font size="60.0"/>
+            </font>
+        </Label>
+        <Label fx:id="player1" layoutX="876.0" layoutY="200.0" text="Player 1: ">
+            <font>
+                <Font size="40.0"/>
+            </font>
+        </Label>
+        <Label fx:id="player2" layoutX="875.0" layoutY="291.0" text="Player 2: ">
+            <font>
+                <Font size="40.0"/>
+            </font>
+        </Label>
+        <Label fx:id="player3" layoutX="876.0" layoutY="384.0" text="Player 3: ">
+            <font>
+                <Font size="40.0"/>
+            </font>
+        </Label>
+        <Label fx:id="player4" layoutX="875.0" layoutY="483.0" text="Player 4: ">
+            <font>
+                <Font size="40.0"/>
             </font>
         </Label>
     </children>

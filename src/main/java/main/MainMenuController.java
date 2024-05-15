@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -42,14 +43,10 @@ public class MainMenuController implements Initializable {
 	}
 
 	@FXML
-	void loadGame(ActionEvent event) {
-		// POPUP WINDOW WITH TEXT INPUT FIELD ASKING FOR GAME CODE
-
-		// IF GAME CODE IS VALID
-		// LOAD GAME FROM JSON
-		// SWITCH TO GAME SCENE
-		// ELSE
-		// POPUP WINDOW WITH ERROR MESSAGE
+	void loadGame(ActionEvent event) throws IOException {
+		AnchorPane pane = (AnchorPane) loadGameBtn.getScene().getRoot();
+		pane.setDisable(true);
+		openPopupWindow("LoadGame.fxml", pane);
 	}
 
 	@FXML
@@ -80,5 +77,18 @@ public class MainMenuController implements Initializable {
 		stage = (Stage) btn.getScene().getWindow();
 		stage.setScene(scene);
 		stage.show();
+	}
+
+	public void openPopupWindow(String fxmlFile, AnchorPane pane) throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+		root = loader.load();
+		scene = new Scene(root);
+		stage = new Stage();
+		stage.setScene(scene);
+		stage.show();
+
+		// Passo il riferimento all'AnchorPane del MainMenuController al LoadGameController
+		LoadGameController controller = loader.getController();
+		controller.mainMenu = pane;
 	}
 }
