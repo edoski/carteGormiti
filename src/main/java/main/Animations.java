@@ -1,4 +1,4 @@
-package utils;
+package main;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.Interpolator;

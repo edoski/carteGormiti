@@ -54,22 +54,22 @@
                 <Font size="60.0"/>
             </font>
         </Label>
-        <Label fx:id="player1" layoutX="876.0" layoutY="200.0" text="Player 1: ">
+        <Label fx:id="player1" layoutX="875.0" layoutY="200.0" text="Player 1: ">
             <font>
                 <Font size="40.0"/>
             </font>
         </Label>
-        <Label fx:id="player2" layoutX="875.0" layoutY="291.0" text="Player 2: ">
+        <Label fx:id="player2" layoutX="874.0" layoutY="291.0" text="Player 2: ">
             <font>
                 <Font size="40.0"/>
             </font>
         </Label>
-        <Label fx:id="player3" layoutX="876.0" layoutY="384.0" text="Player 3: ">
+        <Label fx:id="player3" layoutX="875.0" layoutY="384.0" text="Player 3: ">
             <font>
                 <Font size="40.0"/>
             </font>
         </Label>
-        <Label fx:id="player4" layoutX="875.0" layoutY="483.0" text="Player 4: ">
+        <Label fx:id="player4" layoutX="874.0" layoutY="483.0" text="Player 4: ">
             <font>
                 <Font size="40.0"/>
             </font>

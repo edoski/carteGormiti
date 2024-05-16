@@ -1,4 +1,4 @@
-package game;
+package main;
 
 import org.json.JSONObject;
 
@@ -83,19 +83,13 @@ public class Deck {
 		return playerHand;
 	}
 
-	public boolean savePlayerHand(ArrayList<Card> playerHand) {
+	public void savePlayerHand(ArrayList<Card> playerHand) {
+		//Todo: save the player hand to a file as a JSON object
 
-		//To do: save the player hand
-		return false;
-	}
-
-	public boolean saveDeck(String path) {
-		//To do: save the deck
-		return false;
 	}
 
 	public ArrayList<Card> getPlayerHand(String pathPlayerHand) {
-		//To do: get the player hand from a file
+		//Todo: get the player hand from a file as a JSON object
 		return null;
 	}
 
@@ -109,7 +103,6 @@ public class Deck {
 	// 	TODO: END
 	public static void main(String[] args) {
 		createDeck();
-//    System.out.println(wildsDeck.to);
 
 //    print with toString wild card deck
 		for (Card card : wildsDeck) {

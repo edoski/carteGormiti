@@ -1,4 +1,4 @@
-package game;
+package main;
 
 import org.json.JSONObject;
 
@@ -18,7 +18,7 @@ public class Card {
 	private final String art;
 
 	//	Per le Carte Normali
-	public Card(String name, Element element, double damage, String art) {
+	public Card(final String name, final Element element, final double damage, final String art) {
 		this.name = name;
 		this.element = element;
 		this.damage = damage;
@@ -35,7 +35,7 @@ public class Card {
 
 
 	//	Per le Carte Wild
-	public Card(String name, Wild wild, String art) {
+	public Card(final String name, final Wild wild, final String art) {
 		this.name = name;
 		this.wild = wild;
 		this.art = art;

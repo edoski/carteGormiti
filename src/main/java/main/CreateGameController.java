@@ -1,6 +1,5 @@
 package main;
 
-import game.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -240,7 +239,7 @@ public class CreateGameController implements Initializable {
 	}
 
 	@FXML
-	void startGame(ActionEvent event) {
+	void startGame(ActionEvent event) throws IOException {
 		/*
 		 * startGameBtn, lancia la partita, o torneo, in base al numero di giocatori aggiunti.
 		 *
@@ -289,6 +288,7 @@ public class CreateGameController implements Initializable {
 				alert2.showAndWait();
 				activeCodes.add(code);
 				// TODO: Start game
+				switchToScene("GameRound.fxml", startGameBtn);
 				break;
 			case 3:
 				// Torneo
