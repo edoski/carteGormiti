@@ -257,6 +257,9 @@ public class CreateGameController implements Initializable {
 			}
 		}
 
+		Game gameController = new Game();
+		gameController.setPlayers(players[0], players[1]);
+
 		switch (count) {
 			case 0:
 				// Non ci sono giocatori
@@ -278,6 +281,7 @@ public class CreateGameController implements Initializable {
 				players[1] = player2;
 				activeCodes.add(code);
 				// TODO: Start game
+				switchToScene("GameRound.fxml", startGameBtn);
 				break;
 			case 2:
 				// Partita singola
@@ -301,7 +305,7 @@ public class CreateGameController implements Initializable {
 				Player player3 = new Player("CPU 1");
 				players[2] = player3;
 				activeCodes.add(code);
-				// TODO: Start game
+				// TODO: Start Torneo, likely with start game but need a controller to manage the rest of the games
 				break;
 			case 4:
 				// Torneo
@@ -311,7 +315,7 @@ public class CreateGameController implements Initializable {
 				alert4.setContentText("Confermando, comincerà il torneo con i quattro giocatori inseriti");
 				alert4.showAndWait();
 				activeCodes.add(code);
-				// TODO: Start game
+				// TODO: Start Torneo, likely with start game but need a controller to manage the rest of the games
 				break;
 		}
 	}

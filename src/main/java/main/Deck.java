@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Random;
 
 
 public class Deck {
@@ -22,6 +23,10 @@ public class Deck {
 		createDeck();
 	}
 
+
+	/*
+	 * Questo metodo crea il deck di carte, leggendo da file JSON le carte elementali e le carte wild.
+	 */
 	public static void createDeck() {
 		elementsDeck = new ArrayList<>();
 		wildsDeck = new ArrayList<>();
@@ -67,32 +72,38 @@ public class Deck {
 		}
 	}
 
-	public ArrayList<Card> createPlayerDeck() {
-		ArrayList<Card> playerHand = new ArrayList<Card>();
 
-		/*
-		 *
-		 * Questo metodo distribuisce le carte a ciascun giocatore all'inizio della partita una volta,
-		 * a ciascun giocatore vengono distribuite 9 carte normali:
-		 * - 3 fuoco
-		 * - 3 acqua
-		 * - 3 terra
-		 *
-		 */
+	/*
+	 * Questo metodo distribuisce le carte a ciascun giocatore all'inizio della partita una volta,
+	 * a ciascun giocatore vengono distribuite 9 carte normali in maniera random
+	 */
+	public Card[] createPlayerDeck() {
+		Card[] playerHand = new Card[9];
+		// Distribuzione carte elementali, randomizzando l'ordine
+		Random rand = new Random();
 
+		for (int i = 0; i < 9; i++) {
+			int randomIndex = rand.nextInt(elementsDeck.size());
+			playerHand[i] = elementsDeck.get(randomIndex);
+			elementsDeck.remove(randomIndex);
+		}
+
+		// print player hand
+		for (Card card : playerHand) {
+			System.out.println(card.toStringElement());
+		}
 		return playerHand;
 	}
 
-	public void savePlayerHand(ArrayList<Card> playerHand) {
-		//Todo: save the player hand to a file as a JSON object
 
+	public void savePlayerHand(Card[] playerHand) {
+		//Todo: save the player hand to a file as a JSON object
 	}
 
-	public ArrayList<Card> getPlayerHand(String pathPlayerHand) {
+	public Card[] getPlayerHand(String pathPlayerHand) {
 		//Todo: get the player hand from a file as a JSON object
 		return null;
 	}
-
 	public ArrayList<Card> getDeck(String path) {
 		//To do: get the deck from a file
 		return null;
@@ -104,14 +115,19 @@ public class Deck {
 	public static void main(String[] args) {
 		createDeck();
 
+//		int i = 0;
 //    print with toString wild card deck
-		for (Card card : wildsDeck) {
-			System.out.println(card.toStringWild());
-		}
-
+//		for (Card card : wildsDeck) {
+//			System.out.println(card.toStringWild() + " " + i++);
+//		}
+//
+//		i = 0;
 //    print with tOString for element card deck
-		for (Card card : elementsDeck) {
-			System.out.println(card.toStringElement());
-		}
+//		for (Card card : elementsDeck) {
+//			System.out.println(card.toStringElement() + " " + i++);
+//		}
+
+		Deck deck = new Deck();
+		deck.createPlayerDeck();
 	}
 }

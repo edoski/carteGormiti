@@ -10,7 +10,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class LoadGameController {
-
 	Parent root;
 	Scene scene;
 	Stage stage;
