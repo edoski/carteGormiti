@@ -57,7 +57,7 @@
         <ImageView fx:id="playerCard1" fitHeight="560.0" fitWidth="400.0" layoutX="-124.0" layoutY="334.0"
                    pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33">
             <image>
-                <Image url="@../cards/WILD/SUPER/WILD-SUPER-VINCITA.jpeg"/>
+                <Image url="@../cards/WATER/WATER-06.jpeg"/>
             </image>
         </ImageView>
         <ImageView fx:id="playerCard2" fitHeight="560.0" fitWidth="400.0" layoutX="17.0" layoutY="334.0"

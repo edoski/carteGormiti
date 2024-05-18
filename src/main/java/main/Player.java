@@ -18,6 +18,10 @@ public class Player {
         this.playerHand = playerHand;
     }
 
+    public Card[] getCards() {
+        return playerHand;
+    }
+
     public class Human {
         public Human(String name) {
             super();

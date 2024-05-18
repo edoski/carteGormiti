@@ -51,6 +51,10 @@ public class CreateGameController implements Initializable {
 	Scene scene;
 	Stage stage;
 
+	public Player[] getPlayers() {
+		return players;
+	}
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		players = new Player[4];
@@ -238,6 +242,10 @@ public class CreateGameController implements Initializable {
 		}
 	}
 
+//	Player[] getPlayers() {
+//		return players;
+//	}
+
 	@FXML
 	void startGame(ActionEvent event) throws IOException {
 		/*
@@ -257,8 +265,8 @@ public class CreateGameController implements Initializable {
 			}
 		}
 
-		Game gameController = new Game();
-		gameController.setPlayers(players[0], players[1]);
+		// Passo I dati inerenti ai giocatori alla classe Game
+		Game.setPlayers(players);
 
 		switch (count) {
 			case 0:
@@ -280,8 +288,7 @@ public class CreateGameController implements Initializable {
 				Player player2 = new Player("CPU 1");
 				players[1] = player2;
 				activeCodes.add(code);
-				// TODO: Start game
-				switchToScene("GameRound.fxml", startGameBtn);
+				switchToScene("Game.fxml", startGameBtn);
 				break;
 			case 2:
 				// Partita singola
@@ -291,8 +298,7 @@ public class CreateGameController implements Initializable {
 				alert2.setContentText("Confermando, comincerà la partita con i due giocatori inseriti");
 				alert2.showAndWait();
 				activeCodes.add(code);
-				// TODO: Start game
-				switchToScene("GameRound.fxml", startGameBtn);
+				switchToScene("Game.fxml", startGameBtn);
 				break;
 			case 3:
 				// Torneo
@@ -305,7 +311,7 @@ public class CreateGameController implements Initializable {
 				Player player3 = new Player("CPU 1");
 				players[2] = player3;
 				activeCodes.add(code);
-				// TODO: Start Torneo, likely with start game but need a controller to manage the rest of the games
+				// TODO: Start Torneo
 				break;
 			case 4:
 				// Torneo
@@ -315,7 +321,7 @@ public class CreateGameController implements Initializable {
 				alert4.setContentText("Confermando, comincerà il torneo con i quattro giocatori inseriti");
 				alert4.showAndWait();
 				activeCodes.add(code);
-				// TODO: Start Torneo, likely with start game but need a controller to manage the rest of the games
+				// TODO: Start Torneo
 				break;
 		}
 	}

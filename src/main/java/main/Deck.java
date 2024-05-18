@@ -89,12 +89,19 @@ public class Deck {
 		}
 
 		// print player hand
-		for (Card card : playerHand) {
-			System.out.println(card.toStringElement());
-		}
+//		for (Card card : playerHand) {
+//			System.out.println(card.toStringElement());
+//		}
 		return playerHand;
 	}
 
+	public Card[] getWildsDeck() {
+		Card[] wilds = new Card[wildsDeck.size()];
+		for (int i = 0; i < wildsDeck.size(); i++) {
+			wilds[i] = wildsDeck.get(i);
+		}
+		return wilds;
+	}
 
 	public void savePlayerHand(Card[] playerHand) {
 		//Todo: save the player hand to a file as a JSON object
@@ -112,22 +119,22 @@ public class Deck {
 	//	TODO: START
 	//      DELETE WHEN FINISHED TESTING
 	// 	TODO: END
-	public static void main(String[] args) {
-		createDeck();
-
-//		int i = 0;
-//    print with toString wild card deck
-//		for (Card card : wildsDeck) {
-//			System.out.println(card.toStringWild() + " " + i++);
-//		}
+//	public static void main(String[] args) {
+//		createDeck();
 //
-//		i = 0;
-//    print with tOString for element card deck
-//		for (Card card : elementsDeck) {
-//			System.out.println(card.toStringElement() + " " + i++);
-//		}
-
-		Deck deck = new Deck();
-		deck.createPlayerDeck();
-	}
+////		int i = 0;
+////    print with toString wild card deck
+////		for (Card card : wildsDeck) {
+////			System.out.println(card.toStringWild() + " " + i++);
+////		}
+////
+////		i = 0;
+////    print with tOString for element card deck
+////		for (Card card : elementsDeck) {
+////			System.out.println(card.toStringElement() + " " + i++);
+////		}
+//
+//		Deck deck = new Deck();
+//		deck.createPlayerDeck();
+//	}
 }
