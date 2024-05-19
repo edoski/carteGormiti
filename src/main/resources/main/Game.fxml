@@ -20,38 +20,32 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <Label fx:id="roundLabel" layoutX="15.0" layoutY="59.0" prefHeight="50.0" prefWidth="245.0" text="Round: ">
+        <Label fx:id="roundLabel" layoutX="1029.0" layoutY="32.0" prefHeight="50.0" prefWidth="245.0" text="Round: ">
             <font>
                 <Font name="System Bold" size="40.0"/>
             </font>
         </Label>
-        <Label fx:id="playerLabel" layoutX="353.0" layoutY="47.0" prefHeight="50.0" prefWidth="555.0"
+        <Label fx:id="playerLabel" layoutX="298.0" layoutY="48.0" prefHeight="67.0" prefWidth="639.0"
                text="Scegli una carta, ">
             <font>
                 <Font name="System Bold" size="55.0"/>
             </font>
         </Label>
-        <ImageView fx:id="wildCardImage" fitHeight="560.0" fitWidth="400.0" layoutX="-124.0" layoutY="-48.0"
+        <ImageView fx:id="wildCardImage" fitHeight="560.0" fitWidth="400.0" layoutX="-121.0" layoutY="-144.0"
                    pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33">
             <image>
                 <Image url="@../cards/WILD/SUPER/WILD-SUPER-VINCITA.jpeg"/>
             </image>
         </ImageView>
-        <Label fx:id="wildEffectsLabel" layoutX="6.0" layoutY="331.0" text="- Effects: ">
+        <Label fx:id="wildEffectsLabel" layoutX="9.0" layoutY="235.0" text="- Effects: ">
             <font>
                 <Font size="25.0"/>
             </font>
         </Label>
-        <ImageView fx:id="playerCardChoiceImage" fitHeight="560.0" fitWidth="400.0" layoutX="296.0" layoutY="26.0"
+        <ImageView fx:id="playerCardChoiceImage" fitHeight="560.0" fitWidth="400.0" layoutX="363.0" layoutY="19.0"
                    pickOnBounds="true" preserveRatio="true" scaleX="0.6" scaleY="0.6">
             <image>
                 <Image url="@../cards/WATER/WATER-05.jpeg"/>
-            </image>
-        </ImageView>
-        <ImageView fx:id="enemyCardChoiceImage" fitHeight="560.0" fitWidth="400.0" layoutX="579.0" layoutY="26.0"
-                   pickOnBounds="true" preserveRatio="true" scaleX="0.6" scaleY="0.6">
-            <image>
-                <Image url="@../cards/WATER/WATER-01.jpeg"/>
             </image>
         </ImageView>
         <ImageView fx:id="playerCard1" fitHeight="560.0" fitWidth="400.0" layoutX="-124.0" layoutY="334.0"

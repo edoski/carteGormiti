@@ -10,6 +10,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -48,17 +50,29 @@ public class Game implements Initializable {
 	@FXML
 	private Label wildEffectsLabel;
 
+	static Deck deck = new Deck();
 	static Player player1;
 	static Player player2;
 	static boolean player1Turn = true;
 	static int roundNumber = 1;
 
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		startGame();
+	}
+
+	/*
+	 * Questo metodo imposta i giocatori per la partita
+	 */
+	public static void setPlayers(Player[] players) {
+		player1 = players[0];
+		player2 = players[1];
+	}
+
 	/*
 	 * Questo metodo inizia la partita, creando un mazzo di carte e distribuendole ai giocatori.
 	 */
 	public void startGame() {
-		// Create a new deck of cards
-		Deck deck = new Deck();
 		// Distribute cards to players
 		Card[] player1Hand = deck.createPlayerDeck();
 		Card[] player2Hand = deck.createPlayerDeck();
@@ -81,53 +95,58 @@ public class Game implements Initializable {
 	 */
 	public void playRound() {
 		if (player1Turn) {
-//			// Display player 1 card
-//			// TODO SELECT WILD CARD
-//			selectWildCard(player1);
+			playerLabel.setText("Scegli una carta, " + player1.getName());
+			// Display player 1 card
 			displayPlayerCards(player1);
-//			// Player 1 selects a card
+			// Player 1 selects a card
 //			Card player1Card = player1.selectCard();
-//
-//			// Display player 2 cards
-//			// TODO SELECT WILD CARD
-//			selectWildCard(player2);
+
+			playerLabel.setText("Scegli una carta, " + player2.getName());
+			// Display player 2 cards
 //			displayPlayerCards(player2);
-//			// Player 2 selects a card
+			// Player 2 selects a card
 //			Card player2Card = player2.selectCard();
+			// Flip turn for next round
 			player1Turn = false;
 		} else {
-//			// Display player 2 cards
-//			// TODO SELECT WILD CARD
-//			selectWildCard(player2);
+			playerLabel.setText("Scegli una carta, " + player2.getName());
+			// Display player 2 cards
 //			displayPlayerCards(player2);
-//
-//			// Display player 1 card
-//			// TODO SELECT WILD CARD
-//			selectWildCard(player1);
-//			displayPlayerCards(player1);
-//			// Player 2 selects a card
+			// Player 2 selects a card
 //			Card player2Card = player2.selectCard();
-//			// Player 1 selects a card
+
+			playerLabel.setText("Scegli una carta, " + player1.getName());
+			// Display player 1 card
+//			displayPlayerCards(player1);
+			// Player 1 selects a card
 //			Card player1Card = player1.selectCard();
-//			player1Turn = true;
+			// Flip turn for next round
+			player1Turn = true;
 		}
-//
-//		// Determine winner
+
+		// Determine winner
 //		Player winner = selectRoundWinner(player1Card, player2Card);
-//		// Display winner
+		// Display winner
 //		displayWinner(winner);
-//		// Update player scores
+		// Update player scores
+		// TODO: DOES THIS UPDATE THE PLAYER1 OR PLAYER2 SCORE? OR JUST THE WINNER OBJECT MADE HERE?
 //		winner.playerScore++;
-//		// Update round number
-//		roundNumber++;
-//
-//		// Start next round, if round 3 is not reached
+		// Update round number
+		roundNumber++;
+
+		// TODO: MAYBE CONSIDER MORE ROUNDS, JUST NEED TO CHANGE THE BELOW IF NUMBER & ROUND LABEL
+		// Start next round, if round 3 is not reached
 //		if (roundNumber < 3) {
 //			playRound();
 //		} else {
-//			// End game
-//			selectGameWinner();
-//			displayLeaderboard();
+		// End game
+//          if (gameDraw()) {
+//              TODO: Implement this method, if the game is a draw, play a tiebreaker round
+//              playRound();
+// 		    } else {
+//			    selectGameWinner(player1, player2);
+//			    displayLeaderboard();
+//		    }
 //		}
 	}
 
@@ -145,6 +164,9 @@ public class Game implements Initializable {
 				playerCard7, playerCard8, playerCard9
 		};
 
+		// Sort the cards by element
+		Arrays.sort(cards, Comparator.comparing(card -> card.getElement().ordinal()));
+
 		for (int i = 0; i < cards.length; i++) {
 			Image image = cards[i].getArt();
 			cardViews[i].setImage(image);
@@ -157,11 +179,27 @@ public class Game implements Initializable {
 	}
 
 	/*
+	 * Viene chiamato all'inizio di ogni round, si applica una delle carte Wild (Indebolimento, Potenziamento)
+	 */
+	public static Card selectWildCard() {
+		Random rand = new Random();
+		Card[] wilds = deck.getWildsDeck();
+		return wilds[rand.nextInt(wilds.length)];
+	}
+
+	/*
 	 * Questo metodo permette al giocatore di selezionare una carta dal proprio mazzo
 	 * TODO: In scene builder, set the onAction property of each card to this method
+	 * TODO: showCardPopup() should be called when a card is clicked, the scene is still to be done (follow pdf)
 	 */
 	Card selectCard(ActionEvent event) {
 		return null;
+	}
+
+	/*
+	 * Questo metodo mostra la carta selezionata dal giocatore quando clicca su di essa
+	 */
+	void showCardPopup() {
 	}
 
 	/*
@@ -171,6 +209,7 @@ public class Game implements Initializable {
 //		double p1Dmg = finalCardDamage(player1Card, player2Card, player1.getWildCard());
 //		double p2Dmg = finalCardDamage(player2Card, player1Card, player2.getWildCard());
 //
+	// TODO: ADD A DRAW SCENARIO
 //		if (p1Dmg == p2Dmg) {
 //			return roundDraw();
 //		} else {
@@ -183,9 +222,9 @@ public class Game implements Initializable {
 	 * - Indebolimento: 0.8x danno
 	 * - Potenziamento: 1.2x danno
 	 *
-	 * - Fuoco attacca Terra: 1.2x danno (0.8x se reverse)
-	 * - Terra attacca Acqua: 1.2x danno (0.8x se reverse)
-	 * - Acqua attacca Fuoco: 1.2x danno (0.8x se reverse)
+	 * - Fuoco attacca Terra: 1.2x danno (0.8x se vice-versa)
+	 * - Terra attacca Acqua: 1.2x danno (0.8x se vice-versa)
+	 * - Acqua attacca Fuoco: 1.2x danno (0.8x se vice-versa)
 	 */
 	double finalCardDamage(Card attackerCard, Card defenderCard, Card.Wild wildCard) {
 		double dmg = attackerCard.getDamage();
@@ -209,6 +248,7 @@ public class Game implements Initializable {
 			mult = 0.8;
 		}
 
+		// TODO: THE SPECIFIC ELEMENT OF THE WILD CARD
 		// Wild card effects
 		if (wildCard == Card.Wild.INDEBOLIMENTO) {
 			mult *= 0.8;
@@ -219,29 +259,18 @@ public class Game implements Initializable {
 		return dmg * mult;
 	}
 
-	@FXML
-	void quitAndSaveGame(ActionEvent event) {
-	}
-
-	@FXML
-	void restartGame(ActionEvent event) {
-	}
-
-	@FXML
-	void saveGame(ActionEvent event) {
-	}
-
-
-	/*
-	 * Questo metodo mostra la carta selezionata dal giocatore quando clicca su di essa
-	 */
-	void showCardPopup() {
-	}
-
 	/*
 	 * Seleziona il vincitore a fine partita, in base al numero massimo di punti conseguiti
+	 * TODO: Implement the draw scenario between players, including the tiebreaker round OR just declare a draw (latter is easier)
 	 */
-	public void selectGameWinner() {
+	public Player selectGameWinner(Player player1, Player player2) {
+		return player1.playerScore > player2.playerScore ? player1 : player2;
+	}
+
+	/*
+	 * TODO: GAME DRAW SCENARIO
+	 */
+	public void gameDraw() {
 	}
 
 	/*
@@ -252,23 +281,17 @@ public class Game implements Initializable {
 	}
 
 	/*
-	 * Viene chiamato all'inizio di ogni round (2 turni), si applica una delle carte Wild (Indebolimento, Potenziamento)
+	 * TODO: MENU BAR METHODS
 	 */
-	public static Card selectWildCard() {
-		// Randomly select a wild card
-		Random rand = new Random();
-		Deck deck = new Deck();
-		Card[] wilds = deck.getWildsDeck();
-		return wilds[rand.nextInt(wilds.length)];
+	@FXML
+	void quitAndSaveGame(ActionEvent event) {
 	}
 
-	public static void setPlayers(Player[] players) {
-		player1 = players[0];
-		player2 = players[1];
+	@FXML
+	void restartGame(ActionEvent event) {
 	}
 
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		startGame();
+	@FXML
+	void saveGame(ActionEvent event) {
 	}
 }

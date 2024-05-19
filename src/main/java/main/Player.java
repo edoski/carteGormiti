@@ -7,6 +7,7 @@ public class Player {
 
     public Player(String name) {
         this.name = name;
+        // TODO: MAYBE ADD this.playerHand = playerHand passed from Game
         playerScore = 0;
     }
 

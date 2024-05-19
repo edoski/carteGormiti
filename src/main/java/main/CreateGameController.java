@@ -265,7 +265,7 @@ public class CreateGameController implements Initializable {
 			}
 		}
 
-		// Passo I dati inerenti ai giocatori alla classe Game
+		// Passo I dati inerenti ai giocatori alla classe Gam   e
 		Game.setPlayers(players);
 
 		switch (count) {

@@ -18,6 +18,9 @@ public class Deck {
 	private static ArrayList<Card> elementsDeck;
 	private static ArrayList<Card> wildsDeck;
 
+	private static ArrayList<Card> fireCards;
+	private static ArrayList<Card> waterCards;
+	private static ArrayList<Card> forestCards;
 
 	public Deck() {
 		createDeck();
@@ -44,6 +47,25 @@ public class Deck {
 						Card card = Card.fromJson(cardObject, element);
 						elementsDeck.add(card);
 					}
+				}
+			}
+
+			fireCards = new ArrayList<>();
+			waterCards = new ArrayList<>();
+			forestCards = new ArrayList<>();
+
+			// Distribuzione carte elementali in array separati per facilitare la distribuzione 3 per elemento ai giocatori
+			for (Card card : elementsDeck) {
+				switch (card.getElement()) {
+					case FIRE:
+						fireCards.add(card);
+						break;
+					case WATER:
+						waterCards.add(card);
+						break;
+					case FOREST:
+						forestCards.add(card);
+						break;
 				}
 			}
 		} catch (Exception e) {
@@ -79,19 +101,29 @@ public class Deck {
 	 */
 	public Card[] createPlayerDeck() {
 		Card[] playerHand = new Card[9];
-		// Distribuzione carte elementali, randomizzando l'ordine
 		Random rand = new Random();
 
-		for (int i = 0; i < 9; i++) {
-			int randomIndex = rand.nextInt(elementsDeck.size());
-			playerHand[i] = elementsDeck.get(randomIndex);
-			elementsDeck.remove(randomIndex);
+		// Distribuzione carte fuoco
+		for (int i = 0; i < 3; i++) {
+			int randomIndex = rand.nextInt(fireCards.size());
+			playerHand[i] = fireCards.get(randomIndex);
+			fireCards.remove(randomIndex);
 		}
 
-		// print player hand
-//		for (Card card : playerHand) {
-//			System.out.println(card.toStringElement());
-//		}
+		// Distribuzione carte acqua
+		for (int i = 3; i < 6; i++) {
+			int randomIndex = rand.nextInt(waterCards.size());
+			playerHand[i] = waterCards.get(randomIndex);
+			waterCards.remove(randomIndex);
+		}
+
+		// Distribuzione carte foresta
+		for (int i = 6; i < 9; i++) {
+			int randomIndex = rand.nextInt(forestCards.size());
+			playerHand[i] = forestCards.get(randomIndex);
+			forestCards.remove(randomIndex);
+		}
+
 		return playerHand;
 	}
 
@@ -107,34 +139,8 @@ public class Deck {
 		//Todo: save the player hand to a file as a JSON object
 	}
 
-	public Card[] getPlayerHand(String pathPlayerHand) {
-		//Todo: get the player hand from a file as a JSON object
-		return null;
-	}
 	public ArrayList<Card> getDeck(String path) {
 		//To do: get the deck from a file
 		return null;
 	}
-
-	//	TODO: START
-	//      DELETE WHEN FINISHED TESTING
-	// 	TODO: END
-//	public static void main(String[] args) {
-//		createDeck();
-//
-////		int i = 0;
-////    print with toString wild card deck
-////		for (Card card : wildsDeck) {
-////			System.out.println(card.toStringWild() + " " + i++);
-////		}
-////
-////		i = 0;
-////    print with tOString for element card deck
-////		for (Card card : elementsDeck) {
-////			System.out.println(card.toStringElement() + " " + i++);
-////		}
-//
-//		Deck deck = new Deck();
-//		deck.createPlayerDeck();
-//	}
 }

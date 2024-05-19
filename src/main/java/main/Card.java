@@ -78,12 +78,4 @@ public class Card {
 			return null;
 		}
 	}
-
-	public String toStringElement() {
-		return name + "\t" + element + "\t" + damage + "\n";
-	}
-
-	public String toStringWild() {
-		return name + "\t" + wild + "\n";
-	}
 }
