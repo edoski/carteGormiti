@@ -4,6 +4,7 @@ public class Player {
     final String name;
     Card[] playerHand;
     int playerScore;
+    Card wildCard;
 
     public Player(String name) {
         this.name = name;
@@ -17,6 +18,14 @@ public class Player {
 
     public void setHand(Card[] playerHand) {
         this.playerHand = playerHand;
+    }
+
+    public void setWildCard(Card wildCard) {
+        this.wildCard = wildCard;
+    }
+
+    public Card getWildCard() {
+        return wildCard;
     }
 
     public Card[] getCards() {

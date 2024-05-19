@@ -11,7 +11,7 @@ public class Card {
 	}
 
 	public enum Wild {
-		SUPER, POTENZIAMENTO, INDEBOLIMENTO
+		POTENZIAMENTO, INDEBOLIMENTO
 	}
 
 	private final String name;
@@ -65,6 +65,10 @@ public class Card {
 
 	public double getDamage() {
 		return damage;
+	}
+
+	public Wild getWild() {
+		return wild;
 	}
 
 	public Image getArt() {

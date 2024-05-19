@@ -31,20 +31,4 @@ public class Animations {
 		translateY.setInterpolator(interpolator);
 		return translateY;
 	}
-
-	/*
-	 * applyWildCard() → Centra nello schermo all'inizio del round completo la carta wild del giocatore
-	 */
-
-	/*
-	 * zoomCard() → selezionando una carta nel proprio turno, la ingrandisce per dare maggiori dettagli al giocatore
-	 */
-
-	/*
-	 * roundVersus() → mette al centro dello schermo le carte scelte da entrambi i giocatori quel turno
-	 */
-
-	/*
-	 * displayWinnerCard() → Mantiene e centra nello schermo la carta vincitrice del turno
-	 */
 }

@@ -3,25 +3,26 @@ package main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
+
+
+/*TODO:
+ * - MAKE THE CARDS OPACITY SLIGHTLY DIMMER, AND THEN FULLY VISIBLE WHEN HOVERED OVER
+ * - CHECK WHY CPU02 STARTS BEFORE CPU01 WHEN CPU01 IS SELECTED FIRST
+ * - ADD A TIEBREAKER ROUND IF THE GAME IS A DRAW
+ */
+
 
 public class Game implements Initializable {
-
-	@FXML
-	private ImageView enemyCardChoiceImage;
-
-	@FXML
-	private MenuBar menuBar;
 
 	@FXML
 	private ImageView playerCard1, playerCard2, playerCard3, playerCard4, playerCard5, playerCard6, playerCard7, playerCard8, playerCard9;
@@ -50,14 +51,27 @@ public class Game implements Initializable {
 	@FXML
 	private Label wildEffectsLabel;
 
+	@FXML
+	private Button confirmCardBtn;
+
+	@FXML
+	private Label damageCardChoice;
+
 	static Deck deck = new Deck();
 	static Player player1;
 	static Player player2;
 	static boolean player1Turn = true;
 	static int roundNumber = 1;
+	// card map to map the image view to the card
+	private final HashMap<ImageView, Card> cardMap = new HashMap<>();
+	// wild card for the round
+	static Card roundWildCard;
+	// selected card
+	private Card selectedCard;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		confirmCardBtn.setDisable(true);
 		startGame();
 	}
 
@@ -96,43 +110,43 @@ public class Game implements Initializable {
 	public void playRound() {
 		if (player1Turn) {
 			playerLabel.setText("Scegli una carta, " + player1.getName());
-			// Display player 1 card
 			displayPlayerCards(player1);
-			// Player 1 selects a card
-//			Card player1Card = player1.selectCard();
-
-			playerLabel.setText("Scegli una carta, " + player2.getName());
-			// Display player 2 cards
-//			displayPlayerCards(player2);
-			// Player 2 selects a card
-//			Card player2Card = player2.selectCard();
-			// Flip turn for next round
 			player1Turn = false;
 		} else {
 			playerLabel.setText("Scegli una carta, " + player2.getName());
-			// Display player 2 cards
-//			displayPlayerCards(player2);
-			// Player 2 selects a card
-//			Card player2Card = player2.selectCard();
-
-			playerLabel.setText("Scegli una carta, " + player1.getName());
-			// Display player 1 card
-//			displayPlayerCards(player1);
-			// Player 1 selects a card
-//			Card player1Card = player1.selectCard();
-			// Flip turn for next round
+			displayPlayerCards(player2);
 			player1Turn = true;
 		}
+	}
 
-		// Determine winner
+	/*
+	 * Connesso al bottone confirmCardBtn, questo metodo conferma la carta selezionata dal giocatore
+	 */
+	@FXML
+	Card confirmCard(ActionEvent event) {
+		if (selectedCard != null) {
+			return selectedCard;
+		} else {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setTitle("Errore");
+			alert.setHeaderText("Carta non selezionata");
+			alert.setContentText("Seleziona una carta prima di confermare");
+			alert.showAndWait();
+			return null;
+		}
+	}
+
+	@FXML
+	void onConfirmCard(ActionEvent event) {
+		Card selectedCard = confirmCard(event);
 //		Player winner = selectRoundWinner(player1Card, player2Card);
-		// Display winner
 //		displayWinner(winner);
 		// Update player scores
 		// TODO: DOES THIS UPDATE THE PLAYER1 OR PLAYER2 SCORE? OR JUST THE WINNER OBJECT MADE HERE?
 //		winner.playerScore++;
-		// Update round number
-		roundNumber++;
+		// TODO: NEEDS TO UPDATE ONLY AFTER FULL ROUND
+		//  Update round number
+//		roundNumber++;
 
 		// TODO: MAYBE CONSIDER MORE ROUNDS, JUST NEED TO CHANGE THE BELOW IF NUMBER & ROUND LABEL
 		// Start next round, if round 3 is not reached
@@ -170,6 +184,7 @@ public class Game implements Initializable {
 		for (int i = 0; i < cards.length; i++) {
 			Image image = cards[i].getArt();
 			cardViews[i].setImage(image);
+			cardMap.put(cardViews[i], cards[i]);  // Add the ImageView and Card to the map
 		}
 
 		// Display wild card
@@ -181,25 +196,74 @@ public class Game implements Initializable {
 	/*
 	 * Viene chiamato all'inizio di ogni round, si applica una delle carte Wild (Indebolimento, Potenziamento)
 	 */
-	public static Card selectWildCard() {
+	public Card selectWildCard() {
 		Random rand = new Random();
 		Card[] wilds = deck.getWildsDeck();
-		return wilds[rand.nextInt(wilds.length)];
+		Card wildCard = wilds[rand.nextInt(wilds.length)];
+		Player currentPlayer = getCurrentPlayer();
+		currentPlayer.setWildCard(wildCard);
+
+		// Display wild card effects
+		String wildEffects =
+				"Effetto:" +
+						"\n-->" + wildCard.getWild().toString() + " " + wildCard.getElement().toString() +
+						"\n--> " + (wildCard.getWild().toString().equals("INDEBOLIMENTO") ? "0.8x DANNO" : "1.2x DANNO");
+		wildEffectsLabel.setText(wildEffects);
+
+		roundWildCard = wildCard;
+		return wildCard;
 	}
 
 	/*
 	 * Questo metodo permette al giocatore di selezionare una carta dal proprio mazzo
-	 * TODO: In scene builder, set the onAction property of each card to this method
-	 * TODO: showCardPopup() should be called when a card is clicked, the scene is still to be done (follow pdf)
+	 * TODO: GET THE WILD CARD STATS AND REFLECT THE DAMAGE IN THE LABEL IF APPICABLE
 	 */
-	Card selectCard(ActionEvent event) {
-		return null;
+	@FXML
+	void selectCard(MouseEvent event) {
+		confirmCardBtn.setDisable(false);
+		Player player = getCurrentPlayer();
+		ImageView clickedCard = (ImageView) event.getSource();
+		selectedCard = cardMap.get(clickedCard);
+		// get clicked card
+		Image cardImage = clickedCard.getImage();
+		playerCardChoiceImage.setImage(cardImage);
+		// get card damage
+		double mult = cardMultiplier(selectedCard, roundWildCard);
+		double cardDamage = selectedCard.getDamage();
+		damageCardChoice.setText("Danno: " + Math.round((cardDamage * mult) * 10.0) / 10.0);
+	}
+
+	static Player getCurrentPlayer() {
+		return player1Turn ? player1 : player2;
 	}
 
 	/*
-	 * Questo metodo mostra la carta selezionata dal giocatore quando clicca su di essa
+	 * Calcola il moltiplicatore della carta selezionata, in base alla carta Wild del round
+	 * È diverso da finalCardDamage() perché considera solo la carta selezionata e la carta Wild del round
+	 * e non la carta dell'avversario. Inoltre, fornisce solo il moltiplicatore e non il danno finale.
 	 */
-	void showCardPopup() {
+	static double cardMultiplier(Card card, Card wildCard) {
+		double mult = 1.0;
+
+		if (wildCard.getWild() == Card.Wild.POTENZIAMENTO) {
+			if (card.getElement() == Card.Element.FIRE && roundWildCard.getElement() == Card.Element.FIRE) {
+				mult = 1.2;
+			} else if (card.getElement() == Card.Element.WATER && roundWildCard.getElement() == Card.Element.WATER) {
+				mult = 1.2;
+			} else if (card.getElement() == Card.Element.FOREST && roundWildCard.getElement() == Card.Element.FOREST) {
+				mult = 1.2;
+			}
+		} else {
+			if (card.getElement() == Card.Element.FIRE && roundWildCard.getElement() == Card.Element.FIRE) {
+				mult = 0.8;
+			} else if (card.getElement() == Card.Element.WATER && roundWildCard.getElement() == Card.Element.WATER) {
+				mult = 0.8;
+			} else if (card.getElement() == Card.Element.FOREST && roundWildCard.getElement() == Card.Element.FOREST) {
+				mult = 0.8;
+			}
+		}
+
+		return mult;
 	}
 
 	/*
@@ -226,7 +290,7 @@ public class Game implements Initializable {
 	 * - Terra attacca Acqua: 1.2x danno (0.8x se vice-versa)
 	 * - Acqua attacca Fuoco: 1.2x danno (0.8x se vice-versa)
 	 */
-	double finalCardDamage(Card attackerCard, Card defenderCard, Card.Wild wildCard) {
+	double finalCardDamage(Card attackerCard, Card defenderCard) {
 		double dmg = attackerCard.getDamage();
 		double mult = 1.0;
 
@@ -248,13 +312,8 @@ public class Game implements Initializable {
 			mult = 0.8;
 		}
 
-		// TODO: THE SPECIFIC ELEMENT OF THE WILD CARD
-		// Wild card effects
-		if (wildCard == Card.Wild.INDEBOLIMENTO) {
-			mult *= 0.8;
-		} else if (wildCard == Card.Wild.POTENZIAMENTO) {
-			mult *= 1.2;
-		}
+		// TODO: CHECK IF THE SPECIFIC ELEMENT OF THE WILD CARD WORKS
+		mult *= cardMultiplier(attackerCard, roundWildCard);
 
 		return dmg * mult;
 	}
