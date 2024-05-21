@@ -16,6 +16,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/*TODO
+ * - IF THE LISTVIEWS ARE TOO MUCH OF A HASSLE, SCRAP THEM AND ENLARGE AND MOVE LOAD GAME AND NEW GAME BUTTONS TO THE CENTER OF THE SCREEN
+ */
+
 public class MainMenuController implements Initializable {
 
 	@FXML

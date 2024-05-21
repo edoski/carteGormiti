@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0"
+            prefWidth="1280.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="main.Game">
+    <children>
+        <ImageView fx:id="p1EndRoundCard" fitHeight="560.0" fitWidth="400.0" layoutX="238.0" layoutY="-8.0"
+                   pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65"/>
+        <ImageView fx:id="p2EndRoundCard" fitHeight="560.0" fitWidth="400.0" layoutX="645.0" layoutY="-8.0"
+                   pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65"/>
+        <Label fx:id="p1EndRoundLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="265.0" layoutY="11.0"
+               prefHeight="63.0" prefWidth="345.0" text="Label" textAlignment="CENTER">
+            <font>
+                <Font name="System Bold" size="50.0"/>
+            </font>
+        </Label>
+        <Label fx:id="p2EndRoundLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="673.0" layoutY="11.0"
+               prefHeight="63.0" prefWidth="343.0" text="Label" textAlignment="CENTER">
+            <font>
+                <Font name="System Bold" size="50.0"/>
+            </font>
+        </Label>
+        <Label fx:id="p1EndRoundDmg" alignment="CENTER" contentDisplay="CENTER" layoutX="341.0" layoutY="463.0"
+               prefHeight="37.0" prefWidth="193.0" text="Attack: " textAlignment="CENTER">
+            <font>
+                <Font size="30.0"/>
+            </font>
+        </Label>
+        <Label fx:id="p2EndRoundDmg" alignment="CENTER" contentDisplay="CENTER" layoutX="748.0" layoutY="463.0"
+               prefHeight="37.0" prefWidth="193.0" text="Attack: " textAlignment="CENTER">
+            <font>
+                <Font size="30.0"/>
+            </font>
+        </Label>
+        <Button fx:id="nextRoundBtn" layoutX="443.0" layoutY="650.0" mnemonicParsing="false" onAction="#playRound"
+                text="Next Round">
+            <font>
+                <Font size="30.0"/>
+            </font>
+        </Button>
+        <Button fx:id="endRoundQuitBtn" layoutX="650.0" layoutY="650.0" mnemonicParsing="false"
+                onAction="#quitAndSaveGame" text="Save &amp; Quit">
+            <font>
+                <Font size="30.0"/>
+            </font>
+        </Button>
+        <Label fx:id="endRoundWinnerLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="418.0" layoutY="533.0"
+               prefHeight="63.0" prefWidth="443.0" text="Winner" textAlignment="CENTER" underline="true">
+            <font>
+                <Font name="System Bold" size="50.0"/>
+            </font>
+        </Label>
+    </children>
+</AnchorPane>

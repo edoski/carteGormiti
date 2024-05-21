@@ -1,14 +1,19 @@
 package main;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 public class Player {
     final String name;
-    Card[] playerHand;
+    ArrayList<Card> playerHand;
     int playerScore;
-    Card wildCard;
+    Card roundWildCard;
+    Card chosenCard;
 
     public Player(String name) {
-        this.name = name;
-        // TODO: MAYBE ADD this.playerHand = playerHand passed from Game
+        this.name = name.substring(0, Math.min(name.length(), 16));
+        this.playerHand = new ArrayList<>();
+        this.chosenCard = null;
         playerScore = 0;
     }
 
@@ -16,20 +21,32 @@ public class Player {
         return name;
     }
 
-    public void setHand(Card[] playerHand) {
+    public void setHand(ArrayList<Card> playerHand) {
         this.playerHand = playerHand;
     }
 
-    public void setWildCard(Card wildCard) {
-        this.wildCard = wildCard;
+    public void setRoundWildCard(Card roundWildCard) {
+        this.roundWildCard = roundWildCard;
     }
 
-    public Card getWildCard() {
-        return wildCard;
+    public void setChosenCard(Card chosenCard) {
+        this.chosenCard = chosenCard;
     }
 
-    public Card[] getCards() {
+    public Card getRoundWildCard() {
+        return roundWildCard;
+    }
+
+    public Card getChosenCard() {
+        return chosenCard;
+    }
+
+    public ArrayList<Card> getHand() {
         return playerHand;
+    }
+
+    public void removeUsedCard() {
+        this.getHand().remove(this.getChosenCard());
     }
 
     public class Human {
@@ -41,6 +58,16 @@ public class Player {
     public class Robot {
         public Robot() {
             super();
+        }
+
+        // TODO: CHECK IF IT WORKS
+        // TODO: IMPLEMENT LOGIC THAT CHECKS FOR THE BEST CARD TO PLAY BASED ON CURRENT WILD CARD
+        public Card playTurn() {
+            ArrayList<Card> cards = getHand();
+            Random rand = new Random();
+            Card selectedCard = cards.get(rand.nextInt(cards.size()));
+            setChosenCard(selectedCard);
+            return selectedCard;
         }
     }
 }

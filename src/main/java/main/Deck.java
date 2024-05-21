@@ -82,10 +82,8 @@ public class Deck {
 					JSONObject wildCards = jsonObject.getJSONObject("wild").getJSONObject(wild.name().toLowerCase());
 					for (String key : wildCards.keySet()) {
 						JSONObject cardObject = wildCards.getJSONObject(key);
-						for (String elementKey : cardObject.keySet()) {
-							Card card = Card.fromJson(cardObject, wild);
-							wildsDeck.add(card);
-						}
+						Card card = Card.fromJson(cardObject, wild);
+						wildsDeck.add(card);
 					}
 				}
 			}
@@ -99,48 +97,39 @@ public class Deck {
 	 * Questo metodo distribuisce le carte a ciascun giocatore all'inizio della partita una volta,
 	 * a ciascun giocatore vengono distribuite 9 carte normali in maniera random
 	 */
-	public Card[] createPlayerDeck() {
-		Card[] playerHand = new Card[9];
+	public ArrayList<Card> createPlayerDeck() {
+		ArrayList<Card> playerHand = new ArrayList<>();
 		Random rand = new Random();
 
 		// Distribuzione carte fuoco
 		for (int i = 0; i < 3; i++) {
 			int randomIndex = rand.nextInt(fireCards.size());
-			playerHand[i] = fireCards.get(randomIndex);
+			playerHand.add(fireCards.get(randomIndex));
 			fireCards.remove(randomIndex);
 		}
 
 		// Distribuzione carte acqua
 		for (int i = 3; i < 6; i++) {
 			int randomIndex = rand.nextInt(waterCards.size());
-			playerHand[i] = waterCards.get(randomIndex);
+			playerHand.add(waterCards.get(randomIndex));
 			waterCards.remove(randomIndex);
 		}
 
 		// Distribuzione carte foresta
 		for (int i = 6; i < 9; i++) {
 			int randomIndex = rand.nextInt(forestCards.size());
-			playerHand[i] = forestCards.get(randomIndex);
+			playerHand.add(forestCards.get(randomIndex));
 			forestCards.remove(randomIndex);
 		}
 
 		return playerHand;
 	}
 
-	public Card[] getWildsDeck() {
-		Card[] wilds = new Card[wildsDeck.size()];
-		for (int i = 0; i < wildsDeck.size(); i++) {
-			wilds[i] = wildsDeck.get(i);
-		}
-		return wilds;
+	public ArrayList<Card> getWildsDeck() {
+		return new ArrayList<>(wildsDeck);
 	}
 
-	public void savePlayerHand(Card[] playerHand) {
+	public void savePlayerHand(ArrayList<Card> playerHand) {
 		//Todo: save the player hand to a file as a JSON object
-	}
-
-	public ArrayList<Card> getDeck(String path) {
-		//To do: get the deck from a file
-		return null;
 	}
 }
