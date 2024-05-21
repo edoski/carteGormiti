@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 public class Start extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
-        String mainMenu = "MainMenu.fxml", createGame = "CreateGame.fxml", game = "Game.fxml", roundWinner = "RoundWinner.fxml";
+	    String start = "AdminScene.fxml", mainMenu = "MainMenu.fxml", createGame = "CreateGame.fxml", game = "Game.fxml", roundWinner = "RoundWinner.fxml";
         Parent root = FXMLLoader.load(getClass().getResource(createGame));
         Scene scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());

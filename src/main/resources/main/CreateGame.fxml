@@ -49,7 +49,7 @@
                 <Font name="System Bold" size="24.0"/>
             </font>
         </Button>
-        <Label layoutX="428.0" layoutY="43.0" text="Creazione Gioco">
+        <Label fx:id="createGameTitleLabel" layoutX="428.0" layoutY="43.0" text="Creazione Gioco">
             <font>
                 <Font size="60.0"/>
             </font>

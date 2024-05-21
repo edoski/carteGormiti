@@ -15,8 +15,8 @@ public class Deck {
 	 * non ci interessa l'espansione, poiché il game-flow del gioco prevede una diminuzione di carte nel deck di ciascun giocatore partendo da un max
 	 * iniziale fisso. Pertanto, manteniamo ArrayList per comodità dei metodi built-in, senza alcuna perdita di efficienza (come per es. LinkedList).
 	 */
-	private static ArrayList<Card> elementsDeck;
-	private static ArrayList<Card> wildsDeck;
+	static ArrayList<Card> elementsDeck;
+	static ArrayList<Card> wildsDeck;
 
 	private static ArrayList<Card> fireCards;
 	private static ArrayList<Card> waterCards;
@@ -30,7 +30,7 @@ public class Deck {
 	/*
 	 * Questo metodo crea il deck di carte, leggendo da file JSON le carte elementali e le carte wild.
 	 */
-	public static void createDeck() {
+	public void createDeck() {
 		elementsDeck = new ArrayList<>();
 		wildsDeck = new ArrayList<>();
 
@@ -92,7 +92,6 @@ public class Deck {
 		}
 	}
 
-
 	/*
 	 * Questo metodo distribuisce le carte a ciascun giocatore all'inizio della partita una volta,
 	 * a ciascun giocatore vengono distribuite 9 carte normali in maniera random
@@ -131,5 +130,13 @@ public class Deck {
 
 	public void savePlayerHand(ArrayList<Card> playerHand) {
 		//Todo: save the player hand to a file as a JSON object
+	}
+
+	void clearAllDecks() {
+		elementsDeck.clear();
+		wildsDeck.clear();
+		fireCards.clear();
+		waterCards.clear();
+		forestCards.clear();
 	}
 }

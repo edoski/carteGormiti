@@ -1,6 +1,5 @@
 package main;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -14,6 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -23,27 +23,26 @@ public class CreateGameController implements Initializable {
 	private Button addRobotBtn;
 
 	@FXML
+	private Label createGameTitleLabel;
+
+	@FXML
 	private Label codeLabel;
-	private String code;
+	static String code;
 	// HashSet per memorizzare i codici generati
-	private final HashSet<String> activeCodes = new HashSet<>();
+	static HashSet<String> activeCodes = new HashSet<>();
 
 	@FXML
 	private Button addPlayerBtn;
 	@FXML
 	private Label player1, player2, player3, player4;
-	private Player[] players;
-	private int plyrIndex = 0;
-
+	static ArrayList<Player> players;
+	static int CPUCount = 1;
 	@FXML
 	private TextField playerNameTextField;
-
 	@FXML
 	private Button removeRecentBtn;
-
 	@FXML
 	private Button startGameBtn;
-
 	@FXML
 	private Button goBackBtn;
 
@@ -51,13 +50,16 @@ public class CreateGameController implements Initializable {
 	Scene scene;
 	Stage stage;
 
-	public Player[] getPlayers() {
-		return players;
-	}
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		players = new Player[4];
+		players = new ArrayList<>();
+
+		createGameTitleLabel.setStyle("-fx-font-weight: bold");
+		codeLabel.setStyle("-fx-font-weight: bold");
+		player1.setStyle("-fx-font-weight: bold");
+		player2.setStyle("-fx-font-weight: bold");
+		player3.setStyle("-fx-font-weight: bold");
+		player4.setStyle("-fx-font-weight: bold");
 
 		// TODO: GET CODES FROM FILESYSTEM AND LOAD THEM ONTO THE HASHSET
 		generateCode();
@@ -73,7 +75,7 @@ public class CreateGameController implements Initializable {
 	}
 
 	@FXML
-	void goBackLoginScreen(ActionEvent event) throws IOException {
+	void goBackLoginScreen() throws IOException {
 		/*
 		 * Riporta alla schermata principale
 		 */
@@ -81,7 +83,7 @@ public class CreateGameController implements Initializable {
 	}
 
 	@FXML
-	void addRobot(ActionEvent event) {
+	void addRobot() {
 		/*
 		 * addRobotBtn, aggiunge un robot alla lista di giocatori,
 		 * il nome del robot viene automaticamente inizializzato come "CPU 1" o "CPU 2" etc.
@@ -89,8 +91,7 @@ public class CreateGameController implements Initializable {
 		 * Se l'inserimento del robot corrisponde al terzo giocatore, viene lanciato un alert (vedi commenti su addHuman() al riguardo)
 		 */
 
-		if (plyrIndex < 4) {
-			int CPUCount = 1;
+		if (players.size() < 4) {
 			// TODO: CHECK IF CPU BASED ON OBJECT TYPE, AND NOT ON NAME
 			for (Player player : players) {
 				if (player != null && player.getName().contains("CPU")) {
@@ -99,23 +100,23 @@ public class CreateGameController implements Initializable {
 			}
 
 			Player player = new Player("CPU 0" + CPUCount);
+			players.add(player);
 
-			switch (plyrIndex) {
-				case 0:
+			switch (players.size()) {
+				case 1:
 					player1.setText("Player 1: " + player.getName());
 					break;
-				case 1:
+				case 2:
 					player2.setText("Player 2: " + player.getName());
 					break;
-				case 2:
+				case 3:
 					player3.setText("Player 3: " + player.getName());
 					break;
-				case 3:
+				case 4:
 					player4.setText("Player 4: " + player.getName());
 					break;
 			}
 
-			players[plyrIndex++] = player;
 		} else {
 			// Non puoi aggiungere più di 4 giocatori
 			Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -126,7 +127,7 @@ public class CreateGameController implements Initializable {
 	}
 
 	@FXML
-	void addHuman(ActionEvent event) {
+	void addHuman() {
 		/*
 		 * addPlayerBtn, aggiunge un umano alla partita, il quale nome deriva dalla stringa immessa nel text field playerNameTextField.
 		 *
@@ -154,28 +155,28 @@ public class CreateGameController implements Initializable {
 			playerNameTextField.setStyle("-fx-prompt-text-fill: red");
 			playerNameTextField.setPromptText("Inserisci un nome valido");
 		} else {
-			if (plyrIndex < 4) {
+			if (players.size() < 4) {
 				playerNameTextField.setStyle("-fx-border-color: none");
 				playerNameTextField.setStyle("-fx-prompt-text-fill: grey");
 				playerNameTextField.setPromptText("Player Name");
 
-				switch (plyrIndex) {
-					case 0:
+				Player player = new Player(playerName);
+				players.add(player);
+
+				switch (players.size()) {
+					case 1:
 						player1.setText("Player 1: " + playerName);
 						break;
-					case 1:
+					case 2:
 						player2.setText("Player 2: " + playerName);
 						break;
-					case 2:
+					case 3:
 						player3.setText("Player 3: " + playerName);
 						break;
-					case 3:
+					case 4:
 						player4.setText("Player 4: " + playerName);
 						break;
 				}
-
-				Player player = new Player(playerName);
-				players[plyrIndex++] = player;
 
 				playerNameTextField.clear();
 			} else {
@@ -188,14 +189,13 @@ public class CreateGameController implements Initializable {
 		}
 	}
 
+	/*
+	 * Admin genera una stringa che viene associata alla partita appena creata,
+	 * attraverso questo codice si può riprendere una partita.
+	 *
+	 * Il codice viene generato appena inserito il primo giocatore.
+	 */
 	public void generateCode() {
-		/*
-		 * Admin genera una stringa che viene associata alla partita appena creata,
-		 * attraverso questo codice si può riprendere una partita.
-		 *
-		 * Il codice viene generato appena inserito il primo giocatore.
-		 */
-
 		Random rand = new Random();
 		code = "";
 		for (int i = 0; i < 4; i++) {
@@ -217,37 +217,32 @@ public class CreateGameController implements Initializable {
 	}
 
 	@FXML
-	void removeRecent(ActionEvent event) {
+	void removeRecent() {
 		/*
 		 * removeRecentBtn, rimuove l'inserimento del giocatore (robot o umano) più recente dalla lista
 		 */
 
-		if (plyrIndex > 0) {
-			plyrIndex--;
-			switch (plyrIndex) {
-				case 0:
+		if (!players.isEmpty()) {
+			switch (players.size()) {
+				case 1:
 					player1.setText("Player 1: ");
 					break;
-				case 1:
+				case 2:
 					player2.setText("Player 2: ");
 					break;
-				case 2:
+				case 3:
 					player3.setText("Player 3: ");
 					break;
-				case 3:
+				case 4:
 					player4.setText("Player 4: ");
 					break;
 			}
-			players[plyrIndex] = null;
+			players.removeLast();
 		}
 	}
 
-//	Player[] getPlayers() {
-//		return players;
-//	}
-
 	@FXML
-	void startGame(ActionEvent event) throws IOException {
+	void startGame() throws IOException {
 		/*
 		 * startGameBtn, lancia la partita, o torneo, in base al numero di giocatori aggiunti.
 		 *
@@ -265,8 +260,8 @@ public class CreateGameController implements Initializable {
 			}
 		}
 
-		// Passo I dati inerenti ai giocatori alla classe Gam   e
-		Game.setPlayers(players);
+		// Passo I dati inerenti ai giocatori alla classe Game
+//		Game.setPlayers(players);
 
 		switch (count) {
 			case 0:
@@ -285,8 +280,9 @@ public class CreateGameController implements Initializable {
 				alert1.setContentText("Confermando, verrà aggiunto un giocatore CPU per completare la partita");
 				alert1.showAndWait();
 				// TODO: Add a CPU player
-				Player player2 = new Player("CPU 1");
-				players[1] = player2;
+				Player player2 = new Player("CPU 0" + ++CPUCount);
+				players.add(player2);
+				Game.setPlayers(players);
 				activeCodes.add(code);
 				switchToScene("Game.fxml", startGameBtn);
 				break;
@@ -297,6 +293,7 @@ public class CreateGameController implements Initializable {
 				alert2.setHeaderText("Sei sicuro di voler iniziare una partita singola?");
 				alert2.setContentText("Confermando, comincerà la partita con i due giocatori inseriti");
 				alert2.showAndWait();
+				Game.setPlayers(players);
 				activeCodes.add(code);
 				switchToScene("Game.fxml", startGameBtn);
 				break;
@@ -308,8 +305,9 @@ public class CreateGameController implements Initializable {
 				alert3.setContentText("Confermando, verrà aggiunto un giocatore CPU per completare il torneo");
 				alert3.showAndWait();
 				// TODO: Add a CPU player
-				Player player3 = new Player("CPU 1");
-				players[2] = player3;
+				Player player3 = new Player("CPU 0" + ++CPUCount);
+				players.add(player3);
+				Game.setPlayers(players);
 				activeCodes.add(code);
 				// TODO: Start Torneo
 				break;
@@ -320,6 +318,7 @@ public class CreateGameController implements Initializable {
 				alert4.setHeaderText("Sei sicuro di voler iniziare un torneo?");
 				alert4.setContentText("Confermando, comincerà il torneo con i quattro giocatori inseriti");
 				alert4.showAndWait();
+				Game.setPlayers(players);
 				activeCodes.add(code);
 				// TODO: Start Torneo
 				break;
