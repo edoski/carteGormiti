@@ -14,6 +14,7 @@ public class LoadGameController {
 	Scene scene;
 	Stage stage;
 	AnchorPane mainMenu;
+	static String code;
 
 	@FXML
 	private Button backBtn;

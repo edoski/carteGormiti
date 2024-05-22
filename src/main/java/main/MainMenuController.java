@@ -69,11 +69,6 @@ public class MainMenuController implements Initializable {
 		}
 	}
 
-	@FXML
-	void createGame(ActionEvent event) throws IOException {
-		switchToScene("CreateGame.fxml", newGameBtn);
-	}
-
 	public void switchToScene(String fxmlFile, Button btn) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
 		root = loader.load();

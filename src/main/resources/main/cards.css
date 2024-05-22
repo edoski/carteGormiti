@@ -1,0 +1,7 @@
+.card-image {
+    -fx-opacity: 0.85;
+}
+
+.card-image:hover {
+    -fx-opacity: 1.0;
+}

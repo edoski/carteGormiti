@@ -76,30 +76,19 @@ public class CreateGameController implements Initializable {
 
 	@FXML
 	void goBackLoginScreen() throws IOException {
-		/*
-		 * Riporta alla schermata principale
-		 */
 		switchToScene("MainMenu.fxml", goBackBtn);
 	}
 
+	/*
+	 * addRobotBtn, aggiunge un robot alla lista di giocatori,
+	 * il nome del robot viene automaticamente inizializzato come "CPU 1" o "CPU 2" etc.
+	 *
+	 * Se l'inserimento del robot corrisponde al terzo giocatore, viene lanciato un alert (vedi commenti su addHuman() al riguardo)
+	 */
 	@FXML
 	void addRobot() {
-		/*
-		 * addRobotBtn, aggiunge un robot alla lista di giocatori,
-		 * il nome del robot viene automaticamente inizializzato come "CPU 1" o "CPU 2" etc.
-		 *
-		 * Se l'inserimento del robot corrisponde al terzo giocatore, viene lanciato un alert (vedi commenti su addHuman() al riguardo)
-		 */
-
 		if (players.size() < 4) {
-			// TODO: CHECK IF CPU BASED ON OBJECT TYPE, AND NOT ON NAME
-			for (Player player : players) {
-				if (player != null && player.getName().contains("CPU")) {
-					CPUCount++;
-				}
-			}
-
-			Player player = new Player("CPU 0" + CPUCount);
+			Player player = new Player("CPU 0" + CPUCount++);
 			players.add(player);
 
 			switch (players.size()) {
@@ -116,7 +105,6 @@ public class CreateGameController implements Initializable {
 					player4.setText("Player 4: " + player.getName());
 					break;
 			}
-
 		} else {
 			// Non puoi aggiungere più di 4 giocatori
 			Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -126,16 +114,14 @@ public class CreateGameController implements Initializable {
 		}
 	}
 
+	/*
+	 * addPlayerBtn, aggiunge un umano alla partita, il quale nome deriva dalla stringa immessa nel text field playerNameTextField.
+	 *
+	 * All'inserimento del terzo giocatore, viene lanciato un alert per avvertire il fatto che si entra in un torneo aggiungendolo,
+	 * e dando l'opzione o di confermare il terzo giocatore, o di annullare il suo inserimento
+	 */
 	@FXML
 	void addHuman() {
-		/*
-		 * addPlayerBtn, aggiunge un umano alla partita, il quale nome deriva dalla stringa immessa nel text field playerNameTextField.
-		 *
-		 * All'inserimento del terzo giocatore, viene lanciato un alert per avvertire il fatto che si entra in un torneo aggiungendolo,
-		 * e dando l'opzione o di confermare il terzo giocatore, o di annullare il suo inserimento
-		 */
-
-		// Get the text from the text field
 		String playerName = playerNameTextField.getText();
 
 		// Check if the name is already taken
@@ -216,12 +202,11 @@ public class CreateGameController implements Initializable {
 		}
 	}
 
+	/*
+	 * removeRecentBtn, rimuove l'inserimento del giocatore (robot o umano) più recente dalla lista
+	 */
 	@FXML
 	void removeRecent() {
-		/*
-		 * removeRecentBtn, rimuove l'inserimento del giocatore (robot o umano) più recente dalla lista
-		 */
-
 		if (!players.isEmpty()) {
 			switch (players.size()) {
 				case 1:
@@ -237,33 +222,26 @@ public class CreateGameController implements Initializable {
 					player4.setText("Player 4: ");
 					break;
 			}
+
+			Player player = players.getLast();
+			if (player.getName().contains("CPU") && CPUCount > 1) {
+				CPUCount--;
+			}
 			players.removeLast();
 		}
 	}
 
+	/*
+	 * startGameBtn, lancia la partita, o torneo, in base al numero di giocatori aggiunti.
+	 *
+	 * Partita singola: 2 giocatori
+	 * Torneo: 4 giocatori
+	 *      - Arrotondato a 4 se sono aggiunti 3 giocatori/robot
+	 */
 	@FXML
 	void startGame() throws IOException {
-		/*
-		 * startGameBtn, lancia la partita, o torneo, in base al numero di giocatori aggiunti.
-		 *
-		 * Partita singola: 2 giocatori
-		 * Torneo: 4 giocatori
-		 *      - Arrotondato a 4 se sono aggiunti 3 giocatori/robot
-		 *
-		 */
-
-		// Tally player count
-		int count = 0;
-		for (Player player : players) {
-			if (player != null) {
-				count++;
-			}
-		}
-
-		// Passo I dati inerenti ai giocatori alla classe Game
-//		Game.setPlayers(players);
-
-		switch (count) {
+		Game.startingNewGame = true;
+		switch (players.size()) {
 			case 0:
 				// Non ci sono giocatori
 				Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -279,12 +257,16 @@ public class CreateGameController implements Initializable {
 				alert1.setHeaderText("Sei sicuro di voler iniziare una partita singola?");
 				alert1.setContentText("Confermando, verrà aggiunto un giocatore CPU per completare la partita");
 				alert1.showAndWait();
-				// TODO: Add a CPU player
-				Player player2 = new Player("CPU 0" + ++CPUCount);
-				players.add(player2);
-				Game.setPlayers(players);
-				activeCodes.add(code);
-				switchToScene("Game.fxml", startGameBtn);
+				if (alert1.getResult().getText().equals("OK")) {
+					// TODO: Add a CPU player
+					Player player2 = new Player("CPU 0" + ++CPUCount);
+					players.add(player2);
+					Game.setPlayers(players);
+					activeCodes.add(code);
+					switchToScene("Game.fxml", startGameBtn);
+				} else {
+					alert1.close();
+				}
 				break;
 			case 2:
 				// Partita singola
@@ -293,9 +275,13 @@ public class CreateGameController implements Initializable {
 				alert2.setHeaderText("Sei sicuro di voler iniziare una partita singola?");
 				alert2.setContentText("Confermando, comincerà la partita con i due giocatori inseriti");
 				alert2.showAndWait();
-				Game.setPlayers(players);
-				activeCodes.add(code);
-				switchToScene("Game.fxml", startGameBtn);
+				if (alert2.getResult().getText().equals("OK")) {
+					Game.setPlayers(players);
+					activeCodes.add(code);
+					switchToScene("Game.fxml", startGameBtn);
+				} else {
+					alert2.close();
+				}
 				break;
 			case 3:
 				// Torneo
@@ -304,12 +290,16 @@ public class CreateGameController implements Initializable {
 				alert3.setHeaderText("Sei sicuro di voler iniziare un torneo?");
 				alert3.setContentText("Confermando, verrà aggiunto un giocatore CPU per completare il torneo");
 				alert3.showAndWait();
-				// TODO: Add a CPU player
-				Player player3 = new Player("CPU 0" + ++CPUCount);
-				players.add(player3);
-				Game.setPlayers(players);
-				activeCodes.add(code);
-				// TODO: Start Torneo
+				if (alert3.getResult().getText().equals("OK")) {
+					// TODO: Add a CPU player
+					Player player3 = new Player("CPU 0" + ++CPUCount);
+					players.add(player3);
+					Game.setPlayers(players);
+					activeCodes.add(code);
+					// TODO: Start Torneo
+				} else {
+					alert3.close();
+				}
 				break;
 			case 4:
 				// Torneo
@@ -318,9 +308,13 @@ public class CreateGameController implements Initializable {
 				alert4.setHeaderText("Sei sicuro di voler iniziare un torneo?");
 				alert4.setContentText("Confermando, comincerà il torneo con i quattro giocatori inseriti");
 				alert4.showAndWait();
+				if (alert4.getResult().getText().equals("OK")) {
 				Game.setPlayers(players);
 				activeCodes.add(code);
 				// TODO: Start Torneo
+				} else {
+					alert4.close();
+				}
 				break;
 		}
 	}

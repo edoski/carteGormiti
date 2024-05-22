@@ -1,5 +1,6 @@
 package main;
 
+import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,20 +15,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
-
 /*TODO:
- * - DISABLE THE CARD VIEW ONCE THE CARD HAS BEEN SELECTED SO THAT IT CAN'T BE SELECTED AGAIN IN NEXT ROUNDS
- * - MAKE THE CARDS OPACITY SLIGHTLY DIMMER, AND THEN FULLY VISIBLE WHEN HOVERED OVER
- * - ADD A TIEBREAKER ROUND IF THE GAME IS A DRAW
- * - FOR SELECTWILDCARD MAKE IT SO THAT THE WILD CARD IS NOT THE SAME AS THE PREVIOUS ROUND
+ * - ADD A GAME WINNER DISPLAY (see pdf)
  */
-
 
 public class Game implements Initializable {
 
@@ -35,35 +32,6 @@ public class Game implements Initializable {
 	Scene scene;
 	Stage stage;
 
-	// Round Winner scene elements
-	@FXML
-	private Button endRoundQuitBtn;
-
-	@FXML
-	private Label endRoundWinnerLabel;
-
-	@FXML
-	private Button nextRoundBtn;
-
-	@FXML
-	private ImageView p1EndRoundCard;
-
-	@FXML
-	private Label p1EndRoundDmg;
-
-	@FXML
-	private Label p1EndRoundLabel;
-
-	@FXML
-	private ImageView p2EndRoundCard;
-
-	@FXML
-	private Label p2EndRoundDmg;
-
-	@FXML
-	private Label p2EndRoundLabel;
-
-	// Game scene elements
 	@FXML
 	private ImageView playerCard1, playerCard2, playerCard3, playerCard4, playerCard5, playerCard6, playerCard7, playerCard8, playerCard9;
 
@@ -72,6 +40,9 @@ public class Game implements Initializable {
 
 	@FXML
 	private Label playerLabel;
+
+	@FXML
+	private Label playerTurnLabel;
 
 	@FXML
 	private MenuItem quitAndSaveMB;
@@ -95,7 +66,10 @@ public class Game implements Initializable {
 	private Button confirmCardBtn;
 
 	@FXML
-	private Label damageCardChoice;
+	private Label damageCardChoiceLabel;
+
+	static String code;
+	static boolean startingNewGame;
 
 	// Per migliorare la leggibilità del codice
 	static final Card.Element FIRE = Card.Element.FIRE;
@@ -126,27 +100,51 @@ public class Game implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-//		if (startingNewGame) {
-		startGame();
-//		} else {
-//			startGameFromSave(code);
-//		}
+		CreateGameController.CPUCount = 1;
+		if (startingNewGame) {
+			code = CreateGameController.code;
+			startNewGame();
+		} else {
+			if (LoadGameController.code != null) {
+				code = LoadGameController.code;
+				// TODO: FOR JSONS
+//  			startGameFromSave(code);
+			} else {
+				startGameAfterRound();
+			}
+		}
 	}
 
 	/*
-	 * TODO: SWITCH TO SCENE METHOD
+	 * Questo metodo permette di cambiare scena, e in base alla scena selezionata, imposta certi parametri relativi per quella scena
 	 */
-	public void switchToScene(String fxmlFile, Button btn) throws IOException {
+	public void switchToScene(String fxmlFile) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
 		root = loader.load();
+		if (fxmlFile.equals("RoundWinner.fxml")) {
+			RoundWinnerController controller = loader.getController();
+			controller.setPlayers(player1, player2);
+			controller.setRoundNumber(roundNumber);
+			if (p1FinalDmg == p2FinalDmg) {
+				controller.setRoundWinner(null);
+			} else {
+				controller.setRoundWinner(selectRoundWinner());
+			}
+		} else if (fxmlFile.equals("GameWinner.fxml")) {
+			GameWinnerController controller = loader.getController();
+			controller.setPlayers(player1, player2);
+			controller.setGameWinner(selectGameWinner());
+		}
+		stage = (Stage) confirmCardBtn.getScene().getWindow();
 		scene = new Scene(root);
-		stage = (Stage) btn.getScene().getWindow();
 		stage.setScene(scene);
 		stage.show();
 	}
 
 	/*
 	 * Questo metodo imposta i giocatori per la partita
+	 *
+	 * @param players   ArrayList di giocatori, preso da CreateGameController oppure da un file di salvataggio
 	 */
 	public static void setPlayers(ArrayList<Player> players) {
 		player1 = players.get(0);
@@ -154,28 +152,50 @@ public class Game implements Initializable {
 	}
 
 	/*
-	 * Questo metodo inizia la partita, creando un mazzo di carte e distribuendole ai giocatori.
+	 * Per quando si fanno i cambi di scena, si può riprendere la partita da dove si era fermata
 	 */
-	public void startGame() {
-		// Create a deck of cards
-		deck.createDeck();
+	public void startGameAfterRound() {
+		startingNewGame = false;
 
-		// Distribute cards to players
-		player1Hand = deck.createPlayerDeck();
-		player2Hand = deck.createPlayerDeck();
+		// PLAYER HANDS ALREADY INITIALIZED
+		player1Hand = player1.getHand();
+		player2Hand = player2.getHand();
 
-		// Set player hands
-		player1.setHand(player1Hand);
-		player2.setHand(player2Hand);
-
-		// Display round number
-		roundNumber = 1;
+		roundNumber = RoundWinnerController.getRoundNumber();
 		roundLabel.setText("Round: " + roundNumber + " of 6");
 
-		// Start game from player 1
+		// RESET CHOSEN CARDS FROM PREVIOUS ROUND
+		player1.setChosenCard(null);
+		player2.setChosenCard(null);
+
+		// NEW ROUND STARTS WITH PLAYER 1
 		currentPlayer = player1;
 		selectWildCard(player1);
 		selectWildCard(player2);
+
+		playRound();
+	}
+
+	/*
+	 * Questo metodo inizia la partita, creando un mazzo di carte e distribuendole ai giocatori.
+	 */
+	public void startNewGame() {
+		deck.createDeck();
+
+		// INITIALIZE PLAYER HANDS
+		player1Hand = deck.createPlayerDeck();
+		player2Hand = deck.createPlayerDeck();
+		player1.setHand(player1Hand);
+		player2.setHand(player2Hand);
+
+		roundNumber = 1;
+		roundLabel.setText("Round: " + roundNumber + " of 6");
+
+		// GAME STARTS WITH PLAYER 1
+		currentPlayer = player1;
+		selectWildCard(player1);
+		selectWildCard(player2);
+
 		playRound();
 	}
 
@@ -187,85 +207,70 @@ public class Game implements Initializable {
 		confirmCardBtn.setDisable(true);
 		playTurn(currentPlayer);
 
-		// Check if both players have chosen a card
+		// IF BOTH PLAYERS HAVE SELECTED A CARD
 		if (player1.getChosenCard() != null && player2.getChosenCard() != null) {
-			// Determine the round winner
+			// DETERMINE ROUND WINNER
 			p1FinalDmg = finalCardDamage(player1.getChosenCard(), player2.getChosenCard(), player1WildCard);
 			p2FinalDmg = finalCardDamage(player2.getChosenCard(), player1.getChosenCard(), player2WildCard);
 
-			if (p1FinalDmg == p2FinalDmg) {
-				player1.playerScore++;
-				player2.playerScore++;
-				// TODO: CONVERT TO "RoundWinner.fxml" SCENE
-				System.out.println("Round Draw" + p1FinalDmg + " vs " + p2FinalDmg);
-			} else {
+			if (p1FinalDmg != p2FinalDmg) {
 				Player winner = selectRoundWinner();
 				winner.playerScore++;
-				// TODO: CONVERT TO "RoundWinner.fxml" SCENE
-				System.out.println(winner.name + " ha vinto il round, " + p1FinalDmg + " vs " + p2FinalDmg);
 			}
 
-			// TODO: DEBUG PRINT STATEMENTS
-//			System.out.printf("%s / playRound %d: %s%n", player1.getName(), roundNumber, player1WildCard.getName());
-//			System.out.printf("%s / playRound %d: %s%n", player2.getName(), roundNumber, player2WildCard.getName());
-
-			// Increment the round number
 			roundLabel.setText("Round: " + ++roundNumber + " of 6");
 
-			// END GAME SEQUENCE
-			if (roundNumber > 3) {
-				// TODO: REMOVE THE ALERT WHEN THE BELOW TODO IS IMPLEMENTED
-//				roundLabel.setText("Game Over");
-//				Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//				alert.setTitle("Game Over");
-//				alert.setHeaderText("Game Over");
-//				alert.setContentText("Game Over");
-//				alert.showAndWait();
-//				System.exit(0);
-
-				// TODO: DISPLAY GAME OVER SCENE
-//				if (player1.playerScore == player2.playerScore) {
-				// TIEBREAKER ROUND
-//					roundLabel.setText("Tiebreaker Round");
-//  				player1.setChosenCard(null);
-//	    			player2.setChosenCard(null);
-//	    			selectWildCard(player1);
-//	    			selectWildCard(player2);
-//	    			displayPlayerCards(currentPlayer);
-//					playRound();
-//				} else {
-				// GAME WINNER DISPLAY
-//					selectGameWinner(player1, player2);
-//					displayLeaderboard(player1, player2);
-//				}
-
-				// RESET GAME ASSETS / VARIABLES
-				reset();
-
+			// ROUND LIMIT, END GAME SEQUENCE
+			if (roundNumber > 6) {
+				if (player1.playerScore == player2.playerScore) {
+					// TIEBREAKER ROUND
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					alert.setTitle("Tiebreaker Round");
+					alert.setHeaderText("Punteggio pareggio, inizia il round tiebreaker!");
+					alert.show();
+					PauseTransition delay = new PauseTransition(Duration.seconds(3));
+					delay.setOnFinished(e -> alert.close());
+					delay.play();
+					roundLabel.setText("Tiebreaker");
+					player1.setChosenCard(null);
+					player2.setChosenCard(null);
+					selectWildCard(player1);
+					selectWildCard(player2);
+					displayPlayerCards(currentPlayer);
+				} else {
+					// GAME WINNER SCENE
+					try {
+						switchToScene("GameWinner.fxml");
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
+					// THE GAME ENDS HERE
+					// TODO: LOG GAME
+					GameWinnerController.logGame(player1, player2, selectGameWinner(), code);
+					resetGame();
+					try {
+						switchToScene("MainMenu.fxml");
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
+				}
+			} else {
+				// ROUND WINNER SCENE
 				try {
-					switchToScene("MainMenu.fxml", confirmCardBtn);
+					switchToScene("RoundWinner.fxml");
 				} catch (IOException e) {
 					throw new RuntimeException(e);
 				}
-			} else {
-				// ROUND WINNER DISPLAY
-//				try {
-//					switchToScene("RoundWinner.fxml", confirmCardBtn);
-				// TODO: NEXT ROUND BUTTON SHOULD JUST SWITCH SCENE BACK TO "Game.fxml"
-//				} catch (IOException e) {
-//					throw new RuntimeException(e);
-//				}
 
 				// PREPARING FOR THE NEXT ROUND
-				// Reset chosen cards for both players in preparation for the next round
 				player1.setChosenCard(null);
 				player2.setChosenCard(null);
 
-				// Select new wild cards for the next round
+				// SELECT NEW WILD CARDS FOR THE NEXT ROUND FOR BOTH PLAYERS
 				selectWildCard(player1);
 				selectWildCard(player2);
 
-				// Display the next round
+				// DISPLAY CARDS FOR THE NEXT ROUND, STARTING WITH PLAYER 1
 				displayPlayerCards(currentPlayer);
 			}
 		}
@@ -276,6 +281,7 @@ public class Game implements Initializable {
 	 */
 	public void playTurn(Player player) {
 		playerLabel.setText("Scegli una carta, " + player.getName());
+		playerTurnLabel.setText("TURNO: " + player.getName());
 		displayPlayerCards(player);
 		Card selectedCard = player.getChosenCard();
 		player.setChosenCard(selectedCard);
@@ -288,15 +294,13 @@ public class Game implements Initializable {
 	@FXML
 	void onConfirmCard() {
 		currentPlayer.removeUsedCard();
-//		System.out.printf("%s / PRE-onConfirmCard: %s%n", currentPlayer.getName(), currentPlayer.getRoundWildCard().getName());
 		currentPlayer = (currentPlayer == player1) ? player2 : player1;
-//		System.out.printf("%s / POST-onConfirmCard: %s%n", currentPlayer.getName(), currentPlayer.getRoundWildCard().getName());
 
-		// Set the playerCardChoiceImage to the default card image
+		// DEFAULT CARD IMAGE START FOR NEXT PLAYER
 		InputStream is = getClass().getResourceAsStream("/cards/default_card.jpeg");
 		Image defaultCard = new Image(is);
 		playerCardChoiceImage.setImage(defaultCard);
-		damageCardChoice.setText("Danno: ");
+		damageCardChoiceLabel.setText("DANNO: ");
 
 		playRound();
 	}
@@ -313,12 +317,12 @@ public class Game implements Initializable {
 				playerCard7, playerCard8, playerCard9
 		};
 
-		// Clear the images, a refresh of the cards
+		// CLEAR CARD VIEWS
 		for (ImageView cardView : cardViews) {
 			cardView.setImage(null);
 		}
 
-		// Sort the cards by element (0 = Fire, 1 = Water, 2 = Forest, like in the enum)
+		// SORT HAND DISPLAY BY ENUM (0 = FIRE, 1 = WATER, 2 = FOREST)
 		cards.sort(Comparator.comparing(card -> card.getElement().ordinal()));
 
 		cardMap.clear();
@@ -329,30 +333,34 @@ public class Game implements Initializable {
 		}
 
 		Card wildCard = player.getRoundWildCard();
-		// Display wild card effects
+		// DISPLAY WILD CARD EFFECTS
 		String wildEffects =
-				"Effetto: " + wildCard.getWild().toString() + " " + wildCard.getElement().toString() +
-						"\n--> " + (wildCard.getWild().toString().equals("INDEBOLIMENTO") ? "0.8x DANNO" : "1.2x DANNO");
+				wildCard.getWild().toString() + " DANNO" +
+						"\n--> " + (wildCard.getWild().toString().equals("INDEBOLIMENTO") ? "0.8x" : "1.2x" + " CARTE " + wildCard.getElement().toString());
 		wildEffectsLabel.setText(wildEffects);
+		if (wildCard.getWild() == Card.Wild.POTENZIAMENTO) {
+			wildEffectsLabel.setStyle("-fx-text-fill: lime");
+		} else {
+			wildEffectsLabel.setStyle("-fx-text-fill: red");
+		}
 
-		// Display wild card image
+		// DISPLAY WILD CARD IMAGE
 		Image image = wildCard.getArt();
 		wildCardImage.setImage(image);
-
-//		System.out.printf("%s / displayPlayerCards: %s%n", player.getName(), player.getRoundWildCard().getName());
 	}
 
 	/*
 	 * Viene chiamato all'inizio di ogni round, si applica una delle carte Wild (Indebolimento, Potenziamento)
 	 */
 	public void selectWildCard(Player player) {
+		// TO PREVENT THE SAME WILD CARD FROM BEING SELECTED TWICE IN A ROW
 		if (player == player1) {
 			p1PreviousWildCard = player1WildCard;
 		} else {
 			p2PreviousWildCard = player2WildCard;
 		}
 
-		// Seleziona una carta Wild a caso dal mazzo che non sia la stessa del round precedente per il giocatore
+		// RANDOMLY SELECT A WILD CARD THAT IS NOT THE SAME AS THE PREVIOUS ROUND
 		Random rand = new Random();
 		Card wildCard;
 		do {
@@ -366,8 +374,6 @@ public class Game implements Initializable {
 		} else {
 			player2WildCard = wildCard;
 		}
-
-//		System.out.printf("%s / selectWildCard: %s%n", player.getName(), wildCard.getName());
 	}
 
 	/*
@@ -376,13 +382,15 @@ public class Game implements Initializable {
 	@FXML
 	void selectCard(MouseEvent event) {
 		confirmCardBtn.setDisable(false);
+
 		ImageView clickedCard = (ImageView) event.getSource();
 		selectedCard = cardMap.get(clickedCard);
-		// get clicked card
 		if (selectedCard != null) {
+			// DISPLAY SELECTED CARD IMAGE IF NOT NULL
 			Image cardImage = clickedCard.getImage();
 			playerCardChoiceImage.setImage(cardImage);
 		} else {
+			// DISPLAY DEFAULT CARD IMAGE IF NULL
 			InputStream is = getClass().getResourceAsStream("/cards/default_card.jpeg");
 			Image defaultCard = new Image(is);
 			playerCardChoiceImage.setImage(defaultCard);
@@ -395,18 +403,17 @@ public class Game implements Initializable {
 			playerWildCard = player2WildCard;
 		}
 
-//		System.out.printf("%s / selectCard: %s%n", currentPlayer.getName(), playerWildCard.getName());
-
-		// get card damage
 		if (selectedCard != null) {
+			// CALCULATE & DISPLAY DAMAGE OF SELECTED CARD WITH WILD CARD (ENEMY ELEMENT UNKNOWN)
 			confirmCardBtn.setDisable(false);
 			double mult = wildCardMultiplier(selectedCard, playerWildCard);
 			double cardDamage = selectedCard.getDamage();
-			damageCardChoice.setText("Danno: " + Math.round((cardDamage * mult) * 10.0) / 10.0);
+			damageCardChoiceLabel.setText("DANNO: " + Math.round((cardDamage * mult) * 10.0) / 10.0);
 			currentPlayer.setChosenCard(selectedCard);
 		} else {
+			// DISABLE CONFIRM BUTTON IF NULL CARD VIEW CLICKED
 			confirmCardBtn.setDisable(true);
-			damageCardChoice.setText("Danno: ");
+			damageCardChoiceLabel.setText("DANNO: ");
 		}
 	}
 
@@ -418,9 +425,7 @@ public class Game implements Initializable {
 	static double wildCardMultiplier(Card card, Card wildCard) {
 		double mult = 1.0;
 
-//		System.out.printf("%s / wildCardMultiplier: %s%n", currentPlayer.getName(), wildCard.getName());
-
-		// Per migliorare la leggibilità del codice
+		// FOR CODE READABILITY
 		Card.Element cardElem = card.getElement();
 		Card.Element wildElem = wildCard.getElement();
 
@@ -441,15 +446,7 @@ public class Game implements Initializable {
 				mult = 0.8;
 			}
 		}
-
 		return mult;
-	}
-
-	/*
-	 * Questo metodo determina il vincitore del round, in base al danno finale delle carte selezionate dai giocatori
-	 */
-	Player selectRoundWinner() {
-		return p1FinalDmg > p2FinalDmg ? player1 : player2;
 	}
 
 	/*
@@ -465,11 +462,11 @@ public class Game implements Initializable {
 		double dmg = playerCard.getDamage();
 		double mult = 1.0;
 
-		// Per migliorare la leggibilità del codice
+		// FOR CODE READABILITY
 		final Card.Element playerElem = playerCard.getElement();
 		final Card.Element opponentElem = opponentCard.getElement();
 
-		// Situazione di vantaggio elementale
+		// ELEMENTAL ADVANTAGE CASE
 		if (playerElem == FIRE && opponentElem == FOREST) {
 			mult = 1.2;
 		} else if (playerElem == FOREST && opponentElem == WATER) {
@@ -478,7 +475,7 @@ public class Game implements Initializable {
 			mult = 1.2;
 		}
 
-		// Situazione di svantaggio elementale
+		// ELEMENTAL DISADVANTAGE CASE
 		if (playerElem == FIRE && opponentElem == WATER) {
 			mult = 0.8;
 		} else if (playerElem == WATER && opponentElem == FOREST) {
@@ -487,55 +484,69 @@ public class Game implements Initializable {
 			mult = 0.8;
 		}
 
-//		System.out.printf("%s / finalCardDamage: %s%n", currentPlayer.getName(), currentPlayer.getRoundWildCard().getName());
-//		System.out.println("Elem. Multiplier: " + mult);
-
+		// WILD CARD MULTIPLIER APPLIED TO GET FINAL MULTIPLIER
 		mult *= wildCardMultiplier(playerCard, roundWildCard);
-
-		// Debug print statements
-//		System.out.println(playerCard.getElement().toString() + ", " + dmg);
-//		System.out.println("Wild Card: " + roundWildCard.getName());
-//		System.out.println("Enemy: " + opponentCard.getElement().toString());
-//		System.out.println("Final Multiplier: " + mult);
-//		System.out.println("Final Damage: " + Math.round((dmg * mult) * 10.0) / 10.0);
-//		System.out.println();
-
 		return Math.round((dmg * mult) * 10.0) / 10.0;
 	}
 
 	/*
-	 * Seleziona il vincitore a fine partita, in base al numero massimo di punti conseguiti
+	 * Questo metodo determina il vincitore del round, in base al danno finale delle carte selezionate dai giocatori
 	 */
-	public Player selectGameWinner(Player player1, Player player2) {
+	public static Player selectRoundWinner() {
+		return p1FinalDmg > p2FinalDmg ? player1 : player2;
+	}
+
+	public static Player selectGameWinner() {
 		return player1.playerScore > player2.playerScore ? player1 : player2;
-	}
-
-	/*
-	 * TODO: GAME DRAW SCENARIO
-	 *  ALL IT IS IS player1.playerScore == player2.playerScore
-	 *  MAYBE THIS METHOD ISN'T NEEDED, JUST LAUNCH A TIEBREAKER ROUND WITH playRound()
-	 */
-	public void gameDraw() {
-		// TIEBREAKER ROUND
-	}
-
-	/*
-	 * Parte a termine partita, una volta determinato il vincitore [selectVictor()]
-	 * Fa un switchToScene() alla schermata di fine partita
-	 */
-	public void displayLeaderboard() {
 	}
 
 	/*
 	 * TODO: MENU BAR METHODS
 	 */
+
+	@FXML
+	void showScoreboard() {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("Scoreboard");
+		alert.setHeaderText("Punteggi attuali");
+		alert.setContentText(player1.getName() + ":\t" + player1.playerScore + "PUNTO\n" + player2.getName() + ":\t" + player2.playerScore + "PUNTO");
+		alert.show();
+		PauseTransition delay = new PauseTransition(Duration.seconds(5));
+		delay.setOnFinished(e -> alert.close());
+		delay.play();
+	}
+
+	@FXML
+	void saveGame(ActionEvent event) {
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("Salvataggio partita");
+		alert.setHeaderText("Partita salvata con successo");
+		alert.show();
+		PauseTransition delay = new PauseTransition(Duration.seconds(3));
+		delay.setOnFinished(e -> alert.close());
+		delay.play();
+
+		// TODO: Implement saveGame() method
+	}
+
 	@FXML
 	void quitAndSaveGame(ActionEvent event) {
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+		alert.setTitle("Conferma uscita");
+		alert.setHeaderText("Sei sicuro di voler uscire?");
+		alert.setContentText("Il gioco verrà salvato e chiuso.");
+		alert.showAndWait();
+		if (alert.getResult().getText().equals("OK")) {
+			// TODO: Implement saveGame() method
+//		    saveGame();
+			System.exit(0);
+		} else {
+			alert.close();
+		}
 	}
 
 	/*
 	 * Questo metodo fa ripartire la partita da capo, utilizzando gli stessi giocatori
-
 	 */
 	@FXML
 	void restartGame(ActionEvent event) {
@@ -546,9 +557,9 @@ public class Game implements Initializable {
 		alert.showAndWait();
 
 		if (alert.getResult().getText().equals("OK")) {
-			// Salva i nomi dei giocatori pre-reset
+			// Salva i nomi dei giocatori pre-resetGame
 			String p1Name = player1.getName(), p2Name = player2.getName();
-			reset();
+			resetGame();
 			// Riavvia la partita con gli stessi giocatori
 			CreateGameController.players = new ArrayList<>();
 			CreateGameController.players.add(new Player(p1Name));
@@ -559,8 +570,8 @@ public class Game implements Initializable {
 			InputStream is = getClass().getResourceAsStream("/cards/default_card.jpeg");
 			Image defaultCard = new Image(is);
 			playerCardChoiceImage.setImage(defaultCard);
-			damageCardChoice.setText("Danno: ");
-			startGame();
+			damageCardChoiceLabel.setText("DANNO: ");
+			startNewGame();
 		} else {
 			alert.close();
 		}
@@ -569,8 +580,8 @@ public class Game implements Initializable {
 	/*
 	 * Questo metodo resetta le variabili della partita, in preparazione per una nuova partita
 	 */
-	void reset() {
-		CreateGameController.players = null;
+	void resetGame() {
+		CreateGameController.players.clear();
 		deck.clearAllDecks();
 		player1 = null;
 		player2 = null;
@@ -583,9 +594,5 @@ public class Game implements Initializable {
 		selectedCard = null;
 		roundLabel.setText("Round: " + roundNumber + " of 6");
 		CreateGameController.activeCodes.remove(CreateGameController.code);
-	}
-
-	@FXML
-	void saveGame(ActionEvent event) {
 	}
 }

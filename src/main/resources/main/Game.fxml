@@ -6,13 +6,15 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.*?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0"
-            prefWidth="1280.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="main.Game">
+            prefWidth="1280.0" stylesheets="@cards.css" xmlns="http://javafx.com/javafx/20.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Game">
     <children>
         <MenuBar fx:id="menuBar" layoutX="-1.0" prefWidth="1280.0">
             <menus>
                 <Menu mnemonicParsing="false" text="Game">
                     <items>
+                        <MenuItem fx:id="scoreboardMB" mnemonicParsing="false" onAction="#showScoreboard"
+                                  text="Scoreboard"/>
                         <MenuItem fx:id="saveMB" mnemonicParsing="false" onAction="#saveGame" text="Save"/>
                         <MenuItem fx:id="restartMB" mnemonicParsing="false" onAction="#restartGame" text="Restart"/>
                         <MenuItem fx:id="quitAndSaveMB" mnemonicParsing="false" onAction="#quitAndSaveGame"
@@ -22,27 +24,27 @@
             </menus>
         </MenuBar>
         <Label fx:id="roundLabel" layoutX="1029.0" layoutY="32.0" prefHeight="50.0" prefWidth="245.0" text="Round: "
-               underline="true">
+               textFill="RED" underline="true">
             <font>
                 <Font name="System Bold" size="40.0"/>
             </font>
         </Label>
-        <Label fx:id="playerLabel" layoutX="14.0" layoutY="441.0" prefHeight="67.0" prefWidth="491.0"
-               text="Scegli una carta, " textAlignment="CENTER" textFill="RED" underline="true">
+        <Label fx:id="playerLabel" layoutX="14.0" layoutY="459.0" prefHeight="61.0" prefWidth="491.0"
+               text="Scegli una carta, " textAlignment="CENTER" underline="true">
             <font>
-                <Font name="System Bold" size="32.0"/>
+                <Font name="System Bold" size="30.0"/>
             </font>
         </Label>
-        <ImageView fx:id="wildCardImage" fitHeight="560.0" fitWidth="400.0" layoutX="-109.0" layoutY="-95.0"
+        <ImageView fx:id="wildCardImage" fitHeight="560.0" fitWidth="400.0" layoutX="-109.0" layoutY="-21.0"
                    pickOnBounds="true" preserveRatio="true" scaleX="0.4" scaleY="0.4">
             <image>
                 <Image url="@../cards/default_card.jpeg"/>
             </image>
         </ImageView>
-        <Label fx:id="wildEffectsLabel" alignment="TOP_LEFT" layoutX="11.0" layoutY="308.0" prefHeight="144.0"
-               prefWidth="396.0" text="- Effects: ">
+        <Label fx:id="wildEffectsLabel" alignment="TOP_LEFT" layoutX="14.0" layoutY="384.0" prefHeight="75.0"
+               prefWidth="396.0" text="EFFETTO: ">
             <font>
-                <Font size="25.0"/>
+                <Font name="System Bold" size="25.0"/>
             </font>
         </Label>
         <ImageView fx:id="playerCardChoiceImage" fitHeight="560.0" fitWidth="400.0" layoutX="442.0" layoutY="-20.0"
@@ -52,55 +54,64 @@
             </image>
         </ImageView>
         <ImageView fx:id="playerCard1" fitHeight="560.0" fitWidth="400.0" layoutX="-124.0" layoutY="334.0"
-                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33">
+                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33"
+                   styleClass="card-image">
             <image>
                 <Image url="@../cards/default_card.jpeg"/>
             </image>
         </ImageView>
         <ImageView fx:id="playerCard2" fitHeight="560.0" fitWidth="400.0" layoutX="17.0" layoutY="334.0"
-                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33">
+                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33"
+                   styleClass="card-image">
             <image>
                 <Image url="@../cards/default_card.jpeg"/>
             </image>
         </ImageView>
         <ImageView fx:id="playerCard3" fitHeight="560.0" fitWidth="400.0" layoutX="158.0" layoutY="334.0"
-                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33">
+                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33"
+                   styleClass="card-image">
             <image>
                 <Image url="@../cards/default_card.jpeg"/>
             </image>
         </ImageView>
         <ImageView fx:id="playerCard4" fitHeight="560.0" fitWidth="400.0" layoutX="298.0" layoutY="334.0"
-                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33">
+                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33"
+                   styleClass="card-image">
             <image>
                 <Image url="@../cards/default_card.jpeg"/>
             </image>
         </ImageView>
         <ImageView fx:id="playerCard5" fitHeight="560.0" fitWidth="400.0" layoutX="439.0" layoutY="334.0"
-                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33">
+                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33"
+                   styleClass="card-image">
             <image>
                 <Image url="@../cards/default_card.jpeg"/>
             </image>
         </ImageView>
         <ImageView fx:id="playerCard6" fitHeight="560.0" fitWidth="400.0" layoutX="580.0" layoutY="334.0"
-                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33">
+                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33"
+                   styleClass="card-image">
             <image>
                 <Image url="@../cards/default_card.jpeg"/>
             </image>
         </ImageView>
         <ImageView fx:id="playerCard7" fitHeight="560.0" fitWidth="400.0" layoutX="721.0" layoutY="334.0"
-                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33">
+                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33"
+                   styleClass="card-image">
             <image>
                 <Image url="@../cards/default_card.jpeg"/>
             </image>
         </ImageView>
         <ImageView fx:id="playerCard8" fitHeight="560.0" fitWidth="400.0" layoutX="862.0" layoutY="334.0"
-                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33">
+                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33"
+                   styleClass="card-image">
             <image>
                 <Image url="@../cards/default_card.jpeg"/>
             </image>
         </ImageView>
         <ImageView fx:id="playerCard9" fitHeight="560.0" fitWidth="400.0" layoutX="1003.0" layoutY="334.0"
-                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33">
+                   onMouseClicked="#selectCard" pickOnBounds="true" preserveRatio="true" scaleX="0.33" scaleY="0.33"
+                   styleClass="card-image">
             <image>
                 <Image url="@../cards/default_card.jpeg"/>
             </image>
@@ -112,13 +123,13 @@
                 <Font size="20.0"/>
             </font>
         </Button>
-        <Label fx:id="damageCardChoice" alignment="CENTER" contentDisplay="CENTER" layoutX="542.0" layoutY="40.0"
-               prefHeight="34.0" prefWidth="206.0" text="Damage: " textAlignment="CENTER">
+        <Label fx:id="damageCardChoiceLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="542.0" layoutY="40.0"
+               prefHeight="34.0" prefWidth="206.0" text="DANNO: " textAlignment="CENTER">
             <font>
                 <Font name="System Bold" size="28.0"/>
             </font>
         </Label>
-        <Label layoutX="36.0" layoutY="41.0" text="Wild Card">
+        <Label layoutX="36.0" layoutY="115.0" text="Wild Card">
             <font>
                 <Font name="System Bold" size="26.0"/>
             </font>
@@ -168,16 +179,32 @@
                 <Font name="System Bold" size="24.0"/>
             </font>
         </Label>
-        <Label layoutX="1029.0" layoutY="220.0" text="1.2x (0.8x vice-versa)" textAlignment="CENTER">
+        <Label layoutX="1010.0" layoutY="190.0" text="1.2x danno (0.8x vice-versa)" textAlignment="CENTER">
             <font>
                 <Font name="System Italic" size="13.0"/>
             </font>
         </Label>
-        <Label layoutX="1021.0" layoutY="174.0" text="Elements" textAlignment="CENTER">
+        <Label layoutX="1021.0" layoutY="146.0" text="Elements" textAlignment="CENTER">
             <font>
                 <Font name="System Bold" size="36.0"/>
             </font>
         </Label>
-        <Circle fill="#1f93ff00" layoutX="1088.0" layoutY="273.0" radius="130.0" stroke="BLACK" strokeType="INSIDE"/>
+        <Circle fill="#1f93ff00" layoutX="1088.0" layoutY="257.0" radius="135.0" stroke="BLACK" strokeType="INSIDE"/>
+        <Label fx:id="playerTurnLabel" layoutX="10.0" layoutY="33.0" prefHeight="50.0" prefWidth="491.0" text="TURN: "
+               textFill="#ff0505" underline="true">
+            <font>
+                <Font name="System Bold" size="40.0"/>
+            </font>
+        </Label>
+        <Label layoutX="1007.0" layoutY="218.0" text="YOU" textAlignment="CENTER" underline="true">
+            <font>
+                <Font name="System Bold" size="20.0"/>
+            </font>
+        </Label>
+        <Label layoutX="1122.0" layoutY="218.0" text="ENEMY" textAlignment="CENTER" underline="true">
+            <font>
+                <Font name="System Bold" size="20.0"/>
+            </font>
+        </Label>
     </children>
 </AnchorPane>
