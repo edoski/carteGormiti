@@ -53,6 +53,11 @@ public class RoundWinnerController {
 	@FXML
 	private Label roundWinnerLabel;
 
+	static double p1ElemMult;
+	static double p2ElemMult;
+	static double p1WildMult;
+	static double p2WildMult;
+
 	public void switchToScene(String fxmlFile) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
 		root = loader.load();
@@ -70,15 +75,23 @@ public class RoundWinnerController {
 		p1RoundDmg.setText("Attack: " + Game.p1FinalDmg);
 		p2RoundDmg.setText("Attack: " + Game.p2FinalDmg);
 
-		// TODO: CONVERT PRINT STATEMENTS TO LABELS
-//		p1RoundCardDetails.setText(p1.getChosenCard().getName() + " - " + p1.getChosenCard().getCardType());
-//		p2RoundCardDetails.setText(p2.getChosenCard().getName() + " - " + p2.getChosenCard().getCardType());
-//		System.out.println("Elem. Multiplier: " + mult);
-//		System.out.println(playerCard.getElement().toString() + ", " + dmg);
-//		System.out.println("Wild Card: " + roundWildCard.getName());
-//		System.out.println("Enemy: " + opponentCard.getElement().toString());
-//		System.out.println("Final Multiplier: " + mult);
-//		System.out.println("Final Damage: " + Math.round((dmg * mult) * 10.0) / 10.0);
+		double p1Mult = Math.round(p1ElemMult * p1WildMult * 100.0) / 100.0;
+		String p1CardDetails =
+				p1.getChosenCard().getName() + ":\n" +
+						"- Elem. Multiplier: " + p1ElemMult + "x\n" +
+						"- Wild  Multiplier: " + p1WildMult + "x\n" +
+						"- Final Multiplier: " + p1Mult + "x\n" +
+						p1.getChosenCard().getDamage() + " * " + p1Mult + " = " + Game.p1FinalDmg;
+		p1RoundCardDetails.setText(p1CardDetails);
+
+		double p2Mult = Math.round(p2ElemMult * p2WildMult * 100.0) / 100.0;
+		String p2CardDetails =
+				p2.getChosenCard().getName() + ":\n" +
+						"- Elem. Multiplier: " + p2ElemMult + "x\n" +
+						"- Wild  Multiplier: " + p2WildMult + "x\n" +
+						"- Final Multiplier: " + p2Mult + "x\n" +
+						p2.getChosenCard().getDamage() + " * " + p2Mult + " = " + Game.p2FinalDmg;
+		p2RoundCardDetails.setText(p2CardDetails);
 	}
 
 	public static int getRoundNumber() {

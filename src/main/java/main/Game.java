@@ -23,7 +23,9 @@ import java.net.URL;
 import java.util.*;
 
 /*TODO:
- * - ADD A GAME WINNER DISPLAY (see pdf)
+ * - Implementare il metodo saveGame() per salvare la partita
+ * - Implementare il metodo startGameFromSave() per riprendere la partita da un file di salvataggio
+ * - Implementare il metodo logGame() per registrare la partita in un file di log
  */
 
 public class Game implements Initializable {
@@ -46,9 +48,6 @@ public class Game implements Initializable {
 
 	@FXML
 	private MenuItem quitAndSaveMB;
-
-	@FXML
-	private MenuItem restartMB;
 
 	@FXML
 	private MenuItem saveMB;
@@ -248,11 +247,6 @@ public class Game implements Initializable {
 					// TODO: LOG GAME
 					GameWinnerController.logGame(player1, player2, selectGameWinner(), code);
 					resetGame();
-					try {
-						switchToScene("MainMenu.fxml");
-					} catch (IOException e) {
-						throw new RuntimeException(e);
-					}
 				}
 			} else {
 				// ROUND WINNER SCENE
@@ -446,6 +440,14 @@ public class Game implements Initializable {
 				mult = 0.8;
 			}
 		}
+
+		// WILD MULTIPLIER FOR ROUND WINNER SCENE
+		if (player1.getChosenCard() == card) {
+			RoundWinnerController.p1WildMult = mult;
+		} else {
+			RoundWinnerController.p2WildMult = mult;
+		}
+
 		return mult;
 	}
 
@@ -484,6 +486,13 @@ public class Game implements Initializable {
 			mult = 0.8;
 		}
 
+		// ELEMENTAL MULTIPLIER FOR ROUND WINNER SCENE
+		if (player1.getChosenCard() == playerCard) {
+			RoundWinnerController.p1ElemMult = mult;
+		} else {
+			RoundWinnerController.p2ElemMult = mult;
+		}
+
 		// WILD CARD MULTIPLIER APPLIED TO GET FINAL MULTIPLIER
 		mult *= wildCardMultiplier(playerCard, roundWildCard);
 		return Math.round((dmg * mult) * 10.0) / 10.0;
@@ -509,7 +518,7 @@ public class Game implements Initializable {
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
 		alert.setTitle("Scoreboard");
 		alert.setHeaderText("Punteggi attuali");
-		alert.setContentText(player1.getName() + ":\t" + player1.playerScore + "PUNTO\n" + player2.getName() + ":\t" + player2.playerScore + "PUNTO");
+		alert.setContentText(player1.getName() + ":\t" + player1.playerScore + " punti\n" + player2.getName() + ":\t" + player2.playerScore + " punti");
 		alert.show();
 		PauseTransition delay = new PauseTransition(Duration.seconds(5));
 		delay.setOnFinished(e -> alert.close());
@@ -553,7 +562,7 @@ public class Game implements Initializable {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 		alert.setTitle("Restart Game");
 		alert.setHeaderText("Sei sicuro di voler ricominciare la partita?");
-		alert.setContentText("I punteggi verranno azzerati");
+		alert.setContentText("Il round e punteggi verranno azzerati");
 		alert.showAndWait();
 
 		if (alert.getResult().getText().equals("OK")) {

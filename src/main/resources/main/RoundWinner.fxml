@@ -8,62 +8,62 @@
             prefWidth="1280.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="main.RoundWinnerController">
     <children>
-        <ImageView fx:id="p1EndRoundCard" fitHeight="560.0" fitWidth="400.0" layoutX="238.0" layoutY="-8.0"
+        <ImageView fx:id="p1EndRoundCard" fitHeight="560.0" fitWidth="400.0" layoutX="258.0" layoutY="-8.0"
                    pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65"/>
-        <ImageView fx:id="p2EndRoundCard" fitHeight="560.0" fitWidth="400.0" layoutX="645.0" layoutY="-8.0"
+        <ImageView fx:id="p2EndRoundCard" fitHeight="560.0" fitWidth="400.0" layoutX="625.0" layoutY="-8.0"
                    pickOnBounds="true" preserveRatio="true" scaleX="0.65" scaleY="0.65"/>
-        <Label fx:id="p1RoundLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="265.0" layoutY="11.0"
+        <Label fx:id="p1RoundLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="285.0" layoutY="11.0"
                prefHeight="63.0" prefWidth="345.0" text="Label" textAlignment="CENTER">
             <font>
                 <Font name="System Bold" size="50.0"/>
             </font>
         </Label>
-        <Label fx:id="p2RoundLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="673.0" layoutY="11.0"
+        <Label fx:id="p2RoundLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="653.0" layoutY="11.0"
                prefHeight="63.0" prefWidth="343.0" text="Label" textAlignment="CENTER">
             <font>
                 <Font name="System Bold" size="50.0"/>
             </font>
         </Label>
-        <Label fx:id="p1RoundDmg" alignment="CENTER" contentDisplay="CENTER" layoutX="341.0" layoutY="463.0"
+        <Label fx:id="p1RoundDmg" alignment="CENTER" contentDisplay="CENTER" layoutX="361.0" layoutY="463.0"
                prefHeight="37.0" prefWidth="193.0" text="Attack: " textAlignment="CENTER">
             <font>
-                <Font size="30.0"/>
+                <Font name="System Bold" size="30.0"/>
             </font>
         </Label>
-        <Label fx:id="p2RoundDmg" alignment="CENTER" contentDisplay="CENTER" layoutX="748.0" layoutY="463.0"
+        <Label fx:id="p2RoundDmg" alignment="CENTER" contentDisplay="CENTER" layoutX="728.0" layoutY="463.0"
                prefHeight="37.0" prefWidth="193.0" text="Attack: " textAlignment="CENTER">
             <font>
-                <Font size="30.0"/>
+                <Font name="System Bold" size="30.0"/>
             </font>
         </Label>
         <Button fx:id="nextRoundBtn" layoutX="443.0" layoutY="650.0" mnemonicParsing="false" onAction="#playRound"
                 text="Next Round" textFill="#0af531">
             <font>
-                <Font size="30.0"/>
+                <Font name="System Bold" size="30.0"/>
             </font>
         </Button>
         <Button fx:id="endRoundQuitBtn" layoutX="650.0" layoutY="650.0" mnemonicParsing="false"
                 onAction="#quitAndSaveGame" text="Save &amp; Quit" textFill="RED">
             <font>
-                <Font size="30.0"/>
+                <Font name="System Bold" size="30.0"/>
             </font>
         </Button>
         <Label fx:id="roundWinnerLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="186.0" layoutY="542.0"
                prefHeight="63.0" prefWidth="909.0" text="Winner" textAlignment="CENTER" underline="true">
             <font>
-                <Font name="System Bold" size="50.0"/>
+                <Font name="System Bold Italic" size="50.0"/>
             </font>
         </Label>
-        <Label fx:id="p1RoundCardDetails" alignment="TOP_LEFT" layoutX="14.0" layoutY="90.0" prefHeight="364.0"
-               prefWidth="279.0" text="Player 1:">
+        <Label fx:id="p1RoundCardDetails" alignment="TOP_LEFT" layoutX="14.0" layoutY="200.0" prefHeight="364.0"
+               prefWidth="303.0" text="Player 1:">
             <font>
-                <Font size="30.0"/>
+                <Font name="System Bold" size="24.0"/>
             </font>
         </Label>
-        <Label fx:id="p2RoundCardDetails" alignment="TOP_LEFT" layoutX="987.0" layoutY="90.0" prefHeight="364.0"
+        <Label fx:id="p2RoundCardDetails" alignment="TOP_LEFT" layoutX="987.0" layoutY="200.0" prefHeight="364.0"
                prefWidth="279.0" text="Player 2:">
             <font>
-                <Font size="30.0"/>
+                <Font name="System Bold" size="24.0"/>
             </font>
         </Label>
     </children>

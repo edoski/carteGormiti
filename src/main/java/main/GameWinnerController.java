@@ -43,8 +43,8 @@ public class GameWinnerController {
 	}
 
 	public void setPlayers(Player p1, Player p2) {
-		p1EndGameLabel.setText(p1.getName() + " " + p1.playerScore);
-		p2EndGameLabel.setText(p2.getName() + " " + p2.playerScore);
+		p1EndGameLabel.setText(p1.getName() + "\n" + p1.playerScore + " punti");
+		p2EndGameLabel.setText(p2.getName() + "\n" + p2.playerScore + " punti");
 	}
 
 	public void setGameWinner(Player winner) {
