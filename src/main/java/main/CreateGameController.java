@@ -366,8 +366,6 @@ public class CreateGameController implements Initializable {
 						}
 					};
 
-					System.out.println("Exited Thread 1");
-
 					match1Task.setOnSucceeded(e -> {
 						Game.isNewGame = false;
 						System.out.println("Entered Thread 2");
