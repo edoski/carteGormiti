@@ -74,6 +74,7 @@ public class Game implements Initializable {
 	static String code;
 	static boolean isNewGame;
 	static boolean isTournament;
+	static boolean activateCPU = true;
 
 	// ELEMENTS, FOR CODE READABILITY
 	static final Card.Element FIRE = Card.Element.FIRE;
@@ -293,6 +294,7 @@ public class Game implements Initializable {
 					displayPlayerCards(currentPlayer);
 				} else {
 					// GAME WINNER SCENE
+					activateCPU = false;
 					if (!isTournament) {
 						try {
 							switchToScene("GameWinner.fxml");
@@ -350,8 +352,29 @@ public class Game implements Initializable {
 		playerLabel.setText("Scegli una carta, " + player.getName());
 		playerTurnLabel.setText("TURNO: " + player.getName());
 		displayPlayerCards(player);
-		Card selectedCard = player.getChosenCard();
-		player.setChosenCard(selectedCard);
+		AtomicReference<Card> selectedCard = new AtomicReference<>();
+		if (player.isCPU) {
+			// CPU SELECTS CARD AFTER DELAY
+			PauseTransition delay = new PauseTransition(Duration.seconds(0.75));
+			delay.setOnFinished(e -> {
+				if (activateCPU) {
+					selectedCard.set(player.returnBestCardCPU());
+					selectCardCPU(selectedCard.get());
+
+					// CPU CLICKS CONFIRM BUTTON AFTER DELAY
+					PauseTransition delayConfirm = new PauseTransition(Duration.seconds(0.5));
+					delayConfirm.setOnFinished(event -> {
+						player.setChosenCard(selectedCard.get());
+						confirmCardBtn.fire();
+					});
+					delayConfirm.play();
+				}
+			});
+			delay.play();
+		} else {
+			selectedCard.set(player.getChosenCard());
+			player.setChosenCard(selectedCard.get());
+		}
 	}
 
 	/*
@@ -374,7 +397,6 @@ public class Game implements Initializable {
 
 	/*
 	 * Questo metodo fa il display delle carte disponibili per il giocatore e il suo wild card
-	 *
 	 */
 	void displayPlayerCards(Player player) {
 		ArrayList<Card> cards = player.getHand();
@@ -445,21 +467,38 @@ public class Game implements Initializable {
 
 	/*
 	 * Questo metodo permette al giocatore di selezionare una carta dal proprio mazzo
-	 * TODO: FIX CPU SELECT CARD LOGIC FOR THE DISPLAY OF THE SELECTED CARD, AND MAKE IT SELECT A CARD AFTER 1S
 	 */
 	@FXML
 	void selectCard(MouseEvent event) {
 		confirmCardBtn.setDisable(false);
 
-		ImageView clickedCard = new ImageView();
-		if (!currentPlayer.isCPU) {
-			clickedCard = (ImageView) event.getSource();
-			selectedCard = cardMap.get(clickedCard);
-		} else {
-			selectedCard = currentPlayer.selectCardCPU();
+		ImageView clickedCard = (ImageView) event.getSource();
+		selectedCard = cardMap.get(clickedCard);
+
+		displayCardChoice(clickedCard, selectedCard != null, selectedCard);
+	}
+
+	/*
+	 * Questo metodo permette al giocatore CPU di selezionare una carta dal proprio mazzo
+	 * È identico a selectCard(), ma è chiamato da returnBestCardCPU() per selezionare la carta CPU dopo 1s.
+	 */
+	public void selectCardCPU(Card card) {
+		confirmCardBtn.setDisable(false);
+
+		// Find the ImageView associated with the card
+		ImageView clickedCard = null;
+		for (Map.Entry<ImageView, Card> entry : cardMap.entrySet()) {
+			if (entry.getValue().equals(card)) {
+				clickedCard = entry.getKey();
+				break;
+			}
 		}
 
-		if (selectedCard != null) {
+		displayCardChoice(clickedCard, clickedCard != null, card);
+	}
+
+	private void displayCardChoice(ImageView clickedCard, boolean validCard, Card selectedCard) {
+		if (validCard) {
 			// DISPLAY SELECTED CARD IMAGE IF NOT NULL
 			Image cardImage = clickedCard.getImage();
 			playerCardChoiceImage.setImage(cardImage);

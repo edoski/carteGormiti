@@ -24,7 +24,7 @@
             </menus>
         </MenuBar>
         <Label fx:id="roundLabel" layoutX="1029.0" layoutY="32.0" prefHeight="50.0" prefWidth="245.0" text="Round: "
-               textFill="RED" underline="true">
+               textFill="#0060ff" underline="true">
             <font>
                 <Font name="System Bold" size="40.0"/>
             </font>
@@ -191,7 +191,7 @@
         </Label>
         <Circle fill="#1f93ff00" layoutX="1088.0" layoutY="257.0" radius="135.0" stroke="BLACK" strokeType="INSIDE"/>
         <Label fx:id="playerTurnLabel" layoutX="10.0" layoutY="33.0" prefHeight="50.0" prefWidth="491.0" text="TURN: "
-               textFill="#ff0505" underline="true">
+               textFill="#0060ff" underline="true">
             <font>
                 <Font name="System Bold" size="40.0"/>
             </font>

@@ -1,7 +1,6 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Player {
     final String name;
@@ -51,12 +50,20 @@ public class Player {
         this.getHand().remove(this.getChosenCard());
     }
 
-    // TODO: IMPLEMENT LOGIC THAT CHECKS FOR THE BEST CARD TO PLAY BASED ON CURRENT WILD CARD
-    // TODO: ADD 1S DELAY TO CPU MOVES
-    public Card selectCardCPU() {
+	/*
+	 * SCEGELI LA CARTA MIGLIORE IN BASE AL DANNO E AL MOLTIPLICATORE DELLA WILD CARD
+	 */
+	public Card returnBestCardCPU() {
         ArrayList<Card> cards = getHand();
-        Random rand = new Random();
-        Card selectedCard = cards.get(rand.nextInt(cards.size()));
+		double maxDmg = 0;
+		Card selectedCard = null;
+		for (Card card : cards) {
+			double dmg = Game.wildCardMultiplier(card, roundWildCard) * card.getDamage();
+			if (dmg > maxDmg) {
+				maxDmg = card.getDamage();
+				selectedCard = card;
+			}
+		}
         setChosenCard(selectedCard);
         return selectedCard;
     }

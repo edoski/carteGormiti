@@ -150,7 +150,6 @@ public class AdminController implements Initializable {
                 colorFieldBorder(adminPassword, "red");
             } else {
                 boolean correctUsername = adminUsername.getText().equals(username);
-
                 errorCase = correctUsername ? "password" : "username";
 
                 if (correctUsername) {
@@ -170,8 +169,8 @@ public class AdminController implements Initializable {
             if (trials == 3) {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.setTitle("Warning");
-                alert.setHeaderText("You are about to exceed the number of trials");
-                alert.setContentText("If you do not main with the correct credentials the next attempt, the program will shut down for safety reasons.");
+	            alert.setHeaderText("Stai per superare il numero di tentativi");
+	            alert.setContentText("Se non inserisci le credenziali corrette al prossimo tentativo, il programma terminerà.");
                 alert.showAndWait();
             }
 

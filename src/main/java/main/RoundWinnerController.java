@@ -2,6 +2,7 @@ package main;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -10,8 +11,10 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class RoundWinnerController {
+public class RoundWinnerController implements Initializable {
 
 	Parent root;
 	Scene scene;
@@ -50,6 +53,11 @@ public class RoundWinnerController {
 	static double p2ElemMult;
 	static double p1WildMult;
 	static double p2WildMult;
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		Game.activateCPU = false;
+	}
 
 	public void switchToScene(String fxmlFile) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
@@ -114,8 +122,9 @@ public class RoundWinnerController {
 	// 	- THE PLAYERS SHOULD KEEP THEIR SCORES AND ALL THEIR RELATED DATA
 	@FXML
 	void playRound() {
+		Game.activateCPU = true;
+		Game.isNewGame = false;
 		try {
-			Game.isNewGame = false;
 			switchToScene("Game.fxml");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
