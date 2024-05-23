@@ -21,11 +21,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /*TODO:
+ * FOR CPU MAYBE ALL NECESSARY IS ADDING TO PLAYER CLASS A BOOLEAN isCPU AND WITHIN Game CLASS IN METHODS LIKE selectCard() CHECKING IF currentPlayer.isCPU
+ * FOR LOAD GAME DON'T USE JSON, MAKE EACH LINE OF THE FILE A STRING WITH COMPLETE RELEVANT DATE (I.E. 1 CARD 1 LINE WITH NAME, ELEMENT, DAMAGE, ART, WILD), USE , TO SEPARATE DATA
  * - Implementare il metodo saveGame() per salvare la partita
  * - Implementare il metodo startGameFromSave() per riprendere la partita da un file di salvataggio
- * - Implementare il metodo logGame() per registrare la partita in un file di log
+ * - Maybe add background elevator music and a menu bar option to toggle it on/off
+ * - IF isTournament = true THEN DO NOT RESET PLAYER SCORES AT THE END OF EACH GAME AND DISPLAY THEM ON THE FINAL LEADERBOARD "TournamentWinner.fxml"
  */
 
 public class Game implements Initializable {
@@ -68,42 +72,50 @@ public class Game implements Initializable {
 	private Label damageCardChoiceLabel;
 
 	static String code;
-	static boolean startingNewGame;
+	static boolean isNewGame;
+	static boolean isTournament;
 
-	// Per migliorare la leggibilità del codice
+	// ELEMENTS, FOR CODE READABILITY
 	static final Card.Element FIRE = Card.Element.FIRE;
 	static final Card.Element WATER = Card.Element.WATER;
 	static final Card.Element FOREST = Card.Element.FOREST;
 
+	// CARD DECK AND WILDS DECK
 	static Deck deck = new Deck();
 	static final ArrayList<Card> wildsDeck = deck.getWildsDeck();
+
+	// PLAYERS, currentPlayer IS USED TO KEEP TRACK OF TURN
 	static Player player1;
 	static Player player2;
 	static Player currentPlayer;
 
+	// PLAYER HANDS, EXTRACTED FROM ABOVE deck VARIABLE
 	static ArrayList<Card> player1Hand;
 	static ArrayList<Card> player2Hand;
 
 	static int roundNumber;
-	// card map to map the image view to the card
+
+	// TO MAP CARD IMAGES TO CARD OBJECTS FOR SELECTION
 	private final HashMap<ImageView, Card> cardMap = new HashMap<>();
 
-	// wild cards for the round
+	// PLAYER WILD CARDS OF THE CURRENT & PREVIOUS ROUNDS
 	static Card player1WildCard, p1PreviousWildCard;
 	static Card player2WildCard, p2PreviousWildCard;
 
-	// selected card
+	// THE SELECTED CARD FOR THE CURRENT PLAYER
 	private Card selectedCard;
-	// final damage of the cards, keeps into account both respective wild cards and element advantages/disadvantages
+
+	// FINAL DAMAGE OF CARDS FOR ROUND WINNER DETERMINATION, KEEPS INTO ACCOUNT WILD CARD MULTIPLIERS AND ELEMENTAL ADVANTAGES/DISADVANTAGES
 	static double p1FinalDmg = 0, p2FinalDmg = 0;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		CreateGameController.CPUCount = 1;
-		if (startingNewGame) {
+		if (isNewGame) {
 			code = CreateGameController.code;
 			startNewGame();
 		} else {
+			// TODO: AM I PASSING THE CODE CORRECTLY?
 			if (LoadGameController.code != null) {
 				code = LoadGameController.code;
 				// TODO: FOR JSONS
@@ -120,19 +132,56 @@ public class Game implements Initializable {
 	public void switchToScene(String fxmlFile) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
 		root = loader.load();
-		if (fxmlFile.equals("RoundWinner.fxml")) {
-			RoundWinnerController controller = loader.getController();
-			controller.setPlayers(player1, player2);
-			controller.setRoundNumber(roundNumber);
-			if (p1FinalDmg == p2FinalDmg) {
-				controller.setRoundWinner(null);
-			} else {
-				controller.setRoundWinner(selectRoundWinner());
+		// DEPENDING ON THE SCENE, SET NECESSARY PARAMETERS
+		switch (fxmlFile) {
+			// JAVA 12 SWITCH EXPRESSIONS, NO BREAKS NEEDED
+			case "RoundWinner.fxml" -> {
+				RoundWinnerController controller = loader.getController();
+				controller.setPlayers(player1, player2);
+				controller.setRoundNumber(roundNumber);
+				if (p1FinalDmg == p2FinalDmg) {
+					controller.setRoundWinner(null);
+				} else {
+					controller.setRoundWinner(selectRoundWinner());
+				}
 			}
-		} else if (fxmlFile.equals("GameWinner.fxml")) {
-			GameWinnerController controller = loader.getController();
-			controller.setPlayers(player1, player2);
-			controller.setGameWinner(selectGameWinner());
+			case "GameWinner.fxml" -> {
+				GameWinnerController controller = loader.getController();
+				controller.setPlayers(player1, player2);
+				controller.setGameWinner(selectGameWinner());
+			}
+			case "TournamentNextGame.fxml" -> {
+				// GATHERING DATA FOR NEXT GAME AND FOR FINAL TOURNAMENT LEADERBOARD
+				TournamentNextGameController controller = loader.getController();
+				controller.setPlayers(player1, player2);
+				controller.setGameWinner(selectGameWinner());
+
+				// TODO CHECK IF THIS WORKS TO PASS / STORE DATA UNTIL THE END OF THE TOURNAMENT
+				// TODO PROBABLY NEED MULTIPLE IF'S WITH CODE TO CHECK THE GAME NUMBER AND SET THE DATA ACCORDINGLY
+				//      USE THEN game1/2/3Winner, game1/2/3Loser, game1/2/3WinnerScore, game1/2/3LoserScore VARIABLES
+				//      CHECK IF YOU NEED TO KEEP TRACK OF MORE VARIABLES OR IF THE ABOVE IS ENOUGH
+				//          IN THEORY PLAYER AND NUM. OF GAME HE WAS IN SHOULD BE ENOUGH, AS PLAYER OBJECT CONTAINS SCORES playerScore
+				if (code.endsWith("-1")) {
+					TournamentWinnerController.game1Winner = selectGameWinner();
+					TournamentWinnerController.game1WinnerScore = selectGameWinner().playerScore;
+					TournamentWinnerController.game1Loser = selectGameWinner() == player1 ? player2 : player1;
+					TournamentWinnerController.game1LoserScore = TournamentWinnerController.game1Loser.playerScore;
+				} else if (code.endsWith("-2")) {
+					TournamentWinnerController.game2Winner = selectGameWinner();
+					TournamentWinnerController.game2WinnerScore = selectGameWinner().playerScore;
+					TournamentWinnerController.game2Loser = selectGameWinner() == player1 ? player2 : player1;
+					TournamentWinnerController.game2LoserScore = TournamentWinnerController.game2Loser.playerScore;
+				} else {
+					TournamentWinnerController.game3Winner = selectGameWinner();
+					TournamentWinnerController.game3WinnerScore = selectGameWinner().playerScore;
+					TournamentWinnerController.game3Loser = selectGameWinner() == player1 ? player2 : player1;
+					TournamentWinnerController.game3LoserScore = TournamentWinnerController.game3Loser.playerScore;
+				}
+			}
+			case "TournamentWinner.fxml" -> {
+				TournamentWinnerController controller = loader.getController();
+				// TODO: SET PLAYERS BUT ALL FOUR, THEIR SCORES, AND IDENTIFY TOURNAMENT WINNER
+			}
 		}
 		stage = (Stage) confirmCardBtn.getScene().getWindow();
 		scene = new Scene(root);
@@ -150,11 +199,17 @@ public class Game implements Initializable {
 		player2 = players.get(1);
 	}
 
+	// TODO
+	public static void setPlayersFinalTournamentGame(ArrayList<AtomicReference<Player>> players) {
+		player1 = players.get(0).get();
+		player2 = players.get(1).get();
+	}
+
 	/*
 	 * Per quando si fanno i cambi di scena, si può riprendere la partita da dove si era fermata
 	 */
 	public void startGameAfterRound() {
-		startingNewGame = false;
+		isNewGame = false;
 
 		// PLAYER HANDS ALREADY INITIALIZED
 		player1Hand = player1.getHand();
@@ -238,13 +293,31 @@ public class Game implements Initializable {
 					displayPlayerCards(currentPlayer);
 				} else {
 					// GAME WINNER SCENE
-					try {
-						switchToScene("GameWinner.fxml");
-					} catch (IOException e) {
-						throw new RuntimeException(e);
+					if (!isTournament) {
+						try {
+							switchToScene("GameWinner.fxml");
+						} catch (IOException e) {
+							throw new RuntimeException(e);
+						}
+					} else {
+						// TOURNAMENT MODE
+						// IF FINAL GAME, DISPLAY TOURNAMENT WINNER
+						if (code.endsWith("-3")) {
+							try {
+								switchToScene("TournamentWinner.fxml");
+							} catch (IOException e) {
+								throw new RuntimeException(e);
+							}
+						} else {
+							// IF NOT FINAL GAME, DISPLAY NEXT GAME
+							try {
+								switchToScene("TournamentNextGame.fxml");
+							} catch (IOException e) {
+								throw new RuntimeException(e);
+							}
+						}
 					}
-					// THE GAME ENDS HERE
-					// TODO: LOG GAME
+					// THE GAME ENDS HERE, LOGGING ALL RELEVANT DATA
 					GameWinnerController.logGame(player1, player2, selectGameWinner(), code);
 					resetGame();
 				}
@@ -372,13 +445,20 @@ public class Game implements Initializable {
 
 	/*
 	 * Questo metodo permette al giocatore di selezionare una carta dal proprio mazzo
+	 * TODO: FIX CPU SELECT CARD LOGIC FOR THE DISPLAY OF THE SELECTED CARD, AND MAKE IT SELECT A CARD AFTER 1S
 	 */
 	@FXML
 	void selectCard(MouseEvent event) {
 		confirmCardBtn.setDisable(false);
 
-		ImageView clickedCard = (ImageView) event.getSource();
-		selectedCard = cardMap.get(clickedCard);
+		ImageView clickedCard = new ImageView();
+		if (!currentPlayer.isCPU) {
+			clickedCard = (ImageView) event.getSource();
+			selectedCard = cardMap.get(clickedCard);
+		} else {
+			selectedCard = currentPlayer.selectCardCPU();
+		}
+
 		if (selectedCard != null) {
 			// DISPLAY SELECTED CARD IMAGE IF NOT NULL
 			Image cardImage = clickedCard.getImage();
@@ -588,6 +668,7 @@ public class Game implements Initializable {
 
 	/*
 	 * Questo metodo resetta le variabili della partita, in preparazione per una nuova partita
+	 * TODO: HANDLE RESET SPECIFICS FOR TOURNAMENT MODE
 	 */
 	void resetGame() {
 		CreateGameController.players.clear();

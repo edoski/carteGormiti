@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -19,12 +18,6 @@ public class RoundWinnerController {
 	Stage stage;
 
 	static int roundNumber;
-
-	@FXML
-	private Button endRoundQuitBtn;
-
-	@FXML
-	private Button nextRoundBtn;
 
 	@FXML
 	private ImageView p1EndRoundCard;
@@ -80,7 +73,7 @@ public class RoundWinnerController {
 				p1.getChosenCard().getName() + ":\n" +
 						"- Elem. Multiplier: " + p1ElemMult + "x\n" +
 						"- Wild  Multiplier: " + p1WildMult + "x\n" +
-						"- Final Multiplier: " + p1Mult + "x\n" +
+						"- Final Multiplier: " + p1Mult + "x\n\n" +
 						p1.getChosenCard().getDamage() + " * " + p1Mult + " = " + Game.p1FinalDmg;
 		p1RoundCardDetails.setText(p1CardDetails);
 
@@ -89,7 +82,7 @@ public class RoundWinnerController {
 				p2.getChosenCard().getName() + ":\n" +
 						"- Elem. Multiplier: " + p2ElemMult + "x\n" +
 						"- Wild  Multiplier: " + p2WildMult + "x\n" +
-						"- Final Multiplier: " + p2Mult + "x\n" +
+						"- Final Multiplier: " + p2Mult + "x\n\n" +
 						p2.getChosenCard().getDamage() + " * " + p2Mult + " = " + Game.p2FinalDmg;
 		p2RoundCardDetails.setText(p2CardDetails);
 	}
@@ -122,10 +115,10 @@ public class RoundWinnerController {
 	@FXML
 	void playRound() {
 		try {
-			Game.startingNewGame = false;
+			Game.isNewGame = false;
 			switchToScene("Game.fxml");
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 

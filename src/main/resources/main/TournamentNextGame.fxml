@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.*?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0"
+            prefWidth="1280.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="main.TournamentNextGameController">
+    <children>
+        <Label alignment="CENTER" contentDisplay="CENTER" layoutX="396.0" layoutY="72.0" text="SCOREBOARD"
+               textAlignment="CENTER">
+            <font>
+                <Font name="System Bold" size="75.0"/>
+            </font>
+        </Label>
+        <Label fx:id="gameWinnerLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="37.0" layoutY="280.0"
+               prefHeight="73.0" prefWidth="1200.0" text="Label" textAlignment="CENTER" underline="true">
+            <font>
+                <Font name="System Bold Italic" size="60.0"/>
+            </font>
+        </Label>
+        <Label fx:id="p1EndGameLabel" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="167.0" layoutY="443.0"
+               prefHeight="137.0" prefWidth="457.0" text="Player: " textAlignment="CENTER">
+            <font>
+                <Font name="System Bold" size="45.0"/>
+            </font>
+        </Label>
+        <Label fx:id="p2EndGameLabel" alignment="TOP_CENTER" contentDisplay="CENTER" layoutX="648.0" layoutY="443.0"
+               prefHeight="137.0" prefWidth="457.0" text="Player: " textAlignment="CENTER">
+            <font>
+                <Font name="System Bold" size="45.0"/>
+            </font>
+        </Label>
+        <Button fx:id="homeBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="457.0" layoutY="604.0"
+                mnemonicParsing="false" onAction="#goHome" text="Home" textAlignment="CENTER" textFill="#0ddd29">
+            <font>
+                <Font name="System Bold" size="25.0"/>
+            </font>
+        </Button>
+        <Button fx:id="quitBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="742.0" layoutY="604.0"
+                mnemonicParsing="false" onAction="#quit" prefHeight="47.0" prefWidth="97.0" text="Quit"
+                textAlignment="CENTER" textFill="RED">
+            <font>
+                <Font name="System Bold" size="25.0"/>
+            </font>
+        </Button>
+        <Button fx:id="nextGameBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="573.0" layoutY="604.0"
+                mnemonicParsing="false" onAction="#goNextGame" text="Next Game" textAlignment="CENTER"
+                textFill="#008cff">
+            <font>
+                <Font name="System Bold" size="25.0"/>
+            </font>
+        </Button>
+    </children>
+</AnchorPane>

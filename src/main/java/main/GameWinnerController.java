@@ -10,7 +10,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class GameWinnerController {
 
@@ -64,7 +69,7 @@ public class GameWinnerController {
 	@FXML
 	void quit(ActionEvent event) {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-		alert.setTitle("Confirma uscita");
+		alert.setTitle("Conferma uscita");
 		alert.setHeaderText("Sei sicuro di voler uscire?");
 		alert.setContentText("L'applicazione verrà chiusa.");
 		alert.showAndWait();
@@ -76,18 +81,29 @@ public class GameWinnerController {
 	}
 
 	public static void logGame(Player p1, Player p2, Player winner, String code) {
-		// TODO: LOG GAME CODE, PLAYER NAMES, PLAYER SCORES, WINNER TO FILE, AND CURRENT DATE
+		LocalDate date = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+		String dateFormatted = date.format(formatter);
+		// TODO: GOES TO CURRENT WORKING DIRECTORY, CHECK IF IS SAME AS JAR FILE
+		String currDir = System.getProperty("user.dir");
+		File directory = new File(currDir, "archive");
+		if (!directory.exists()) {
+			directory.mkdirs(); // Create the directory if it doesn't exist
+		}
+		File logFile = new File(directory, code + ".txt");
+		try {
+			FileWriter writer = new FileWriter(logFile);
+			PrintWriter printer = new PrintWriter(writer);
 
-		/* EXAMPLE OF LOG FILE:
-		 *
-		 * -------------------------
-		 * CODE: XY45
-		 * DATE: 2024-05-22
-		 * PLAYER 1: John, SCORE: 5
-		 * PLAYER 2: Jane, SCORE: 3
-		 * WINNER: John
-		 * -------------------------
-		 *
-		 */
+			printer.println("CODE: " + code);
+			printer.println("DATE: " + dateFormatted);
+			printer.println("PLAYER 1: " + p1.getName() + ", SCORE: " + p1.playerScore);
+			printer.println("PLAYER 2: " + p2.getName() + ", SCORE: " + p2.playerScore);
+			printer.println("WINNER: " + winner.getName());
+
+			printer.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 }

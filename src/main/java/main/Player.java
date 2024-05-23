@@ -9,11 +9,13 @@ public class Player {
     int playerScore;
     Card roundWildCard;
     Card chosenCard;
+    boolean isCPU;
 
     public Player(String name) {
-        this.name = name.substring(0, Math.min(name.length(), 16));
+        this.name = name.substring(0, Math.min(name.length(), 12));
         this.playerHand = new ArrayList<>();
         this.chosenCard = null;
+        this.isCPU = false;
         playerScore = 0;
     }
 
@@ -49,25 +51,13 @@ public class Player {
         this.getHand().remove(this.getChosenCard());
     }
 
-    public class Human {
-        public Human(String name) {
-            super();
-        }
-    }
-
-    public class Robot {
-        public Robot() {
-            super();
-        }
-
-        // TODO: CHECK IF IT WORKS
-        // TODO: IMPLEMENT LOGIC THAT CHECKS FOR THE BEST CARD TO PLAY BASED ON CURRENT WILD CARD
-        public Card playTurn() {
-            ArrayList<Card> cards = getHand();
-            Random rand = new Random();
-            Card selectedCard = cards.get(rand.nextInt(cards.size()));
-            setChosenCard(selectedCard);
-            return selectedCard;
-        }
+    // TODO: IMPLEMENT LOGIC THAT CHECKS FOR THE BEST CARD TO PLAY BASED ON CURRENT WILD CARD
+    // TODO: ADD 1S DELAY TO CPU MOVES
+    public Card selectCardCPU() {
+        ArrayList<Card> cards = getHand();
+        Random rand = new Random();
+        Card selectedCard = cards.get(rand.nextInt(cards.size()));
+        setChosenCard(selectedCard);
+        return selectedCard;
     }
 }
