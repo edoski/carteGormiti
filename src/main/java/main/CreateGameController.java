@@ -96,22 +96,6 @@ public class CreateGameController implements Initializable {
 		stage.show();
 	}
 
-//	public synchronized void switchToScene(String fxmlFile, Button btn) throws IOException {
-//		Platform.runLater(() -> {
-//			FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
-//			Parent root;
-//			try {
-//				root = loader.load();
-//			} catch (IOException e) {
-//				throw new RuntimeException(e);
-//			}
-//			Scene scene = new Scene(root);
-//			Stage stage = (Stage) btn.getScene().getWindow();
-//			stage.setScene(scene);
-//			stage.show();
-//		});
-//	}
-
 	@FXML
 	void goBackLoginScreen() throws IOException {
 		switchToScene("MainMenu.fxml", goBackBtn);
@@ -276,8 +260,6 @@ public class CreateGameController implements Initializable {
 	 * Partita singola: 2 giocatori
 	 * Torneo: 4 giocatori
 	 *
-	 * FOR TOURNAMENT PIPELINE TO BE CORRECT PLAYERS.SIZE() MUST BE 2 AT ANY GIVEN TIME
-	 * WHERE 2 IS THE TWO PLAYERS IN THE CURRENT MATCH
 	 */
 	@FXML
 	void startGame() throws IOException {

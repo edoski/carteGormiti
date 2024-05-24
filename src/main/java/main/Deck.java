@@ -14,6 +14,8 @@ public class Deck {
 	 * Utilizziamo un ArrayList piuttosto che un array statico, perché comunque ArrayList è di base un array (dinamico), ma per quello che ci riguarda
 	 * non ci interessa l'espansione, poiché il game-flow del gioco prevede una diminuzione di carte nel deck di ciascun giocatore partendo da un max
 	 * iniziale fisso. Pertanto, manteniamo ArrayList per comodità dei metodi built-in, senza alcuna perdita di efficienza (come per es. LinkedList).
+	 *
+	 * L'input in tutti i modi è talmente piccolo che non si noterebbe alcuna differenza di performance tra ArrayList e array statico.
 	 */
 	static ArrayList<Card> elementsDeck;
 	static ArrayList<Card> wildsDeck;

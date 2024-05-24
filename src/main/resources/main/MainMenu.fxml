@@ -29,9 +29,8 @@
              <Font name="System Bold" size="70.0"/>
          </font>
       </Label>
-       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="140.0" layoutY="201.0"
-              text="Carica una partita/torneo dalla lista di sotto, oppure usando un codice con Load Game."
-              textAlignment="CENTER">
+       <Label alignment="CENTER" contentDisplay="CENTER" layoutX="302.0" layoutY="202.0"
+              text="Carica una partita/torneo usando un codice con Load Game." textAlignment="CENTER">
          <font>
              <Font name="System Bold" size="28.0"/>
          </font>
@@ -42,15 +41,15 @@
              <Font name="System Bold" size="28.0"/>
          </font>
       </Label>
-       <Button fx:id="newGameBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="78.0" layoutY="387.0"
+       <Button fx:id="newGameBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="99.0" layoutY="387.0"
                mnemonicParsing="false" onAction="#newGame" prefHeight="145.0" prefWidth="503.0" text="New Game"
                textAlignment="CENTER" textFill="#60d743">
          <font>
              <Font name="System Bold" size="60.0"/>
          </font>
        </Button>
-       <Button fx:id="loadGameBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="680.0" layoutY="382.0"
-               mnemonicParsing="false" onAction="#loadGame" prefHeight="151.0" prefWidth="542.0" text="Load Game"
+       <Button fx:id="loadGameBtn" alignment="CENTER" contentDisplay="CENTER" layoutX="660.0" layoutY="386.0"
+               mnemonicParsing="false" onAction="#loadGame" prefHeight="146.0" prefWidth="542.0" text="Load Game"
                textAlignment="CENTER" textFill="#258bff">
          <font>
              <Font name="System Bold" size="60.0"/>

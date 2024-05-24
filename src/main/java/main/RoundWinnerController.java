@@ -135,6 +135,7 @@ public class RoundWinnerController implements Initializable {
 	void playRound() {
 		Game.activateCPU = true;
 		Game.isNewGame = false;
+		GameSave.saveGame();
 		try {
 			switchToScene("Game.fxml");
 		} catch (IOException e) {
@@ -150,7 +151,6 @@ public class RoundWinnerController implements Initializable {
 		alert.setContentText("Il gioco verrà salvato e chiuso.");
 		alert.showAndWait();
 		if (alert.getResult().getText().equals("OK")) {
-			// MAYBE UNNECESSARY, BUT JUST TO BE SURE
 			GameSave.saveGame();
 			switchToScene("MainMenu.fxml");
 		} else {

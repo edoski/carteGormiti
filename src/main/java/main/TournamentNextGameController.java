@@ -69,7 +69,6 @@ public class TournamentNextGameController {
 
 	@FXML
 	void goHome(ActionEvent event) {
-		// GameSaveLoad.saveGame();
 		try {
 			switchToScene("MainMenu.fxml");
 		} catch (IOException e) {

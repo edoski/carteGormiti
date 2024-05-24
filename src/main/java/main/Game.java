@@ -573,7 +573,7 @@ public class Game implements Initializable {
 
 	/*
 	 * Questo metodo permette al giocatore CPU di selezionare una carta dal proprio mazzo
-	 * È identico a selectCard(), ma è chiamato da returnBestCardCPU() per selezionare la carta CPU dopo 1s.
+	 * È identico a selectCard(), ma è chiamato da returnBestCardCPU() per selezionare la carta CPU dopo un breve delay.
 	 */
 	public void selectCardCPU(Card card) {
 		confirmCardBtn.setDisable(false);
@@ -710,9 +710,6 @@ public class Game implements Initializable {
 		return Math.round((dmg * mult) * 10.0) / 10.0;
 	}
 
-	/*
-	 * Questo metodo determina il vincitore del round, in base al danno finale delle carte selezionate dai giocatori
-	 */
 	public static Player selectRoundWinner() {
 		return p1FinalDmg > p2FinalDmg ? player1 : player2;
 	}

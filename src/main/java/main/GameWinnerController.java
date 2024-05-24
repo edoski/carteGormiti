@@ -90,7 +90,7 @@ public class GameWinnerController {
 		String currDir = System.getProperty("user.dir");
 		File directory = new File(currDir, "archive");
 		if (!directory.exists()) {
-			directory.mkdirs(); // Create the directory if it doesn't exist
+			directory.mkdirs();
 		}
 		File logFile = new File(directory, gameCode + ".txt");
 		try {
