@@ -24,13 +24,6 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
-/*TODO:
- * FOR LOAD GAME DON'T USE JSON, MAKE EACH LINE OF THE FILE A STRING WITH COMPLETE RELEVANT DATE (I.E. 1 CARD 1 LINE WITH NAME, ELEMENT, DAMAGE, ART, WILD), USE , TO SEPARATE DATA
- * - Implementare il metodo saveGame() per salvare la partita
- * - Implementare il metodo startGameFromSave() per riprendere la partita da un file di salvataggio
- * - IF isTournament = true THEN DO NOT RESET PLAYER SCORES AT THE END OF EACH GAME AND DISPLAY THEM ON THE FINAL LEADERBOARD "TournamentWinner.fxml"
- */
-
 public class Game implements Initializable {
 
 	Parent root;
@@ -123,10 +116,8 @@ public class Game implements Initializable {
 		} else if (isLoadGame) {
 			code = LoadGameController.code;
 //			if (isTournament) {
-			// TODO
 //				startGameFromSaveTournament(code);
 //			} else {
-			// TODO
 //  			startGameFromSave(code);
 //			}
 			startGameFromSave(code);
@@ -169,7 +160,6 @@ public class Game implements Initializable {
 				TournamentNextGameController.match2Player1 = CreateGameController.players.getFirst();
 				TournamentNextGameController.match2Player2 = CreateGameController.players.getLast();
 
-				// TODO CHECK IF THIS WORKS TO PASS / STORE DATA UNTIL THE END OF THE TOURNAMENT
 //				if (code.endsWith("-1")) {
 //					TournamentWinnerController.game1Winner = selectGameWinner();
 //					TournamentWinnerController.game1WinnerScore = selectGameWinner().playerScore;
@@ -731,10 +721,6 @@ public class Game implements Initializable {
 		return player1.playerScore > player2.playerScore ? player1 : player2;
 	}
 
-	/*
-	 * TODO: MENU BAR METHODS
-	 */
-
 	@FXML
 	void showScoreboard() {
 		Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -808,7 +794,6 @@ public class Game implements Initializable {
 
 	/*
 	 * Questo metodo resetta le variabili della partita, in preparazione per una nuova partita
-	 * TODO: HANDLE RESET SPECIFICS FOR TOURNAMENT MODE
 	 */
 	void resetGameCondition() {
 		CreateGameController.players.clear();

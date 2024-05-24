@@ -1,7 +1,6 @@
 package main;
 
 public class TournamentWinnerController {
-	// TODO: NEED TO PASS OR STORE THESE BY THE END OF THE TOURNAMENT TO DISPLAY LEADERBOARD
 	static Player game1Winner, game1Loser;
 	static int game1WinnerScore, game1LoserScore;
 
@@ -10,5 +9,4 @@ public class TournamentWinnerController {
 
 	static Player game3Winner, game3Loser;
 	static int game3WinnerScore, game3LoserScore;
-
 }

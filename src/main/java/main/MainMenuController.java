@@ -3,24 +3,16 @@ package main;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 
-/*TODO
- * - IF THE LISTVIEWS ARE TOO MUCH OF A HASSLE, SCRAP THEM AND ENLARGE AND MOVE LOAD GAME AND NEW GAME BUTTONS TO THE CENTER OF THE SCREEN
- */
-
-public class MainMenuController implements Initializable {
+public class MainMenuController {
 
 	@FXML
 	private Button loadGameBtn;
@@ -31,20 +23,9 @@ public class MainMenuController implements Initializable {
 	@FXML
 	private Button quitBtn;
 
-	@FXML
-	private ListView<?> singleGameList;
-
-	@FXML
-	private ListView<?> tournamentList;
-
 	Parent root;
 	Scene scene;
 	Stage stage;
-
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		// LOAD CURRENT GAMES FROM JSON
-	}
 
 	@FXML
 	void loadGame(ActionEvent event) throws IOException {

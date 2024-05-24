@@ -87,7 +87,6 @@ public class GameWinnerController {
 		LocalDate date = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 		String dateFormatted = date.format(formatter);
-		// TODO: GOES TO CURRENT WORKING DIRECTORY, CHECK IF IS SAME AS JAR FILE
 		String currDir = System.getProperty("user.dir");
 		File directory = new File(currDir, "archive");
 		if (!directory.exists()) {

@@ -385,7 +385,7 @@ public class CreateGameController implements Initializable {
 //					TournamentWinnerController.match2Player1 = match2.getFirst();
 //					TournamentWinnerController.match2Player2 = match2.getLast();
 
-					/*TODO
+					/*
 					 * APPROACH: EXECUTOR SERVICE WITH COUNTDOWN LATCHES
 					 */
 //
@@ -469,7 +469,7 @@ public class CreateGameController implements Initializable {
 //					executor.submit(match3Task);
 //					executor.shutdown();
 
-					/*TODO
+					/*
 					 *  APPROACH: THREADS WITH JOIN
 					 */
 

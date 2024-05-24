@@ -128,10 +128,6 @@ public class Deck {
 		return new ArrayList<>(wildsDeck);
 	}
 
-	public void savePlayerHand(ArrayList<Card> playerHand) {
-		//Todo: save the player hand to a file as a JSON object
-	}
-
 	void clearAllDecks() {
 		elementsDeck.clear();
 		wildsDeck.clear();
