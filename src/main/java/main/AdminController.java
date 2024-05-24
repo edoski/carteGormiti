@@ -35,8 +35,8 @@ public class AdminController implements Initializable {
     @FXML
     Button loginButton;
 
-    private final String username = "1";
-    private final String password = "1";
+    private final String username = "admin";
+    private final String password = "pass";
     private int trials = 0;
 
     Parent root;

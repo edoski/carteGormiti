@@ -62,6 +62,7 @@ public class RoundWinnerController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		GameSave.saveGame();
 		Game.activateCPU = false;
 		if (Game.player1.isCPU && Game.player2.isCPU) {
 			// PAUSE 1S THEN HIT NEXT ROUND BUTTON
@@ -130,8 +131,6 @@ public class RoundWinnerController implements Initializable {
 		}
 	}
 
-	// TODO: ISSUE CURRENTLY IS THAT THIS SWITCH IS LIKE A RESTART OF THE GAME, NOT A NEW ROUND
-	// 	- THE PLAYERS SHOULD KEEP THEIR SCORES AND ALL THEIR RELATED DATA
 	@FXML
 	void playRound() {
 		Game.activateCPU = true;
@@ -151,8 +150,8 @@ public class RoundWinnerController implements Initializable {
 		alert.setContentText("Il gioco verrà salvato e chiuso.");
 		alert.showAndWait();
 		if (alert.getResult().getText().equals("OK")) {
-			// TODO: Implement saveGame() method
-//		Game.saveGame();
+			// MAYBE UNNECESSARY, BUT JUST TO BE SURE
+			GameSave.saveGame();
 			switchToScene("MainMenu.fxml");
 		} else {
 			alert.close();

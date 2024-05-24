@@ -1,6 +1,7 @@
 package main;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -8,6 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -47,6 +50,13 @@ public class LoadGameController implements Initializable {
 		} else {
 			dir.mkdir();
 		}
+
+		EventHandler<KeyEvent> enterKey = keyEvent -> {
+			if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+				confirmBtn.fire();
+			}
+		};
+		gameCodeInputField.setOnKeyPressed(enterKey);
 	}
 
 	public void switchToScene(String fxmlFile) throws IOException {
@@ -79,13 +89,16 @@ public class LoadGameController implements Initializable {
 			try {
 				stage = (Stage) backBtn.getScene().getWindow();
 				stage.close();
+				stage = (Stage) mainMenu.getScene().getWindow();
+				stage.close();
 				switchToScene("Game.fxml");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		} else {
-			gameCodeInputField.setStyle("-fx-text-inner-color: red");
+			gameCodeInputField.clear();
 			gameCodeInputField.setPromptText("Codice non valido");
+			gameCodeInputField.setStyle("-fx-prompt-text-fill: red");
 		}
 	}
 }

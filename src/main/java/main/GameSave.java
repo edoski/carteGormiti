@@ -14,7 +14,6 @@ public class GameSave {
 	static Card p1WildCard, p2WildCard;
 	static int roundNumber;
 
-
 	/*
 	 * SAVE FILE FORMAT:
 	 * code

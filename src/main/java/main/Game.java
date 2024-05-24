@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -222,7 +221,6 @@ public class Game implements Initializable {
 	public void startNewGame() {
 		deck.createDeck();
 
-		System.out.println(code);
 		if (isTournament) {
 			if (code.endsWith("-1")) {
 				// MATCH 1
@@ -358,6 +356,9 @@ public class Game implements Initializable {
 	 */
 	public void playRound() {
 		confirmCardBtn.setDisable(true);
+		if (currentPlayer.isCPU) {
+			activateCPU = true;
+		}
 		playTurn(currentPlayer);
 
 		// IF BOTH PLAYERS HAVE SELECTED A CARD
@@ -391,6 +392,11 @@ public class Game implements Initializable {
 					selectWildCard(player2);
 					displayPlayerCards(currentPlayer);
 				} else {
+					// LOGGING ALL RELEVANT DATA TO "archive" DIRECTORY, AND DELETING THE SAVE FILE FROM "games" DIRECTORY
+					GameWinnerController.logGame(player1, player2, selectGameWinner());
+					File file = new File(System.getProperty("user.dir") + "/games/" + code + ".txt");
+					file.delete();
+
 					// GAME WINNER SCENE
 					activateCPU = false;
 					if (!isTournament) {
@@ -417,15 +423,7 @@ public class Game implements Initializable {
 							}
 						}
 					}
-					// THE GAME ENDS HERE, LOGGING ALL RELEVANT DATA, AND DELETING THE SAVE FILE FROM "games" DIRECTORY
-					File file = new File(System.getProperty("user.dir") + "/games/" + code + ".txt");
-					try {
-						Files.delete(file.toPath());
-						System.out.println("File was deleted successfully");
-					} catch (IOException e) {
-						System.out.println("File could not be deleted: " + e.getMessage());
-					}
-					GameWinnerController.logGame(player1, player2, selectGameWinner(), code);
+					// THE GAME ENDS HERE
 					resetGameCondition();
 				}
 			} else {
@@ -460,14 +458,14 @@ public class Game implements Initializable {
 		AtomicReference<Card> selectedCard = new AtomicReference<>();
 		if (player.isCPU) {
 			// CPU SELECTS CARD AFTER DELAY
-			PauseTransition delay = new PauseTransition(Duration.seconds(0.5));
+			PauseTransition delay = new PauseTransition(Duration.seconds(0.25));
 			delay.setOnFinished(e -> {
 				if (activateCPU) {
 					selectedCard.set(player.returnBestCardCPU());
 					selectCardCPU(selectedCard.get());
 
 					// CPU CLICKS CONFIRM BUTTON AFTER DELAY
-					PauseTransition delayConfirm = new PauseTransition(Duration.seconds(0.5));
+					PauseTransition delayConfirm = new PauseTransition(Duration.seconds(0.25));
 					delayConfirm.setOnFinished(event -> {
 						player.setChosenCard(selectedCard.get());
 						confirmCardBtn.fire();

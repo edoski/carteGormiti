@@ -38,6 +38,8 @@ public class GameWinnerController {
 	@FXML
 	private Button quitBtn;
 
+	static String gameCode;
+
 	public void switchToScene(String fxmlFile) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
 		root = loader.load();
@@ -80,7 +82,8 @@ public class GameWinnerController {
 		}
 	}
 
-	public static void logGame(Player p1, Player p2, Player winner, String code) {
+	public static void logGame(Player p1, Player p2, Player winner) {
+		gameCode = Game.code;
 		LocalDate date = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
 		String dateFormatted = date.format(formatter);
@@ -90,12 +93,12 @@ public class GameWinnerController {
 		if (!directory.exists()) {
 			directory.mkdirs(); // Create the directory if it doesn't exist
 		}
-		File logFile = new File(directory, code + ".txt");
+		File logFile = new File(directory, gameCode + ".txt");
 		try {
 			FileWriter writer = new FileWriter(logFile);
 			PrintWriter printer = new PrintWriter(writer);
 
-			printer.println("CODE: " + code);
+			printer.println("CODE: " + gameCode);
 			printer.println("DATE: " + dateFormatted);
 			printer.println("PLAYER 1: " + p1.getName() + ", SCORE: " + p1.playerScore);
 			printer.println("PLAYER 2: " + p2.getName() + ", SCORE: " + p2.playerScore);
