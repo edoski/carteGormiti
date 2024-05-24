@@ -47,7 +47,7 @@ public class GameWinnerController {
 		stage.show();
 	}
 
-	public void setPlayers(Player p1, Player p2) {
+	public void setPlayersDisplay(Player p1, Player p2) {
 		p1EndGameLabel.setText(p1.getName() + "\n" + p1.playerScore + " punti");
 		p2EndGameLabel.setText(p2.getName() + "\n" + p2.playerScore + " punti");
 	}

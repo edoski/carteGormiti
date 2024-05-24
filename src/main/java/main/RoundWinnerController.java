@@ -1,14 +1,17 @@
 package main;
 
+import javafx.animation.PauseTransition;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -49,6 +52,9 @@ public class RoundWinnerController implements Initializable {
 	@FXML
 	private Label roundWinnerLabel;
 
+	@FXML
+	private Button nextRoundBtn;
+
 	static double p1ElemMult;
 	static double p2ElemMult;
 	static double p1WildMult;
@@ -57,6 +63,12 @@ public class RoundWinnerController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		Game.activateCPU = false;
+		if (Game.player1.isCPU && Game.player2.isCPU) {
+			// PAUSE 1S THEN HIT NEXT ROUND BUTTON
+			PauseTransition pause = new PauseTransition(Duration.seconds(1));
+			pause.setOnFinished(event -> nextRoundBtn.fire());
+			pause.play();
+		}
 	}
 
 	public void switchToScene(String fxmlFile) throws IOException {

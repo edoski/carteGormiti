@@ -71,6 +71,10 @@ public class Card {
 		return wild;
 	}
 
+	public String getArtPath() {
+		return this.art;
+	}
+
 	public Image getArt() {
 		try {
 			// substring(19) per rimuovere il prefisso "src/main/resources/"
@@ -78,8 +82,7 @@ public class Card {
 			InputStream is = getClass().getResourceAsStream(artPath);
 			return new Image(is);
 		} catch (NullPointerException e) {
-			System.out.println("An error occurred while trying to load the image: " + this.art);
-			return null;
+			throw new RuntimeException("Errore nel caricamento dell'immagine della carta " + this.name + " " + this.art.substring(19));
 		}
 	}
 }

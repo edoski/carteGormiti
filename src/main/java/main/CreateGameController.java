@@ -1,6 +1,6 @@
 package main;
 
-import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -10,15 +10,17 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.ResourceBundle;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class CreateGameController implements Initializable {
@@ -41,16 +43,27 @@ public class CreateGameController implements Initializable {
 	private Button startGameBtn;
 	@FXML
 	private Button goBackBtn;
+	@FXML
+	private Button addPlayerBtn;
 
 	Parent root;
 	Scene scene;
 	Stage stage;
 
+	static ArrayList<Player> match1 = new ArrayList<>();
+	static ArrayList<Player> match2 = new ArrayList<>();
+	static ArrayList<AtomicReference<Player>> match3 = new ArrayList<>();
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		players = new ArrayList<>();
+		EventHandler<KeyEvent> enterKey = keyEvent -> {
+			if (keyEvent.getCode().equals(KeyCode.ENTER)) {
+				addPlayerBtn.fire();
+			}
+		};
+		playerNameTextField.setOnKeyPressed(enterKey);
 
-		// TODO: MAYBE INSTEAD OF ALERTS, USE LABEL ATOP OF PLAYERS TO SHOW EITHER "PARTITA SINGOLA" OR "TORNEO" DEPENDING ON players.size()
+		players = new ArrayList<>();
 
 		// FOR STYLE CONSISTENCY IF USER LEAVES CREATE GAME SCREEN AND RETURNS
 		createGameTitleLabel.setStyle("-fx-font-weight: bold");
@@ -60,7 +73,17 @@ public class CreateGameController implements Initializable {
 		player3.setStyle("-fx-font-weight: bold");
 		player4.setStyle("-fx-font-weight: bold");
 
-		// TODO: GET CODES FROM FILESYSTEM AND LOAD THEM ONTO THE HASHSET
+		// GET CODES FROM ACTIVE GAMES DIR AND LOAD THEM ONTO THE HASHSET
+		File dir = new File(System.getProperty("user.dir") + "/games");
+		if (dir.exists()) {
+			File[] files = dir.listFiles();
+			assert files != null;
+			for (File file : files) {
+				activeCodes.add(file.getName().substring(0, 4));
+			}
+		} else {
+			dir.mkdir();
+		}
 		generateCode();
 	}
 
@@ -72,6 +95,22 @@ public class CreateGameController implements Initializable {
 		stage.setScene(scene);
 		stage.show();
 	}
+
+//	public synchronized void switchToScene(String fxmlFile, Button btn) throws IOException {
+//		Platform.runLater(() -> {
+//			FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlFile));
+//			Parent root;
+//			try {
+//				root = loader.load();
+//			} catch (IOException e) {
+//				throw new RuntimeException(e);
+//			}
+//			Scene scene = new Scene(root);
+//			Stage stage = (Stage) btn.getScene().getWindow();
+//			stage.setScene(scene);
+//			stage.show();
+//		});
+//	}
 
 	@FXML
 	void goBackLoginScreen() throws IOException {
@@ -236,22 +275,24 @@ public class CreateGameController implements Initializable {
 	 *
 	 * Partita singola: 2 giocatori
 	 * Torneo: 4 giocatori
-	 *      - Arrotondato a 4 se sono aggiunti 3 giocatori/robot
+	 *
+	 * FOR TOURNAMENT PIPELINE TO BE CORRECT PLAYERS.SIZE() MUST BE 2 AT ANY GIVEN TIME
+	 * WHERE 2 IS THE TWO PLAYERS IN THE CURRENT MATCH
 	 */
 	@FXML
 	void startGame() throws IOException {
 		Game.isNewGame = true;
 		switch (players.size()) {
+			// Non ci sono giocatori
 			case 0:
-				// Non ci sono giocatori
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setTitle("Warning");
 				alert.setHeaderText("Non ci sono giocatori");
 				alert.setContentText("Aggiungi almeno un giocatore per iniziare la partita");
 				alert.showAndWait();
 				break;
+			// Partita singola
 			case 1:
-				// Partita singola
 				Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
 				alert1.setTitle("Partita singola");
 				alert1.setHeaderText("Sei sicuro di voler iniziare una partita singola?");
@@ -268,8 +309,8 @@ public class CreateGameController implements Initializable {
 					alert1.close();
 				}
 				break;
+			// Partita singola
 			case 2:
-				// Partita singola
 				Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
 				alert2.setTitle("Partita singola");
 				alert2.setHeaderText("Sei sicuro di voler iniziare una partita singola?");
@@ -283,8 +324,8 @@ public class CreateGameController implements Initializable {
 					alert2.close();
 				}
 				break;
+			// Torneo
 			case 3:
-				// Torneo
 				Alert alert3 = new Alert(Alert.AlertType.CONFIRMATION);
 				alert3.setTitle("Torneo");
 				alert3.setHeaderText("Sei sicuro di voler iniziare un torneo?");
@@ -295,11 +336,12 @@ public class CreateGameController implements Initializable {
 					player4.isCPU = true;
 					players.add(player4);
 
-					// TODO: Start Torneo
 					Game.isTournament = true;
 					Random rand = new Random();
 					int p1, p2;
-					ArrayList<Player> match1 = new ArrayList<>(), match2 = new ArrayList<>(), match3 = new ArrayList<>();
+					match1 = new ArrayList<>();
+					match2 = new ArrayList<>();
+					match3 = new ArrayList<>();
 
 					p1 = rand.nextInt(players.size());
 					match1.add(players.remove(p1));
@@ -328,71 +370,196 @@ public class CreateGameController implements Initializable {
 					alert3.close();
 				}
 				break;
+			// Torneo
 			case 4:
-				// Torneo
 				Alert alert4 = new Alert(Alert.AlertType.CONFIRMATION);
 				alert4.setTitle("Torneo");
 				alert4.setHeaderText("Sei sicuro di voler iniziare un torneo?");
 				alert4.setContentText("Confermando, comincerà il torneo con i quattro giocatori inseriti");
 				alert4.showAndWait();
+
 				if (alert4.getResult().getText().equals("OK")) {
-					// TODO: Start Torneo
-					Game.isTournament = true;
-					Random rand = new Random();
-					ArrayList<Player> match1 = new ArrayList<>();
-					ArrayList<Player> match2 = new ArrayList<>();
-					ArrayList<AtomicReference<Player>> match3 = new ArrayList<>();
-					AtomicInteger p1, p2;
-					AtomicReference<Player> winner1 = new AtomicReference<>();
-					AtomicReference<Player> winner2 = new AtomicReference<>();
-					AtomicReference<Player> winner3 = new AtomicReference<>();
+//					Game.isTournament = true;
 
-					p1 = new AtomicInteger(rand.nextInt(players.size()));
-					match1.add(players.remove(p1.get()));
-					p2 = new AtomicInteger(rand.nextInt(players.size()));
-					match1.add(players.remove(p2.get()));
+					// MATCH 2
+//					TournamentWinnerController.match2Player1 = match2.getFirst();
+//					TournamentWinnerController.match2Player2 = match2.getLast();
 
-					Task<Player> match1Task = new Task<>() {
-						@Override
-						protected Player call() throws Exception {
-							System.out.println("Entered Thread 1");
-							Game.setPlayers(match1);
-							code += "-1";
-							activeCodes.add(code);
-							switchToScene("Game.fxml", startGameBtn);
-							winner1.set(Game.selectGameWinner());
-							System.out.println(winner1.get().getName() + " ttttttt");
-							return winner1.get();
-						}
-					};
+					/*TODO
+					 * APPROACH: EXECUTOR SERVICE WITH COUNTDOWN LATCHES
+					 */
+//
+//					ExecutorService executor = Executors.newSingleThreadExecutor();
+//					CountDownLatch latch1 = new CountDownLatch(1);
+//					CountDownLatch latch2 = new CountDownLatch(1);
+//
+//					// MATCH 1
+//					Runnable match1Task = () -> {
+//						System.out.println("Entered Thread 1");
+//						Game.isNewGame = true;
+//						Game.isTournament = true;
+//						match1.add(players.removeFirst());
+//						match1.add(players.removeFirst());
+//						match2.add(players.getFirst());
+//						match2.add(players.getFirst());
+//						Game.setPlayers(match1);
+//						code += "-1";
+//						activeCodes.add(code);
+//						Platform.runLater(() -> {
+//							try {
+//								switchToScene("Game.fxml", startGameBtn);
+//							} catch (IOException ex) {
+//								throw new RuntimeException(ex);
+//							}
+//						});
+//						TournamentWinnerController.game1Winner = Game.selectGameWinner();
+//						System.out.println(TournamentWinnerController.game1Winner.getName());
+//						latch1.countDown();
+//					};
+//
+//					executor.submit(match1Task);
+//
+//					Runnable match2Task = () -> {
+//						try {
+//							latch1.await();
+//							System.out.println("Entered Thread 2");
+//							Game.isTournament = true;
+//							Game.isNewGame = true;
+//							Game.setPlayers(match2);
+//							code += "-2";
+//							activeCodes.add(code);
+//							Platform.runLater(() -> {
+//								try {
+//									switchToScene("Game.fxml", startGameBtn);
+//								} catch (IOException ex) {
+//									throw new RuntimeException(ex);
+//								}
+//							});
+//							TournamentWinnerController.game2Winner = Game.selectGameWinner();
+//							System.out.println(TournamentWinnerController.game2Winner.getName());
+//							latch2.countDown();
+//						} catch (InterruptedException e) {
+//							Thread.currentThread().interrupt();
+//						}
+//					};
+//
+//					executor.submit(match2Task);
+//
+//					Runnable match3Task = () -> {
+//						try {
+//							latch2.await();
+//							System.out.println("Entered Thread 3");
+//							match3.add(new AtomicReference<>(TournamentWinnerController.game1Winner));
+//							match3.add(new AtomicReference<>(TournamentWinnerController.game2Winner));
+//							Game.setPlayersFinalTournamentGame(match3);
+//							code += "-3";
+//							activeCodes.add(code);
+//							Platform.runLater(() -> {
+//								try {
+//									switchToScene("Game.fxml", startGameBtn);
+//								} catch (IOException ex) {
+//									throw new RuntimeException(ex);
+//								}
+//							});
+//						} catch (InterruptedException e) {
+//							Thread.currentThread().interrupt();
+//						}
+//					};
+//
+//					executor.submit(match3Task);
+//					executor.shutdown();
 
-					match1Task.setOnSucceeded(e -> {
-						Game.isNewGame = false;
-						System.out.println("Entered Thread 2");
-						p1.set(rand.nextInt(players.size()));
-						match2.add(players.remove(p1.get()));
-						p2.set(rand.nextInt(players.size()));
-						match2.add(players.remove(p2.get()));
-						Game.setPlayers(match2);
-						code += "-2";
-						activeCodes.add(code);
-						try {
-							switchToScene("Game.fxml", startGameBtn);
-						} catch (IOException ex) {
-							throw new RuntimeException(ex);
-						}
-						winner2.set(Game.selectGameWinner());
-						System.out.println(winner2.get().getName());
-					});
+					/*TODO
+					 *  APPROACH: THREADS WITH JOIN
+					 */
 
-					new Thread(match1Task).start();
+					// MATCH 1
+//					Thread match1Thread = new Thread(() -> {
+//						System.out.println("Entered Thread 1");
+//						Game.isNewGame = true;
+//						Game.isTournament = true;
+//						match1.add(players.removeFirst());
+//						match1.add(players.removeFirst());
+////						match2.add(players.getFirst());
+////						match2.add(players.getFirst());
+//						Game.setPlayers(match1);
+//						code += "-1";
+//						activeCodes.add(code);
+//						Platform.runLater(() -> {
+//							try {
+//								switchToScene("Game.fxml", startGameBtn);
+//							} catch (IOException ex) {
+//								throw new RuntimeException(ex);
+//							}
+////							Platform.runLater(() -> {
+////								System.out.println(TournamentWinnerController.game1Winner.getName());
+////								TournamentWinnerController.game1Winner = Game.selectGameWinner();
+////								match2.add(players.removeFirst());
+////								match2.add(players.removeFirst());
+////								Game.setPlayers(match2);
+////							});
+//						});
+//					});
 
-//					match3.add(winner1);
-//					match3.add(winner2);
-//					Game.setPlayersFinalTournamentGame(match3);
-//					code += "-3";
-//					activeCodes.add(code);
-//					switchToScene("Game.fxml", startGameBtn);
+//					match1Thread.start();
+
+					// MATCH 2
+//					Thread match2Thread = new Thread(() -> {
+//						System.out.println("Entered Thread 2");
+//						try {
+//							match1Thread.join();
+//						} catch (InterruptedException e) {
+//							throw new RuntimeException(e);
+//						}
+//						Game.isTournament = true;
+//						Game.isNewGame = true;
+//						match2.add(players.removeFirst());
+//						match2.add(players.removeFirst());
+////						Game.setPlayers(match2);
+//						code = code.substring(0, code.length() - 1) + "2";
+//						activeCodes.add(code);
+//						Platform.runLater(() -> {
+//							try {
+//								switchToScene("Game.fxml", startGameBtn);
+//							} catch (IOException ex) {
+//								throw new RuntimeException(ex);
+//							}
+//						});
+//						TournamentWinnerController.game2Winner = Game.selectGameWinner();
+//						System.out.println(TournamentWinnerController.game2Winner.getName());
+//					});
+
+					// MATCH 3
+//					Thread match3Thread = new Thread(() -> {
+//						System.out.println("Entered Thread 3");
+//						match3.add(new AtomicReference<>(TournamentWinnerController.game1Winner));
+//						match3.add(new AtomicReference<>(TournamentWinnerController.game2Winner));
+//						Game.setPlayersFinalTournamentGame(match3);
+//						code = code.substring(0, code.length() - 1) + "3";
+//						activeCodes.add(code);
+//						Platform.runLater(() -> {
+//							try {
+//								switchToScene("Game.fxml", startGameBtn);
+//							} catch (IOException ex) {
+//								throw new RuntimeException(ex);
+//							}
+//						});
+//					});
+
+//					try {
+//						match1Thread.start();
+//						match1Thread.join();
+//						match2Thread.start();
+//						match2Thread.join();
+//						match3Thread.start();
+//						match3Thread.join();
+//					} catch (InterruptedException e) {
+//						Thread.currentThread().interrupt();
+//					}
+
+					TournamentNextGameController tournamentController = new TournamentNextGameController();
+					tournamentController.startTournament();
+
 				} else {
 					alert4.close();
 				}

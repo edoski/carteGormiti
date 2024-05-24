@@ -17,6 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -24,11 +25,9 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 /*TODO:
- * FOR CPU MAYBE ALL NECESSARY IS ADDING TO PLAYER CLASS A BOOLEAN isCPU AND WITHIN Game CLASS IN METHODS LIKE selectCard() CHECKING IF currentPlayer.isCPU
  * FOR LOAD GAME DON'T USE JSON, MAKE EACH LINE OF THE FILE A STRING WITH COMPLETE RELEVANT DATE (I.E. 1 CARD 1 LINE WITH NAME, ELEMENT, DAMAGE, ART, WILD), USE , TO SEPARATE DATA
  * - Implementare il metodo saveGame() per salvare la partita
  * - Implementare il metodo startGameFromSave() per riprendere la partita da un file di salvataggio
- * - Maybe add background elevator music and a menu bar option to toggle it on/off
  * - IF isTournament = true THEN DO NOT RESET PLAYER SCORES AT THE END OF EACH GAME AND DISPLAY THEM ON THE FINAL LEADERBOARD "TournamentWinner.fxml"
  */
 
@@ -66,7 +65,7 @@ public class Game implements Initializable {
 	private Label wildEffectsLabel;
 
 	@FXML
-	private Button confirmCardBtn;
+	Button confirmCardBtn;
 
 	@FXML
 	private Label damageCardChoiceLabel;
@@ -74,6 +73,7 @@ public class Game implements Initializable {
 	static String code;
 	static boolean isNewGame;
 	static boolean isTournament;
+	static boolean isLoadGame;
 	static boolean activateCPU = true;
 
 	// ELEMENTS, FOR CODE READABILITY
@@ -111,19 +111,27 @@ public class Game implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		// NECESSARY IF MORE THAN ONE GAME RAN ON THE SAME INSTANCE
 		CreateGameController.CPUCount = 1;
+		code = CreateGameController.code;
 		if (isNewGame) {
-			code = CreateGameController.code;
+//			code = CreateGameController.code;
+//			if (isTournament) {
+//				code = TournamentNextGameController.nextGameCode;
+//			}
 			startNewGame();
-		} else {
-			// TODO: AM I PASSING THE CODE CORRECTLY?
-			if (LoadGameController.code != null) {
-				code = LoadGameController.code;
-				// TODO: FOR JSONS
+		} else if (isLoadGame) {
+			code = LoadGameController.code;
+//			if (isTournament) {
+			// TODO
+//				startGameFromSaveTournament(code);
+//			} else {
+			// TODO
 //  			startGameFromSave(code);
-			} else {
-				startGameAfterRound();
-			}
+//			}
+			startGameFromSave(code);
+		} else {
+			startGameAfterRound();
 		}
 	}
 
@@ -135,7 +143,6 @@ public class Game implements Initializable {
 		root = loader.load();
 		// DEPENDING ON THE SCENE, SET NECESSARY PARAMETERS
 		switch (fxmlFile) {
-			// JAVA 12 SWITCH EXPRESSIONS, NO BREAKS NEEDED
 			case "RoundWinner.fxml" -> {
 				RoundWinnerController controller = loader.getController();
 				controller.setPlayers(player1, player2);
@@ -148,40 +155,43 @@ public class Game implements Initializable {
 			}
 			case "GameWinner.fxml" -> {
 				GameWinnerController controller = loader.getController();
-				controller.setPlayers(player1, player2);
+				controller.setPlayersDisplay(player1, player2);
 				controller.setGameWinner(selectGameWinner());
 			}
 			case "TournamentNextGame.fxml" -> {
 				// GATHERING DATA FOR NEXT GAME AND FOR FINAL TOURNAMENT LEADERBOARD
 				TournamentNextGameController controller = loader.getController();
-				controller.setPlayers(player1, player2);
+				controller.setPlayersDisplay(player1, player2);
 				controller.setGameWinner(selectGameWinner());
+				int gameNum = Integer.parseInt(code.substring(code.length() - 1)) + 1;
+				TournamentNextGameController.nextGameCode = code.substring(0, code.length() - 1) + gameNum;
+
+				TournamentNextGameController.match2Player1 = CreateGameController.players.getFirst();
+				TournamentNextGameController.match2Player2 = CreateGameController.players.getLast();
 
 				// TODO CHECK IF THIS WORKS TO PASS / STORE DATA UNTIL THE END OF THE TOURNAMENT
-				// TODO PROBABLY NEED MULTIPLE IF'S WITH CODE TO CHECK THE GAME NUMBER AND SET THE DATA ACCORDINGLY
-				//      USE THEN game1/2/3Winner, game1/2/3Loser, game1/2/3WinnerScore, game1/2/3LoserScore VARIABLES
-				//      CHECK IF YOU NEED TO KEEP TRACK OF MORE VARIABLES OR IF THE ABOVE IS ENOUGH
-				//          IN THEORY PLAYER AND NUM. OF GAME HE WAS IN SHOULD BE ENOUGH, AS PLAYER OBJECT CONTAINS SCORES playerScore
-				if (code.endsWith("-1")) {
-					TournamentWinnerController.game1Winner = selectGameWinner();
-					TournamentWinnerController.game1WinnerScore = selectGameWinner().playerScore;
-					TournamentWinnerController.game1Loser = selectGameWinner() == player1 ? player2 : player1;
-					TournamentWinnerController.game1LoserScore = TournamentWinnerController.game1Loser.playerScore;
-				} else if (code.endsWith("-2")) {
-					TournamentWinnerController.game2Winner = selectGameWinner();
-					TournamentWinnerController.game2WinnerScore = selectGameWinner().playerScore;
-					TournamentWinnerController.game2Loser = selectGameWinner() == player1 ? player2 : player1;
-					TournamentWinnerController.game2LoserScore = TournamentWinnerController.game2Loser.playerScore;
-				} else {
-					TournamentWinnerController.game3Winner = selectGameWinner();
-					TournamentWinnerController.game3WinnerScore = selectGameWinner().playerScore;
-					TournamentWinnerController.game3Loser = selectGameWinner() == player1 ? player2 : player1;
-					TournamentWinnerController.game3LoserScore = TournamentWinnerController.game3Loser.playerScore;
-				}
+//				if (code.endsWith("-1")) {
+//					TournamentWinnerController.game1Winner = selectGameWinner();
+//					TournamentWinnerController.game1WinnerScore = selectGameWinner().playerScore;
+//					TournamentWinnerController.game1Loser = selectGameWinner() == player1 ? player2 : player1;
+//					TournamentWinnerController.game1LoserScore = TournamentWinnerController.game1Loser.playerScore;
+//					TournamentWinnerController.match2Player1 = ;
+//				} else if (code.endsWith("-2")) {
+//					TournamentWinnerController.game2Winner = selectGameWinner();
+//					TournamentWinnerController.game2WinnerScore = selectGameWinner().playerScore;
+//					TournamentWinnerController.game2Loser = selectGameWinner() == player1 ? player2 : player1;
+//					TournamentWinnerController.game2LoserScore = TournamentWinnerController.game2Loser.playerScore;
+//				} else {
+//					TournamentWinnerController.game3Winner = selectGameWinner();
+//					TournamentWinnerController.game3WinnerScore = selectGameWinner().playerScore;
+//					TournamentWinnerController.game3Loser = selectGameWinner() == player1 ? player2 : player1;
+//					TournamentWinnerController.game3LoserScore = TournamentWinnerController.game3Loser.playerScore;
+//				}
+//				controller.startTournament();
 			}
 			case "TournamentWinner.fxml" -> {
 				TournamentWinnerController controller = loader.getController();
-				// TODO: SET PLAYERS BUT ALL FOUR, THEIR SCORES, AND IDENTIFY TOURNAMENT WINNER
+//				controller.showLeaderboard();
 			}
 		}
 		stage = (Stage) confirmCardBtn.getScene().getWindow();
@@ -200,10 +210,51 @@ public class Game implements Initializable {
 		player2 = players.get(1);
 	}
 
-	// TODO
 	public static void setPlayersFinalTournamentGame(ArrayList<AtomicReference<Player>> players) {
 		player1 = players.get(0).get();
 		player2 = players.get(1).get();
+	}
+
+	/*
+	 * Questo metodo inizia la partita, creando un mazzo di carte e distribuendole ai giocatori.
+	 */
+	public void startNewGame() {
+		deck.createDeck();
+
+		System.out.println(code);
+		if (isTournament) {
+			if (code.endsWith("-1")) {
+				// MATCH 1
+				player1 = CreateGameController.match1.getFirst();
+				player2 = CreateGameController.match1.getLast();
+			} else if (code.endsWith("-2")) {
+				// MATCH 2
+//				player1 = CreateGameController.match2.getFirst();
+//				player2 = CreateGameController.match2.getLast();
+				player1 = TournamentNextGameController.match2Player1;
+				player2 = TournamentNextGameController.match2Player2;
+			} else {
+				// FINAL GAME
+//				player1 = CreateGameController.match3.getFirst().get();
+//				player2 = CreateGameController.match3.getLast().get();
+			}
+		}
+
+		// INITIALIZE PLAYER HANDS
+		player1Hand = deck.createPlayerDeck();
+		player2Hand = deck.createPlayerDeck();
+		player1.setHand(player1Hand);
+		player2.setHand(player2Hand);
+
+		roundNumber = 1;
+		roundLabel.setText("Round: " + roundNumber + " of 6");
+
+		// GAME STARTS WITH PLAYER 1
+		currentPlayer = player1;
+		selectWildCard(player1);
+		selectWildCard(player2);
+
+		playRound();
 	}
 
 	/*
@@ -231,25 +282,70 @@ public class Game implements Initializable {
 		playRound();
 	}
 
-	/*
-	 * Questo metodo inizia la partita, creando un mazzo di carte e distribuendole ai giocatori.
-	 */
-	public void startNewGame() {
-		deck.createDeck();
+	public void startGameFromSave(String code) {
+		isNewGame = false;
+		isLoadGame = false;
 
-		// INITIALIZE PLAYER HANDS
-		player1Hand = deck.createPlayerDeck();
-		player2Hand = deck.createPlayerDeck();
-		player1.setHand(player1Hand);
-		player2.setHand(player2Hand);
+		// GET DATA FROM .TXT FILE USING SCANNER
+		File file = new File(System.getProperty("user.dir") + "/games/" + code + ".txt");
+		try {
+			Scanner sc = new Scanner(file);
+			Game.code = sc.nextLine();
+			roundNumber = Integer.parseInt(sc.nextLine());
 
-		roundNumber = 1;
+			Deck initDeck = new Deck();
+			ArrayList<Card> initWildsDeck = initDeck.getWildsDeck();
+			Random rand = new Random();
+
+			// PLAYER 1
+			String p1Name = sc.nextLine();
+			int p1Score = Integer.parseInt(sc.nextLine());
+			String[] p1WildCardData = sc.nextLine().split(",");
+			Card p1WildCard = new Card(p1WildCardData[0], Card.Wild.valueOf(p1WildCardData[1]), Card.Element.valueOf(p1WildCardData[2]), p1WildCardData[3]);
+			int p1HandSize = Integer.parseInt(sc.nextLine());
+			ArrayList<Card> p1Hand = new ArrayList<>();
+			for (int i = 0; i < p1HandSize; i++) {
+				String[] cardData = sc.nextLine().split(",");
+				Card card = new Card(cardData[0], Card.Element.valueOf(cardData[1]), Double.parseDouble(cardData[2]), cardData[3]);
+				p1Hand.add(card);
+			}
+			player1 = new Player(p1Name);
+			player1.playerScore = p1Score;
+			player1.setHand(p1Hand);
+			player1.setRoundWildCard(p1WildCard);
+			p1PreviousWildCard = initWildsDeck.get(rand.nextInt(initWildsDeck.size()));
+			player1WildCard = p1WildCard;
+
+			// PLAYER 2
+			String p2Name = sc.nextLine();
+			int p2Score = Integer.parseInt(sc.nextLine());
+			String[] p2WildCardData = sc.nextLine().split(",");
+			Card p2WildCard = new Card(p2WildCardData[0], Card.Wild.valueOf(p2WildCardData[1]), Card.Element.valueOf(p2WildCardData[2]), p2WildCardData[3]);
+			int p2HandSize = Integer.parseInt(sc.nextLine());
+			ArrayList<Card> p2Hand = new ArrayList<>();
+			for (int i = 0; i < p2HandSize; i++) {
+				String[] cardData = sc.nextLine().split(",");
+				Card card = new Card(cardData[0], Card.Element.valueOf(cardData[1]), Double.parseDouble(cardData[2]), cardData[3]);
+				p2Hand.add(card);
+			}
+			player2 = new Player(p2Name);
+			player2.playerScore = p2Score;
+			player2.setHand(p2Hand);
+			player2.setRoundWildCard(p2WildCard);
+			p2PreviousWildCard = initWildsDeck.get(rand.nextInt(initWildsDeck.size()));
+			player2WildCard = p2WildCard;
+
+			sc.close();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+
+		player1.setChosenCard(null);
+		player2.setChosenCard(null);
+
 		roundLabel.setText("Round: " + roundNumber + " of 6");
-
-		// GAME STARTS WITH PLAYER 1
 		currentPlayer = player1;
-		selectWildCard(player1);
-		selectWildCard(player2);
+		displayPlayerCards(currentPlayer);
 
 		playRound();
 	}
@@ -319,9 +415,11 @@ public class Game implements Initializable {
 							}
 						}
 					}
-					// THE GAME ENDS HERE, LOGGING ALL RELEVANT DATA
+					// THE GAME ENDS HERE, LOGGING ALL RELEVANT DATA, AND DELETING THE SAVE FILE FROM "games" DIRECTORY
+					File file = new File(System.getProperty("user.dir") + "/games/" + code + ".txt");
+					file.delete();
 					GameWinnerController.logGame(player1, player2, selectGameWinner(), code);
-					resetGame();
+					resetGameCondition();
 				}
 			} else {
 				// ROUND WINNER SCENE
@@ -355,7 +453,7 @@ public class Game implements Initializable {
 		AtomicReference<Card> selectedCard = new AtomicReference<>();
 		if (player.isCPU) {
 			// CPU SELECTS CARD AFTER DELAY
-			PauseTransition delay = new PauseTransition(Duration.seconds(0.75));
+			PauseTransition delay = new PauseTransition(Duration.seconds(0.5));
 			delay.setOnFinished(e -> {
 				if (activateCPU) {
 					selectedCard.set(player.returnBestCardCPU());
@@ -653,8 +751,7 @@ public class Game implements Initializable {
 		PauseTransition delay = new PauseTransition(Duration.seconds(3));
 		delay.setOnFinished(e -> alert.close());
 		delay.play();
-
-		// TODO: Implement saveGame() method
+		GameSave.saveGame();
 	}
 
 	@FXML
@@ -665,8 +762,7 @@ public class Game implements Initializable {
 		alert.setContentText("Il gioco verrà salvato e chiuso.");
 		alert.showAndWait();
 		if (alert.getResult().getText().equals("OK")) {
-			// TODO: Implement saveGame() method
-//		    saveGame();
+			GameSave.saveGame();
 			System.exit(0);
 		} else {
 			alert.close();
@@ -685,9 +781,9 @@ public class Game implements Initializable {
 		alert.showAndWait();
 
 		if (alert.getResult().getText().equals("OK")) {
-			// Salva i nomi dei giocatori pre-resetGame
+			// Salva i nomi dei giocatori pre-resetGameCondition
 			String p1Name = player1.getName(), p2Name = player2.getName();
-			resetGame();
+			resetGameCondition();
 			// Riavvia la partita con gli stessi giocatori
 			CreateGameController.players = new ArrayList<>();
 			CreateGameController.players.add(new Player(p1Name));
@@ -709,7 +805,7 @@ public class Game implements Initializable {
 	 * Questo metodo resetta le variabili della partita, in preparazione per una nuova partita
 	 * TODO: HANDLE RESET SPECIFICS FOR TOURNAMENT MODE
 	 */
-	void resetGame() {
+	void resetGameCondition() {
 		CreateGameController.players.clear();
 		deck.clearAllDecks();
 		player1 = null;

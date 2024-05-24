@@ -19,6 +19,18 @@
                 <Font size="20.0"/>
             </font>
         </Button>
+        <Button fx:id="startGameBtn" layoutX="372.0" layoutY="628.0" mnemonicParsing="false" onAction="#startGame"
+                text="Start Game" textFill="#32e132">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Button>
+        <Button fx:id="goBackBtn" layoutX="206.0" layoutY="628.0" mnemonicParsing="false" onAction="#goBackLoginScreen"
+                prefHeight="45.0" prefWidth="146.0" text="Back" textFill="RED">
+            <font>
+                <Font name="System Bold" size="24.0"/>
+            </font>
+        </Button>
         <Button fx:id="addRobotBtn" layoutX="875.0" layoutY="631.0" mnemonicParsing="false" onAction="#addRobot"
                 text="Add Robot">
             <font>
@@ -35,18 +47,6 @@
                 onAction="#removeRecent" text="Remove Recent">
             <font>
                 <Font size="20.0"/>
-            </font>
-        </Button>
-        <Button fx:id="startGameBtn" layoutX="372.0" layoutY="628.0" mnemonicParsing="false" onAction="#startGame"
-                text="Start Game" textFill="#32e132">
-            <font>
-                <Font name="System Bold" size="24.0"/>
-            </font>
-        </Button>
-        <Button fx:id="goBackBtn" layoutX="206.0" layoutY="628.0" mnemonicParsing="false" onAction="#goBackLoginScreen"
-                prefHeight="45.0" prefWidth="146.0" text="Back" textFill="RED">
-            <font>
-                <Font name="System Bold" size="24.0"/>
             </font>
         </Button>
         <Label fx:id="createGameTitleLabel" layoutX="428.0" layoutY="43.0" text="Creazione Gioco">
