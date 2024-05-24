@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -254,6 +255,7 @@ public class Game implements Initializable {
 		selectWildCard(player1);
 		selectWildCard(player2);
 
+		GameSave.saveGame();
 		playRound();
 	}
 
@@ -417,7 +419,12 @@ public class Game implements Initializable {
 					}
 					// THE GAME ENDS HERE, LOGGING ALL RELEVANT DATA, AND DELETING THE SAVE FILE FROM "games" DIRECTORY
 					File file = new File(System.getProperty("user.dir") + "/games/" + code + ".txt");
-					file.delete();
+					try {
+						Files.delete(file.toPath());
+						System.out.println("File was deleted successfully");
+					} catch (IOException e) {
+						System.out.println("File could not be deleted: " + e.getMessage());
+					}
 					GameWinnerController.logGame(player1, player2, selectGameWinner(), code);
 					resetGameCondition();
 				}

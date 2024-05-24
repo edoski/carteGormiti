@@ -8,11 +8,11 @@ import java.util.ArrayList;
 
 public class GameSave {
 	static String code = Game.code;
-	static Player p1 = Game.player1, p2 = Game.player2;
-	static int p1Score = p1.playerScore, p2Score = p2.playerScore;
-	static ArrayList<Card> p1Hand = p1.getHand(), p2Hand = p2.getHand();
-	static Card p1WildCard = p1.getRoundWildCard(), p2WildCard = p2.getRoundWildCard();
-	static int roundNumber = Game.roundNumber;
+	static Player p1, p2;
+	static int p1Score, p2Score;
+	static ArrayList<Card> p1Hand, p2Hand;
+	static Card p1WildCard, p2WildCard;
+	static int roundNumber;
 
 
 	/*
@@ -31,6 +31,16 @@ public class GameSave {
 	 * p2Hand (n lines for n cards)
 	 */
 	public static void saveGame() {
+		roundNumber = Game.roundNumber;
+		p1 = Game.player1;
+		p2 = Game.player2;
+		p1Score = p1.playerScore;
+		p2Score = p2.playerScore;
+		p1Hand = p1.getHand();
+		p2Hand = p2.getHand();
+		p1WildCard = p1.getRoundWildCard();
+		p2WildCard = p2.getRoundWildCard();
+
 		String currDir = System.getProperty("user.dir");
 		File directory = new File(currDir, "games");
 		if (!directory.exists()) {
